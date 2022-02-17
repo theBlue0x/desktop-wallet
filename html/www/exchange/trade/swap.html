@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blue0x Decentralized Exchange">
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <title>Blue0x | EXCHANGE</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap-reset.min.css" rel="stylesheet">
+  <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="css/style.min.css" rel="stylesheet">
+  <link href="css/style-responsive.min.css" rel="stylesheet" />
+  <style>
+  .input-group-addon {
+    border: none;
+    background-color: #2a84f8;
+    color: white;
+    font-weight: 700;
+  }
+  .panel-heading {
+    color: white;
+    background-color: #2a84f8;
+  }
+  .panel {
+    background-color: #0b0a0e;
+    border: none;
+    margin-top: 2vh;
+  }
+  .panel-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  p {
+    color: #d1d1d1;
+    font-weight: 600;
+  }
+  .modal {
+    background-color: #24242a!important;
+    border-radius: 0px;
+    border: none;
+  }
+  </style>
+</head>
+<body class="full-width" onload="setAccountNumber();">
+  <section id="container">
+    <script type="text/javascript" src="js/menu.js"></script>
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="col-sm-6 col-sm-offset-3">
+          <section class="panel">
+            <header class="panel-heading"> <span>Quick Swap</span> </header>
+            <div class="panel-body" align="center" style="color:#d1d1d1;">
+              <div id="txMessage">
+                <h4>You Send</h4>
+                <div class="input-group" style="max-width:300px;"> <span class="input-group-addon">Currency</span>
+                  <select id="baseCurrency" class="form-control" onchange="clearAmounts();" style="border:0.1px solid #b7b7b7"> </select>
+                </div>
+                <br/>
+                <div class="input-group" style="max-width:300px;"> <span class="input-group-addon">&nbsp;Amount&nbsp;</span>
+                  <input type="number" id="baseAmount" required class="form-control" placeholder="0.00" oninput="validate(this);" onkeyup="preview();" style="border:0.1px solid #b7b7b7"> </div> <i class="fa fa-arrow-down" style="margin-top:24px;margin-bottom:8px;"></i>
+                <h4>You Receive</h4>
+                <div class="input-group" style="max-width:300px;"> <span class="input-group-addon">&nbsp;Amount&nbsp;</span>
+                  <input type="text" id="targetAmount" required placeholder="0.00" class="form-control" style="border:0.1px solid #b7b7b7"> </div>
+                <br/>
+                <div class="input-group" style="max-width:300px;"> <span class="input-group-addon">Currency</span>
+                  <select id="targetCurrency" class="form-control" onchange="clearAmounts();" style="border:0.1px solid #b7b7b7"> </select>
+                </div>
+                <br/>
+                <div><i>Effective Swap Rate: <span id="rateBLX"></span></i></div>
+                <div id="error" style="color:red;"></div>
+                <br/>
+                <button type="button" style="margin-bottom:40px" class="btn btn-info" onclick="swapModal();">&nbsp;Preview&nbsp;</button>
+              </div>
+            </div>
+            <div class="modal fade" id="swapModal">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><b>Preview Swap</b></h4> </div>
+                  <div class="modal-body" align="center" style="color:white;"> <span id="modalRate" style="display:none;"></span> <span id="modalBaseAmount" style="display:none;"></span>
+                    <p class="centered">Amount to Swap:</p>
+                    <div class="input-group" style="max-width:300px;"> <span id="modalBaseAmountDisplay" class="form-control"></span> <span id="modalCurrencyAdd" class="input-group-addon"></span> </div>
+                    <br/>
+                    <p class="centered">Effective Rate:</p>
+                    <div class="input-group" style="max-width:300px;"> <span id="modalRateDisplay" class="form-control"></span> <span class="input-group-addon">&nbsp;BLX&nbsp;</span> </div>
+                    <br/>
+                    <p class="centered">You Receive:</p>
+                    <div class="input-group" style="max-width:300px;"> <span id="modalTargetAmount" class="form-control"></span> <span class="input-group-addon">&nbsp;BLX&nbsp;</span> </div>
+                    <br/> <span id="buyModalRateNQT" style="display:none;"></span>
+                    <br/>
+                    <div class="form-group" style="max-width:400px;color:white;">
+                      <label for="secretPhrase"><b>Your Account Secret Phrase:</b></label>
+                      <!--button type="button" class="btn btn-qr btn-xs" data-toggle="modal" data-target="#reader1">
+                      <i class="fa fa-qrcode"></i>
+                    </button-->
+                      <div class="iconic-input"> <i class="fa fa-key"></i>
+                        <input type="password" class="form-control" id="modalSecretPhrase" placeholder="required" required>
+                        <div id="modalErrorMessage"></div>
+                      </div>
+                    </div>
+                    <p><i style="font-weight:100;">Transaction Fee : 0.01 BLX</i></p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-info" onclick="swap();" data-dismiss="modal">Confirm</button>
+                  </div>
+                </div>
+              </div>
+          </section>
+          </div>
+        </div>
+      </section>
+    </section>
+  </section>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/constants.js"></script>
+  <script src="js/freemarket_scripts.js"></script>
+  <script>
+  var validate = function(e) {
+    var t = e.value;
+    e.value = (t.indexOf(".") >= 0) ? (t.substr(0, t.indexOf(".")) + t.substr(t.indexOf("."), 3)) : t;
+  }
+  </script>
+  <script>
+  function clearAmounts() {
+    $("#baseAmount").val('');
+    $("#targetAmount").val('');
+    $("#error").text('');
+  }
+  </script>
+  <script>
+  var currency = {
+    USDX: ["BLX"],
+    AUDX: ["BLX"],
+    CADX: ["BLX"],
+    CHFX: ["BLX"],
+    CNYX: ["BLX"],
+    EURX: ["BLX"],
+    GBPX: ["BLX"],
+    IQDX: ["BLX"],
+    IRRX: ["BLX"],
+    JPYX: ["BLX"],
+    NZDX: ["BLX"],
+    RUBX: ["BLX"]
+  };
+  function populateSelect(id, values) {
+    var $select = $(id);
+    $select.empty();
+    values.forEach(function(value) {
+      var $option = $("<option value='" + value + "'>" + value + "</option>");
+      $select.append($option);
+    });
+  }
+  $("#baseCurrency").on("change", function() {
+    var key = $(this).val();
+    populateSelect("#targetCurrency", currency[key]);
+  });
+  populateSelect("#baseCurrency", Object.keys(currency));
+  populateSelect("#targetCurrency", currency[$("#baseCurrency").val()]);
+  </script>
+  <script>
+  function preview() {
+    $("#error").text('');
+    var baseCurrency = $("#baseCurrency").val();
+    $.getJSON(Constants.apiUrl, {
+      requestType: "getCurrency",
+      code: $("#baseCurrency").val()
+    }, function(code) {
+      var currencyCode = code.currency;
+      var baseAmount = $("#baseAmount").val() * 100;
+      var baseAmountFormatted = Math.fround(baseAmount);
+      if(baseAmount > 0) {
+        $.getJSON(Constants.apiUrl, {
+          requestType: "getAvailableToSell",
+          currency: currencyCode,
+          units: baseAmountFormatted
+        }, function(request) {
+          var error = request.errorDescription;
+          if(!error) {
+            var rate = request.rateNQT / 1000000;
+            var amountNeeded = request.amountNQT / 1000000;
+            var amountNeededFormatted = Math.floor(amountNeeded)/100;
+              $("#targetAmount").val(amountNeededFormatted);
+              $("#rateBLX").html('<span>' + rate + ' BLX</span>');
+            } else {
+            $("#error").text(error);
+          }})}})}
+  </script>
+  <script>
+  function swapModal() {
+    $("#modalErrorMessage").text('');
+    var baseCurrency = $("#baseCurrency").val();
+    $.getJSON(Constants.apiUrl, {
+      requestType: "getCurrency",
+      code: $("#baseCurrency").val()
+    }, function(code) {
+      var currencyCode = code.currency;
+      var baseAmount = $("#baseAmount").val() * 100;
+      var baseAmountFormatted = Math.fround(baseAmount);
+      $.getJSON(Constants.apiUrl, {
+        requestType: "getAvailableToSell",
+        currency: currencyCode,
+        units: baseAmountFormatted
+      }, function(request) {
+        var error1 = request.errorDescription;
+        if(!error1) {
+          var rate = (request.rateNQT / 1000000).toFixed(2);
+          var baseAmountDisplay = (baseAmount / 100).toFixed(2);
+          var baseAmountActual = $("#baseAmount").val();
+          var amountNeeded = request.amountNQT / 1000000;
+          var amountNeededFormatted = Math.floor(amountNeeded)/100;
+          var amountNeededFormatted1 = amountNeededFormatted.toFixed(2);
+          var targetCurrency = $("#targetCurrency").val();
+          $("#swapModal").modal();
+          $("#modalCurrencyAdd").text(baseCurrency);
+          $("#modalRateDisplay").text(rate);
+          $("#modalBaseAmount").val(baseAmountActual);
+          $("#modalBaseAmountDisplay").text(baseAmountDisplay);
+          $("#modalTargetAmount").text(amountNeededFormatted1);
+        } else {
+          $("#modalErrorMessage").text(error1);
+    }})})}
+  </script>
+  <script>
+  function swap() {
+    var baseCurrency = $("#baseCurrency").val();
+    $.getJSON(Constants.apiUrl, {
+      requestType: "getCurrency",
+      code: baseCurrency
+    }, function(code) {
+      var currencyCode = code.currency;
+      var units = $("#modalBaseAmount").val() * 100;
+      var unitsFormatted = Math.fround(units);
+      $.getJSON(Constants.apiUrl, {
+        requestType: "getAvailableToSell",
+        currency: currencyCode,
+        units: unitsFormatted
+      }, function(request) {
+        var rate = request.rateNQT;
+        var secretPhrase = $("#modalSecretPhrase").val();
+        var units = $("#modalBaseAmount").val() * 100;
+        var unitsFormatted = Math.fround(units);
+        $.post(Constants.apiUrl, {
+          requestType: "currencySell",
+          currency: currencyCode,
+          rateNQT: rate,
+          units: unitsFormatted,
+          secretPhrase: secretPhrase,
+          deadline: 60,
+          feeNQT: 1000000
+        }, function(result) {
+          var tx = JSON.parse(result);
+          var error = tx.errorDescription;
+          var txId = tx.transaction;
+            if(!error) {
+            $("#txMessage").html('<h4><b>Swap Successful!<br/><br/>TX: ' + txId + '</b><br/><br/></h4><a class="btn btn-info" href="markets.html" role="button">View Markets</a><br/><br/>');
+          } else {
+            $("#txMessage").html('<h4><b>Transaction Error!<br/><br/>' + error + '</b><br/><br/></h4><a class="btn btn-info" href="swap.html" role="button">Go Back</a><br/><br/>');
+  }})})})}
+  </script>
+</body>
+</html>

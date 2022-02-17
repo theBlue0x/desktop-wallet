@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blue0x Decentralized Marketplace">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Blue0x | MARKET</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/bootstrap-reset.css" rel="stylesheet">
+  <link href="../assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="../css/style.min.css" rel="stylesheet">
+  <link href="../css/style-responsive.css" rel="stylesheet" />
+  <link href="../css/spinner.css" rel="stylesheet">
+  <link href="../assets/fancybox/jquery.fancybox.css" rel="stylesheet" />
+  <link href="../css/gallery.css" rel="stylesheet" />
+  <script>
+  function showMessage() {
+      var sender = (getQueryVariable("sender"));
+      var user = sessionStorage.getItem("accountRS");
+    $.getJSON(Constants.apiUrl, {
+        requestType: 'getPrunableMessages',
+        account: user,
+        otherAccount: sender,
+        secretPhrase: $("#secretPhrase").val()
+      },
+      function(request) {
+        for(i = request.prunableMessages.length - 1; i >= 0; i--) {
+        var data = request.prunableMessages[i].decryptedMessage;
+        var sentFrom = request.prunableMessages[i].senderRS;
+        var recipient = request.prunableMessages[i].recipientRS;
+        var result;
+        if (user == sentFrom){
+        result += '<tr>';
+        result += '<td style="float:right;border-top:none;"><b>You:</b> ' + data + '</td>';
+        result += '</tr>';
+      } else {
+        result += '<tr>';
+        result += '<td style="float:left;border-top:none;"><b>Them:</b> ' + data + '</td>';
+        result += '</tr>';
+      }
+        $("#table-body").html(result);
+        document.getElementById("phrase").style.display = "none";
+      }
+        var buttons = "";
+        buttons += '<a class="btn btn-default" href="ViewYourMessages.html">Back to Messages</a>&nbsp;<button class="btn btn-default" data-toggle="modal" data-target="#messageModal">Reply</button>';
+        document.getElementById("messageButtonSection").innerHTML = buttons;
+      })};
+  </script>
+  <script >
+function docReady(fn) {
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        setTimeout(fn, 1);
+    } else {
+        document.addEventListener("DOMContentLoaded", fn);
+    }} 
+docReady(function() {
+    var lastResult, countResults = 0;
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+        "qr-reader1", { fps: 10, qrbox: 250 });
+    function onScanSuccess(decodedText, decodedResult) {
+        if (decodedText !== lastResult) {
+            ++countResults;
+            lastResult = decodedText;
+            document.getElementById('secretPhrase').value = decodedText;
+            html5QrcodeScanner.clear();
+            setTimeout(function(){ $('#reader1').modal('hide'); }, 300);
+        }}
+    function onScanError(qrCodeError) {
+    }
+    html5QrcodeScanner.render(onScanSuccess, onScanError);
+});
+</script>
+</head>
+<body class="full-width" onload="setAccountNumber(); setLanguage();">
+  <section id="container">
+    <script type="text/javascript" src="../js/menu.js"></script>
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="row">
+          <div class="col-lg-12">
+            <section class="panel">
+              <header class="panel-heading" id="panel-heading">
+                <span>Messages</span>
+              </header>
+              <div class="panel-body" style="padding:20px;" id="panel-body">
+                  <div class="form-group" id="phrase">
+                    <label for="secretPhrase"><span data-i18n="secret_phrase">Account Secret Phrase</span></label>
+                    <button type="button" class="btn btn-qr btn-xs" data-toggle="modal" data-target="#reader1">
+                    <i class="fa fa-qrcode"></i>
+                    </button>
+                    <div class="iconic-input">
+                      <i class="fa fa-key"></i>
+                      <input type="password" class="form-control" id="secretPhrase" data-i18n="[placeholder]placeholder_required">
+                    </div>
+                  </div>
+                  <table class="display table" style="border-top:none;margin-bottom:0px;">
+                  <tbody id="table-body"></tbody>
+                </table>
+                  <div id="messageButtonSection">
+                      <a type="button" class="btn btn-default" onclick="showMessage()">Show Message</a>
+                    </div>
+                    <!-- Message Modal -->
+                    <div aria-hidden="true" aria-labelledby="messageModalLabel" role="dialog" tabindex="-1" id="messageModal" class="modal fade">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                              <h4 class="modal-title">Reply</h4>
+                            </div>
+                            <div class="modal-body">
+                          <div class="form-group">
+                            <label for="reply"><b>Reply:</b> </label>
+                            <textarea class="form-control" data-i18n="[placeholder]placeholder_required" cols="25" rows="4" id="reply" maxlength="203"></textarea>
+                            </div>
+                              <p><span>Please enter your account secret phrase to send this message.</span></p>
+                              <div class="form-group">
+                              <label for="secret_phrase_message"><b><span data-i18n="secret_phrase">Your Account Secret Phrase</span></b> :</label>
+                              <div class="iconic-input">
+                                <i class="fa fa-bars"></i>
+                                <input type="password" class="form-control" data-i18n="[placeholder]placeholder_required" id="secret_phrase_message" autofocus>
+                              </div>
+                              <br/>
+                                <button data-dismiss="modal" class="btn btn-secondary" type="button">Close</button>&nbsp;
+                                <button data-dismiss="modal" class="btn btn-default" type="button" onclick="message()">Reply</button>
+                            </div>
+                            <p>The network fee of this transaction is 0.01 BLX.</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <!-- Message Modal-->
+                    <div class="modal fade" style="top:10vh" id="reader1">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Scan Your Secret Phrase</h4>
+                      </div>
+                        <div class="modal-body" style="position: static">
+                         <div id="qr-reader1"></div>
+                        </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div> <!-- /.modal-content -->
+                  </div> <!-- /.modal-dialog -->
+                </div> <!-- /.modal -->
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+        </div>
+      </section>
+    </section>
+  </section>
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/jquery.dcjqaccordion.2.7.min.js"></script>
+  <script src="../js/bootstrap-hover-dropdown.min.js"></script>
+  <script src="../assets/fancybox/jquery.fancybox.js"></script>
+  <script src="../js/validator.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    jQuery(".fancybox").fancybox();
+  });
+  </script>
+  <script src="../js/constants.js"></script>
+  <script src="../js/freemarket_scripts.js"></script>
+  <script src="../js/common-scripts.js"></script>
+  <script src="../js/i18next.min.js"></script>
+  <script src="../js/freemarket_localization_scripts.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.0.1/html5-qrcode.min.js"></script>
+  <script>
+    function message() {
+      var sender = (getQueryVariable("sender"));
+      $.post(Constants.apiUrl,{
+        requestType: 'sendMessage',
+        recipient: sender,
+        messageToEncryptIsText: 'true',
+        encryptedMessageIsPrunable: 'true',
+        messageToEncrypt: $("#reply").val(),
+        secretPhrase: $("#secret_phrase_message").val(),
+        feeNQT: 1000000,
+        deadline: 60
+      },
+      function(result){
+        var errorCode = result.errorCode;
+        if (!errorCode) {
+          var transactionID = result.transaction;
+          var success = $.t("success");
+          document.getElementById("panel-heading").innerHTML = success;
+          document.getElementById("panel-body").innerHTML = "<b> TX ID: " + transactionID + "</b><br/><br/>";
+          } else { 
+          var errorDescription = result.errorDescription;
+          var errorCode = result.errorCode;
+          document.getElementById("panel-body").innerHTML = "<b> " + errorDescription + "</b>";
+          };
+      },"json");
+    };
+  </script>
+</body>
+</html>

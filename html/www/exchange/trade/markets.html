@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Blue0x Decentralized Exchange">
+	<link rel="shortcut icon" href="img/favicon.ico">
+	<title>Blue0x | EXCHANGE</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/bootstrap-reset.min.css" rel="stylesheet">
+	<link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<link href="css/style.min.css" rel="stylesheet">
+	<link href="css/style-responsive.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.5/css/flag-icons.min.css" integrity="sha512-UwbBNAFoECXUPeDhlKR3zzWU3j8ddKIQQsDOsKhXQGdiB5i3IHEXr9kXx82+gaHigbNKbTDp3VY/G6gZqva6ZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" rel="stylesheet">
+	<style>
+	h4 {
+		margin-top: 3px;
+		color: #d1d1d1;
+	}
+	</style>
+</head>
+<body class="full-width" onload="setAccountNumber();">
+	<section id="container">
+		<script type="text/javascript" src="js/menu.js"></script>
+		<section id="main-content">
+			<section class="wrapper">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="panel">
+							<header class="panel-heading"> <span class="flag-icon flag-icon-us"></span> <span><a href="usdxMarket.html">&nbsp;USDX - United States Dollar</a></span> </header>
+							<div class="panel-body">
+								<div style="float:left">
+									<h4 id="usdx">0.00</h4>
+									<p>BLX</p>
+								</div>
+								<div style="float:right">
+									<p>24 HR: <span id="usdxt">00.00%</span></p>
+									<p>7 DAY: <span id="usdxs">00.00%</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="panel">
+							<header class="panel-heading"> <span class="flag-icon flag-icon-au"></span> <span><a href="audxMarket.html">&nbsp;AUDX - Australian Dollar</a></span> </header>
+							<div class="panel-body">
+								<div style="float:left">
+									<h4 id="audx">0.00</h4>
+									<p>BLX</p>
+								</div>
+								<div style="float:right">
+									<p>24 HR: <span id="audxt">00.00%</span></p>
+									<p>7 DAY: <span id="audxs">00.00%</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="panel">
+							<header class="panel-heading"> <span class="flag-icon flag-icon-ca"></span> <span><a href="cadxMarket.html">&nbsp;CADX - Canadian Dollar</a></span> </header>
+							<div class="panel-body">
+								<div style="float:left">
+									<h4 id="cadx">0.00</h4>
+									<p>BLX</p>
+								</div>
+								<div style="float:right">
+									<p>24 HR: <span id="cadxt">00.00%</span></p>
+									<p>7 DAY: <span id="cadxs">00.00%</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="panel">
+							<header class="panel-heading"> <span class="flag-icon flag-icon-ch"></span> <span><a href="chfxMarket.html">&nbsp;CHFX - Swiss Franc</a></span> </header>
+							<div class="panel-body">
+								<div style="float:left">
+									<h4 id="chfx">0.00</h4>
+									<p>BLX</p>
+								</div>
+								<div style="float:right">
+									<p>24 HR: <span id="chfxt">00.00%</span></p>
+									<p>7 DAY: <span id="chfxs">00.00%</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="panel">
+							<header class="panel-heading"> <span class="flag-icon flag-icon-cn"></span> <span><a href="cnyxMarket.html">&nbsp;CNYX - Chinese Yuan</a></span> </header>
+							<div class="panel-body">
+								<div style="float:left">
+									<h4 id="cnyx">0.00</h4>
+									<p>BLX</p>
+								</div>
+								<div style="float:right">
+									<p>24 HR: <span id="cnyxt">00.00%</span></p>
+									<p>7 DAY: <span id="cnyxs">00.00%</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="panel">
+							<header class="panel-heading"> <span class="flag-icon flag-icon-eu"></span> <span><a href="eurxMarket.html">&nbsp;EURX - Euro</a></span> </header>
+							<div class="panel-body">
+								<div style="float:left">
+									<h4 id="eurx">0.00</h4>
+									<p>BLX</p>
+								</div>
+								<div style="float:right">
+									<p>24 HR: <span id="eurxt">00.00%</span></p>
+									<p>7 DAY: <span id="eurxs">00.00%</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="panel">
+							<header class="panel-heading"> <span class="flag-icon flag-icon-gb"></span> <span><a href="gbpxMarket.html">&nbsp;GBPX - British Pound Sterling</a></span> </header>
+							<div class="panel-body">
+								<div style="float:left">
+									<h4 id="gbpx">0.00</h4>
+									<p>BLX</p>
+								</div>
+								<div style="float:right">
+									<p>24 HR: <span id="gbpxt">00.00%</span></p>
+									<p>7 DAY: <span id="gbpxs">00.00%</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="panel">
+							<header class="panel-heading"> <span class="flag-icon flag-icon-iq"></span> <span><a href="iqdxMarket.html">&nbsp;IQDX - Iraqi Dinar</a></span> </header>
+							<div class="panel-body">
+								<div style="float:left">
+									<h4 id="iqdx">0.00</h4>
+									<p>BLX</p>
+								</div>
+								<div style="float:right">
+									<p>24 HR: <span id="iqdxt">00.00%</span></p>
+									<p>7 DAY: <span id="iqdxs">00.00%</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="panel">
+							<header class="panel-heading"> <span class="flag-icon flag-icon-ir"></span> <span><a href="irrxMarket.html">&nbsp;IRRX - Iranian Rial</a></span> </header>
+							<div class="panel-body">
+								<div style="float:left">
+									<h4 id="irrx">0.00</h4>
+									<p>BLX</p>
+								</div>
+								<div style="float:right">
+									<p>24 HR: <span id="irrxt">00.00%</span></p>
+									<p>7 DAY: <span id="irrxs">00.00%</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="panel">
+							<header class="panel-heading"> <span class="flag-icon flag-icon-jp"></span> <span><a href="jpyxMarket.html">&nbsp;JPYX - Japanese Yen</a></span> </header>
+							<div class="panel-body">
+								<div style="float:left">
+									<h4 id="jpyx">0.00</h4>
+									<p>BLX</p>
+								</div>
+								<div style="float:right">
+									<p>24 HR: <span id="jpyxt">00.00%</span></p>
+									<p>7 DAY: <span id="jpyxs">00.00%</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="panel">
+							<header class="panel-heading"> <span class="flag-icon flag-icon-nz"></span> <span><a href="nzdxMarket.html">&nbsp;NZDX - New Zealand Dollar</a></span> </header>
+							<div class="panel-body">
+								<div style="float:left">
+									<h4 id="nzdx">0.00</h4>
+									<p>BLX</p>
+								</div>
+								<div style="float:right">
+									<p>24 HR: <span id="nzdxt">00.00%</span></p>
+									<p>7 DAY: <span id="nzdxs">00.00%</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="panel">
+							<header class="panel-heading"> <span class="flag-icon flag-icon-ru"></span> <span><a href="rubxMarket.html">&nbsp;RUBX - Russian Ruble</a></span> </header>
+							<div class="panel-body">
+								<div style="float:left">
+									<h4 id="rubx">0.00</h4>
+									<p>BLX</p>
+								</div>
+								<div style="float:right">
+									<p>24 HR: <span id="rubxt">00.00%</span></p>
+									<p>7 DAY: <span id="rubxs">00.00%</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</section>
+	</section>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/constants.js"></script>
+	<script src="js/freemarket_scripts.js"></script>
+	<script>
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getExchanges",
+			currency: Constants.USDXId
+		}, function(request) {
+			var rate = request.exchanges[0].rateNQT / 1000000;
+			document.getElementById("usdx").innerHTML = rate.toFixed(2);
+			var genesisDate = 1620390840;
+			var today = Math.floor(Date.now() / 1000)
+			var dayAgo = today - 86440;
+			var weekAgo = today - 604800;
+			var dayAgoStamp = dayAgo - genesisDate;
+			var weekAgoStamp = weekAgo - genesisDate;
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.USDXId,
+				timestamp: dayAgoStamp
+			}, function(dayPrice) {
+				if(dayPrice.exchanges.length != 0) {
+					var i = dayPrice.exchanges.length - 1;
+					var dayRate = dayPrice.exchanges[i].rateNQT / 1000000;
+					var day = ((rate - dayRate) / dayRate) * 100;
+					var dayPercent = day.toFixed(2);
+					if(dayPercent >= 0.00) {
+						var usdxt = '';
+						usdxt += '<span style="color:#3fcd59">' + dayPercent + '%' + '</span>';
+						document.getElementById("usdxt").innerHTML = usdxt;
+					} else {
+						var usdxt = '';
+						usdxt += '<span style="color:#ff363c">' + dayPercent + '%' + '</span>';
+						document.getElementById("usdxt").innerHTML = usdxt;
+					}
+				} else {
+					var usdxt = '';
+					usdxt += '<span style="color:#3fcd59">0.00%</span>';
+					document.getElementById("usdxt").innerHTML = usdxt;
+				}})
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.USDXId,
+				timestamp: weekAgoStamp
+			}, function(weekPrice) {
+				var i = weekPrice.exchanges.length - 1;
+				var weekRate = weekPrice.exchanges[i].rateNQT / 1000000;
+				var week = ((rate - weekRate) / weekRate) * 100;
+				var weekPercent = week.toFixed(2);
+				if(weekPercent >= 0.00) {
+					var usdxs = '';
+					usdxs += '<span style="color:#3fcd59">' + weekPercent + '%' + '</span>';
+					document.getElementById("usdxs").innerHTML = usdxs;
+				} else {
+					var usdxs = '';
+					usdxs += '<span style="color:#ff363c">' + weekPercent + '%' + '</span>';
+					document.getElementById("usdxs").innerHTML = usdxs;
+		}})})
+	</script>
+	<script>
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getExchanges",
+			currency: Constants.AUDXId
+		}, function(request) {
+			var rate = request.exchanges[0].rateNQT / 1000000;
+			document.getElementById("audx").innerHTML = rate.toFixed(2);
+			var genesisDate = 1620390840;
+			var today = Math.floor(Date.now() / 1000)
+			var dayAgo = today - 86440;
+			var weekAgo = today - 604800;
+			var dayAgoStamp = dayAgo - genesisDate;
+			var weekAgoStamp = weekAgo - genesisDate;
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.AUDXId,
+				timestamp: dayAgoStamp
+			}, function(dayPrice) {
+				if(dayPrice.exchanges.length != 0) {
+					var i = dayPrice.exchanges.length - 1;
+					var dayRate = dayPrice.exchanges[i].rateNQT / 1000000;
+					var day = ((rate - dayRate) / dayRate) * 100;
+					var dayPercent = day.toFixed(2);
+					if(dayPercent >= 0.00) {
+						var audxt = '';
+						audxt += '<span style="color:#3fcd59">' + dayPercent + '%' + '</span>';
+						document.getElementById("audxt").innerHTML = audxt;
+					} else {
+						var audxt = '';
+						audxt += '<span style="color:#ff363c">' + dayPercent + '%' + '</span>';
+						document.getElementById("audxt").innerHTML = audxt;
+					}
+				} else {
+					var audxt = '';
+					audxt += '<span style="color:#3fcd59">0.00%</span>';
+					document.getElementById("audxt").innerHTML = audxt;
+				}})
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.AUDXId,
+				timestamp: weekAgoStamp
+			}, function(weekPrice) {
+				var i = weekPrice.exchanges.length - 1;
+				var weekRate = weekPrice.exchanges[i].rateNQT / 1000000;
+				var week = ((rate - weekRate) / weekRate) * 100;
+				var weekPercent = week.toFixed(2);
+				if(weekPercent >= 0.00) {
+					var audxs = '';
+					audxs += '<span style="color:#3fcd59">' + weekPercent + '%' + '</span>';
+					document.getElementById("audxs").innerHTML = audxs;
+				} else {
+					var audxs = '';
+					audxs += '<span style="color:#ff363c">' + weekPercent + '%' + '</span>';
+					document.getElementById("audxs").innerHTML = audxs;
+		}})})
+	</script>
+	<script>
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getExchanges",
+			currency: Constants.CADXId
+		}, function(request) {
+			var rate = request.exchanges[0].rateNQT / 1000000;
+			document.getElementById("cadx").innerHTML = rate.toFixed(2);
+			var genesisDate = 1620390840;
+			var today = Math.floor(Date.now() / 1000)
+			var dayAgo = today - 86440;
+			var weekAgo = today - 604800;
+			var dayAgoStamp = dayAgo - genesisDate;
+			var weekAgoStamp = weekAgo - genesisDate;
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.CADXId,
+				timestamp: dayAgoStamp
+			}, function(dayPrice) {
+				if(dayPrice.exchanges.length != 0) {
+					var i = dayPrice.exchanges.length - 1;
+					var dayRate = dayPrice.exchanges[i].rateNQT / 1000000;
+					var day = ((rate - dayRate) / dayRate) * 100;
+					var dayPercent = day.toFixed(2);
+					if(dayPercent >= 0.00) {
+						var cadxt = '';
+						cadxt += '<span style="color:#3fcd59">' + dayPercent + '%' + '</span>';
+						document.getElementById("cadxt").innerHTML = cadxt;
+					} else {
+						var cadxt = '';
+						cadxt += '<span style="color:#ff363c">' + dayPercent + '%' + '</span>';
+						document.getElementById("cadxt").innerHTML = cadxt;
+					}
+				} else {
+					var cadxt = '';
+					cadxt += '<span style="color:#3fcd59">0.00%</span>';
+					document.getElementById("cadxt").innerHTML = cadxt;
+				}})
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.CADXId,
+				timestamp: weekAgoStamp
+			}, function(weekPrice) {
+				var i = weekPrice.exchanges.length - 1;
+				var weekRate = weekPrice.exchanges[i].rateNQT / 1000000;
+				var week = ((rate - weekRate) / weekRate) * 100;
+				var weekPercent = week.toFixed(2);
+				if(weekPercent >= 0.00) {
+					var cadxs = '';
+					cadxs += '<span style="color:#3fcd59">' + weekPercent + '%' + '</span>';
+					document.getElementById("cadxs").innerHTML = cadxs;
+				} else {
+					var cadxs = '';
+					cadxs += '<span style="color:#ff363c">' + weekPercent + '%' + '</span>';
+					document.getElementById("cadxs").innerHTML = cadxs;
+		}})})
+	</script>
+	<script>
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getExchanges",
+			currency: Constants.CHFXId
+		}, function(request) {
+			var rate = request.exchanges[0].rateNQT / 1000000;
+			document.getElementById("chfx").innerHTML = rate.toFixed(2);
+			var genesisDate = 1620390840;
+			var today = Math.floor(Date.now() / 1000)
+			var dayAgo = today - 86440;
+			var weekAgo = today - 604800;
+			var dayAgoStamp = dayAgo - genesisDate;
+			var weekAgoStamp = weekAgo - genesisDate;
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.CHFXId,
+				timestamp: dayAgoStamp
+			}, function(dayPrice) {
+				if(dayPrice.exchanges.length != 0) {
+					var i = dayPrice.exchanges.length - 1;
+					var dayRate = dayPrice.exchanges[i].rateNQT / 1000000;
+					var day = ((rate - dayRate) / dayRate) * 100;
+					var dayPercent = day.toFixed(2);
+					if(dayPercent >= 0.00) {
+						var chfxt = '';
+						chfxt += '<span style="color:#3fcd59">' + dayPercent + '%' + '</span>';
+						document.getElementById("chfxt").innerHTML = chfxt;
+					} else {
+						var chfxt = '';
+						chfxt += '<span style="color:#ff363c">' + dayPercent + '%' + '</span>';
+						document.getElementById("chfxt").innerHTML = chfxt;
+					}
+				} else {
+					var chfxt = '';
+					chfxt += '<span style="color:#3fcd59">0.00%</span>';
+					document.getElementById("chfxt").innerHTML = chfxt;
+				}})
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.CHFXId,
+				timestamp: weekAgoStamp
+			}, function(weekPrice) {
+				var i = weekPrice.exchanges.length - 1;
+				var weekRate = weekPrice.exchanges[i].rateNQT / 1000000;
+				var week = ((rate - weekRate) / weekRate) * 100;
+				var weekPercent = week.toFixed(2);
+				if(weekPercent >= 0.00) {
+					var chfxs = '';
+					chfxs += '<span style="color:#3fcd59">' + weekPercent + '%' + '</span>';
+					document.getElementById("chfxs").innerHTML = chfxs;
+				} else {
+					var chfxs = '';
+					chfxs += '<span style="color:#ff363c">' + weekPercent + '%' + '</span>';
+					document.getElementById("chfxs").innerHTML = chfxs;
+		}})})
+	</script>
+	<script>
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getExchanges",
+			currency: Constants.CNYXId
+		}, function(request) {
+			var rate = request.exchanges[0].rateNQT / 1000000;
+			document.getElementById("cnyx").innerHTML = rate.toFixed(2);
+			var genesisDate = 1620390840;
+			var today = Math.floor(Date.now() / 1000)
+			var dayAgo = today - 86440;
+			var weekAgo = today - 604800;
+			var dayAgoStamp = dayAgo - genesisDate;
+			var weekAgoStamp = weekAgo - genesisDate;
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.CNYXId,
+				timestamp: dayAgoStamp
+			}, function(dayPrice) {
+				if(dayPrice.exchanges.length != 0) {
+					var i = dayPrice.exchanges.length - 1;
+					var dayRate = dayPrice.exchanges[i].rateNQT / 1000000;
+					var day = ((rate - dayRate) / dayRate) * 100;
+					var dayPercent = day.toFixed(2);
+					if(dayPercent >= 0.00) {
+						var cnyxt = '';
+						cnyxt += '<span style="color:#3fcd59">' + dayPercent + '%' + '</span>';
+						document.getElementById("cnyxt").innerHTML = cnyxt;
+					} else {
+						var cnyxt = '';
+						cnyxt += '<span style="color:#ff363c">' + dayPercent + '%' + '</span>';
+						document.getElementById("cnyxt").innerHTML = cnyxt;
+					}
+				} else {
+					var cnyxt = '';
+					cnyxt += '<span style="color:#3fcd59">0.00%</span>';
+					document.getElementById("cnyxt").innerHTML = cnyxt;
+				}})
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.CNYXId,
+				timestamp: weekAgoStamp
+			}, function(weekPrice) {
+				var i = weekPrice.exchanges.length - 1;
+				var weekRate = weekPrice.exchanges[i].rateNQT / 1000000;
+				var week = ((rate - weekRate) / weekRate) * 100;
+				var weekPercent = week.toFixed(2);
+				if(weekPercent >= 0.00) {
+					var cnyxs = '';
+					cnyxs += '<span style="color:#3fcd59">' + weekPercent + '%' + '</span>';
+					document.getElementById("cnyxs").innerHTML = cnyxs;
+				} else {
+					var cnyxs = '';
+					cnyxs += '<span style="color:#ff363c">' + weekPercent + '%' + '</span>';
+					document.getElementById("cnyxs").innerHTML = cnyxs;
+		}})})
+	</script>
+	<script>
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getExchanges",
+			currency: Constants.EURXId
+		}, function(request) {
+			var rate = request.exchanges[0].rateNQT / 1000000;
+			document.getElementById("eurx").innerHTML = rate.toFixed(2);
+			var genesisDate = 1620390840;
+			var today = Math.floor(Date.now() / 1000)
+			var dayAgo = today - 86440;
+			var weekAgo = today - 604800;
+			var dayAgoStamp = dayAgo - genesisDate;
+			var weekAgoStamp = weekAgo - genesisDate;
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.EURXId,
+				timestamp: dayAgoStamp
+			}, function(dayPrice) {
+				if(dayPrice.exchanges.length != 0) {
+					var i = dayPrice.exchanges.length - 1;
+					var dayRate = dayPrice.exchanges[i].rateNQT / 1000000;
+					var day = ((rate - dayRate) / dayRate) * 100;
+					var dayPercent = day.toFixed(2);
+					if(dayPercent >= 0.00) {
+						var eurxt = '';
+						eurxt += '<span style="color:#3fcd59">' + dayPercent + '%' + '</span>';
+						document.getElementById("eurxt").innerHTML = eurxt;
+					} else {
+						var eurxt = '';
+						eurxt += '<span style="color:#ff363c">' + dayPercent + '%' + '</span>';
+						document.getElementById("eurxt").innerHTML = eurxt;
+					}
+				} else {
+					var eurxt = '';
+					eurxt += '<span style="color:#3fcd59">0.00%</span>';
+					document.getElementById("eurxt").innerHTML = eurxt;
+				}})
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.EURXId,
+				timestamp: weekAgoStamp
+			}, function(weekPrice) {
+				var i = weekPrice.exchanges.length - 1;
+				var weekRate = weekPrice.exchanges[i].rateNQT / 1000000;
+				var week = ((rate - weekRate) / weekRate) * 100;
+				var weekPercent = week.toFixed(2);
+				if(weekPercent >= 0.00) {
+					var eurxs = '';
+					eurxs += '<span style="color:#3fcd59">' + weekPercent + '%' + '</span>';
+					document.getElementById("eurxs").innerHTML = eurxs;
+				} else {
+					var eurxs = '';
+					eurxs += '<span style="color:#ff363c">' + weekPercent + '%' + '</span>';
+					document.getElementById("eurxs").innerHTML = eurxs;
+		}})})
+	</script>
+	<script>
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getExchanges",
+			currency: Constants.GBPXId
+		}, function(request) {
+			var rate = request.exchanges[0].rateNQT / 1000000;
+			document.getElementById("gbpx").innerHTML = rate.toFixed(2);
+			var genesisDate = 1620390840;
+			var today = Math.floor(Date.now() / 1000)
+			var dayAgo = today - 86440;
+			var weekAgo = today - 604800;
+			var dayAgoStamp = dayAgo - genesisDate;
+			var weekAgoStamp = weekAgo - genesisDate;
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.GBPXId,
+				timestamp: dayAgoStamp
+			}, function(dayPrice) {
+				if(dayPrice.exchanges.length != 0) {
+					var i = dayPrice.exchanges.length - 1;
+					var dayRate = dayPrice.exchanges[i].rateNQT / 1000000;
+					var day = ((rate - dayRate) / dayRate) * 100;
+					var dayPercent = day.toFixed(2);
+					if(dayPercent >= 0.00) {
+						var gbpxt = '';
+						gbpxt += '<span style="color:#3fcd59">' + dayPercent + '%' + '</span>';
+						document.getElementById("gbpxt").innerHTML = gbpxt;
+					} else {
+						var gbpxt = '';
+						gbpxt += '<span style="color:#ff363c">' + dayPercent + '%' + '</span>';
+						document.getElementById("gbpxt").innerHTML = gbpxt;
+					}
+				} else {
+					var gbpxt = '';
+					gbpxt += '<span style="color:#3fcd59">0.00%</span>';
+					document.getElementById("gbpxt").innerHTML = gbpxt;
+				}})
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.GBPXId,
+				timestamp: weekAgoStamp
+			}, function(weekPrice) {
+				var i = weekPrice.exchanges.length - 1;
+				var weekRate = weekPrice.exchanges[i].rateNQT / 1000000;
+				var week = ((rate - weekRate) / weekRate) * 100;
+				var weekPercent = week.toFixed(2);
+				if(weekPercent >= 0.00) {
+					var gbpxs = '';
+					gbpxs += '<span style="color:#3fcd59">' + weekPercent + '%' + '</span>';
+					document.getElementById("gbpxs").innerHTML = gbpxs;
+				} else {
+					var gbpxs = '';
+					gbpxs += '<span style="color:#ff363c">' + weekPercent + '%' + '</span>';
+					document.getElementById("gbpxs").innerHTML = gbpxs;
+				}})})
+	</script>
+	<script>
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getExchanges",
+			currency: Constants.IQDXId
+		}, function(request) {
+			var rate = request.exchanges[0].rateNQT / 1000000;
+			document.getElementById("iqdx").innerHTML = rate.toFixed(2);
+			var genesisDate = 1620390840;
+			var today = Math.floor(Date.now() / 1000)
+			var dayAgo = today - 86440;
+			var weekAgo = today - 604800;
+			var dayAgoStamp = dayAgo - genesisDate;
+			var weekAgoStamp = weekAgo - genesisDate;
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.IQDXId,
+				timestamp: dayAgoStamp
+			}, function(dayPrice) {
+				if(dayPrice.exchanges.length != 0) {
+					var i = dayPrice.exchanges.length - 1;
+					var dayRate = dayPrice.exchanges[i].rateNQT / 1000000;
+					var day = ((rate - dayRate) / dayRate) * 100;
+					var dayPercent = day.toFixed(2);
+					if(dayPercent >= 0.00) {
+						var iqdxt = '';
+						iqdxt += '<span style="color:#3fcd59">' + dayPercent + '%' + '</span>';
+						document.getElementById("iqdxt").innerHTML = iqdxt;
+					} else {
+						var iqdxt = '';
+						iqdxt += '<span style="color:#ff363c">' + dayPercent + '%' + '</span>';
+						document.getElementById("iqdxt").innerHTML = iqdxt;
+					}
+				} else {
+					var iqdxt = '';
+					iqdxt += '<span style="color:#3fcd59">0.00%</span>';
+					document.getElementById("iqdxt").innerHTML = iqdxt;
+				}})
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.IQDXId,
+				timestamp: weekAgoStamp
+			}, function(weekPrice) {
+				var i = weekPrice.exchanges.length - 1;
+				var weekRate = weekPrice.exchanges[i].rateNQT / 1000000;
+				var week = ((rate - weekRate) / weekRate) * 100;
+				var weekPercent = week.toFixed(2);
+				if(weekPercent >= 0.00) {
+					var iqdxs = '';
+					iqdxs += '<span style="color:#3fcd59">' + weekPercent + '%' + '</span>';
+					document.getElementById("iqdxs").innerHTML = iqdxs;
+				} else {
+					var iqdxs = '';
+					iqdxs += '<span style="color:#ff363c">' + weekPercent + '%' + '</span>';
+					document.getElementById("iqdxs").innerHTML = iqdxs;
+		}})})
+	</script>
+	<script>
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getExchanges",
+			currency: Constants.IRRXId
+		}, function(request) {
+			var rate = request.exchanges[0].rateNQT / 1000000;
+			document.getElementById("irrx").innerHTML = rate.toFixed(2);
+			var genesisDate = 1620390840;
+			var today = Math.floor(Date.now() / 1000)
+			var dayAgo = today - 86440;
+			var weekAgo = today - 604800;
+			var dayAgoStamp = dayAgo - genesisDate;
+			var weekAgoStamp = weekAgo - genesisDate;
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.IRRXId,
+				timestamp: dayAgoStamp
+			}, function(dayPrice) {
+				if(dayPrice.exchanges.length != 0) {
+					var i = dayPrice.exchanges.length - 1;
+					var dayRate = dayPrice.exchanges[i].rateNQT / 1000000;
+					var day = ((rate - dayRate) / dayRate) * 100;
+					var dayPercent = day.toFixed(2);
+					if(dayPercent >= 0.00) {
+						var irrxt = '';
+						irrxt += '<span style="color:#3fcd59">' + dayPercent + '%' + '</span>';
+						document.getElementById("irrxt").innerHTML = irrxt;
+					} else {
+						var irrxt = '';
+						irrxt += '<span style="color:#ff363c">' + dayPercent + '%' + '</span>';
+						document.getElementById("irrxt").innerHTML = irrxt;
+					}
+				} else {
+					var irrxt = '';
+					irrxt += '<span style="color:#3fcd59">0.00%</span>';
+					document.getElementById("irrxt").innerHTML = irrxt;
+				}
+			})
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.IRRXId,
+				timestamp: weekAgoStamp
+			}, function(weekPrice) {
+				var i = weekPrice.exchanges.length - 1;
+				var weekRate = weekPrice.exchanges[i].rateNQT / 1000000;
+				var week = ((rate - weekRate) / weekRate) * 100;
+				var weekPercent = week.toFixed(2);
+				if(weekPercent >= 0.00) {
+					var irrxs = '';
+					irrxs += '<span style="color:#3fcd59">' + weekPercent + '%' + '</span>';
+					document.getElementById("irrxs").innerHTML = irrxs;
+				} else {
+					var irrxs = '';
+					irrxs += '<span style="color:#ff363c">' + weekPercent + '%' + '</span>';
+					document.getElementById("irrxs").innerHTML = irrxs;
+		}})})
+	</script>
+	<script>
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getExchanges",
+			currency: Constants.JPYXId
+		}, function(request) {
+			var rate = request.exchanges[0].rateNQT / 1000000;
+			document.getElementById("jpyx").innerHTML = rate.toFixed(2);
+			var genesisDate = 1620390840;
+			var today = Math.floor(Date.now() / 1000)
+			var dayAgo = today - 86440;
+			var weekAgo = today - 604800;
+			var dayAgoStamp = dayAgo - genesisDate;
+			var weekAgoStamp = weekAgo - genesisDate;
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.JPYXId,
+				timestamp: dayAgoStamp
+			}, function(dayPrice) {
+				if(dayPrice.exchanges.length != 0) {
+					var i = dayPrice.exchanges.length - 1;
+					var dayRate = dayPrice.exchanges[i].rateNQT / 1000000;
+					var day = ((rate - dayRate) / dayRate) * 100;
+					var dayPercent = day.toFixed(2);
+					if(dayPercent >= 0.00) {
+						var jpyxt = '';
+						jpyxt += '<span style="color:#3fcd59">' + dayPercent + '%' + '</span>';
+						document.getElementById("jpyxt").innerHTML = jpyxt;
+					} else {
+						var jpyxt = '';
+						jpyxt += '<span style="color:#ff363c">' + dayPercent + '%' + '</span>';
+						document.getElementById("jpyxt").innerHTML = jpyxt;
+					}
+				} else {
+					var jpyxt = '';
+					jpyxt += '<span style="color:#3fcd59">0.00%</span>';
+					document.getElementById("jpyxt").innerHTML = jpyxt;
+				}})
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.JPYXId,
+				timestamp: weekAgoStamp
+			}, function(weekPrice) {
+				var i = weekPrice.exchanges.length - 1;
+				var weekRate = weekPrice.exchanges[i].rateNQT / 1000000;
+				var week = ((rate - weekRate) / weekRate) * 100;
+				var weekPercent = week.toFixed(2);
+				if(weekPercent >= 0.00) {
+					var jpyxs = '';
+					jpyxs += '<span style="color:#3fcd59">' + weekPercent + '%' + '</span>';
+					document.getElementById("jpyxs").innerHTML = jpyxs;
+				} else {
+					var jpyxs = '';
+					jpyxs += '<span style="color:#ff363c">' + weekPercent + '%' + '</span>';
+					document.getElementById("jpyxs").innerHTML = jpyxs;
+		}})})
+	</script>
+	<script>
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getExchanges",
+			currency: Constants.NZDXId
+		}, function(request) {
+			var rate = request.exchanges[0].rateNQT / 1000000;
+			document.getElementById("nzdx").innerHTML = rate.toFixed(2);
+			var genesisDate = 1620390840;
+			var today = Math.floor(Date.now() / 1000)
+			var dayAgo = today - 86440;
+			var weekAgo = today - 604800;
+			var dayAgoStamp = dayAgo - genesisDate;
+			var weekAgoStamp = weekAgo - genesisDate;
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.NZDXId,
+				timestamp: dayAgoStamp
+			}, function(dayPrice) {
+				if(dayPrice.exchanges.length != 0) {
+					var i = dayPrice.exchanges.length - 1;
+					var dayRate = dayPrice.exchanges[i].rateNQT / 1000000;
+					var day = ((rate - dayRate) / dayRate) * 100;
+					var dayPercent = day.toFixed(2);
+					if(dayPercent >= 0.00) {
+						var nzdxt = '';
+						nzdxt += '<span style="color:#3fcd59">' + dayPercent + '%' + '</span>';
+						document.getElementById("nzdxt").innerHTML = nzdxt;
+					} else {
+						var nzdxt = '';
+						nzdxt += '<span style="color:#ff363c">' + dayPercent + '%' + '</span>';
+						document.getElementById("nzdxt").innerHTML = nzdxt;
+					}
+				} else {
+					var nzdxt = '';
+					nzdxt += '<span style="color:#3fcd59">0.00%</span>';
+					document.getElementById("nzdxt").innerHTML = nzdxt;
+				}})
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.NZDXId,
+				timestamp: weekAgoStamp
+			}, function(weekPrice) {
+				var i = weekPrice.exchanges.length - 1;
+				var weekRate = weekPrice.exchanges[i].rateNQT / 1000000;
+				var week = ((rate - weekRate) / weekRate) * 100;
+				var weekPercent = week.toFixed(2);
+				if(weekPercent >= 0.00) {
+					var nzdxs = '';
+					nzdxs += '<span style="color:#3fcd59">' + weekPercent + '%' + '</span>';
+					document.getElementById("nzdxs").innerHTML = nzdxs;
+				} else {
+					var nzdxs = '';
+					nzdxs += '<span style="color:#ff363c">' + weekPercent + '%' + '</span>';
+					document.getElementById("nzdxs").innerHTML = nzdxs;
+		}})})
+	</script>
+	<script>
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getExchanges",
+			currency: Constants.RUBXId
+		}, function(request) {
+			var rate = request.exchanges[0].rateNQT / 1000000;
+			document.getElementById("rubx").innerHTML = rate.toFixed(2);
+			var genesisDate = 1620390840;
+			var today = Math.floor(Date.now() / 1000)
+			var dayAgo = today - 86440;
+			var weekAgo = today - 604800;
+			var dayAgoStamp = dayAgo - genesisDate;
+			var weekAgoStamp = weekAgo - genesisDate;
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.RUBXId,
+				timestamp: dayAgoStamp
+			}, function(dayPrice) {
+				if(dayPrice.exchanges.length != 0) {
+					var i = dayPrice.exchanges.length - 1;
+					var dayRate = dayPrice.exchanges[i].rateNQT / 1000000;
+					var day = ((rate - dayRate) / dayRate) * 100;
+					var dayPercent = day.toFixed(2);
+					if(dayPercent >= 0.00) {
+						var rubxt = '';
+						rubxt += '<span style="color:#3fcd59">' + dayPercent + '%' + '</span>';
+						document.getElementById("rubxt").innerHTML = rubxt;
+					} else {
+						var rubxt = '';
+						rubxt += '<span style="color:#ff363c">' + dayPercent + '%' + '</span>';
+						document.getElementById("rubxt").innerHTML = rubxt;
+					}
+				} else {
+					var rubxt = '';
+					rubxt += '<span style="color:#3fcd59">0.00%</span>';
+					document.getElementById("rubxt").innerHTML = rubxt;
+				}})
+			$.getJSON(Constants.apiUrl, {
+				requestType: "getExchanges",
+				currency: Constants.RUBXId,
+				timestamp: weekAgoStamp
+			}, function(weekPrice) {
+				var i = weekPrice.exchanges.length - 1;
+				var weekRate = weekPrice.exchanges[i].rateNQT / 1000000;
+				var week = ((rate - weekRate) / weekRate) * 100;
+				var weekPercent = week.toFixed(2);
+				if(weekPercent >= 0.00) {
+					var rubxs = '';
+					rubxs += '<span style="color:#3fcd59">' + weekPercent + '%' + '</span>';
+					document.getElementById("rubxs").innerHTML = rubxs;
+				} else {
+					var rubxs = '';
+					rubxs += '<span style="color:#ff363c">' + weekPercent + '%' + '</span>';
+					document.getElementById("rubxs").innerHTML = rubxs;
+		}})})
+	</script>
+
+</body>
+
+</html>

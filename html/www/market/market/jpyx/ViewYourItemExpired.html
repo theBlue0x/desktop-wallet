@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blue0x Decentralized Marketplace">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Blue0x | MARKET</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/bootstrap-reset.css" rel="stylesheet">
+  <link href="../assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="../css/style.min.css" rel="stylesheet">
+  <link href="../css/style-responsive.css" rel="stylesheet" />
+  <link href="../css/spinner.css" rel="stylesheet">
+  <link href="../assets/fancybox/jquery.fancybox.css" rel="stylesheet" />
+  <link href="../css/gallery.css" rel="stylesheet" />
+  <script>
+  function showItem() {
+    var listingid = (getQueryVariable("itemid"));
+    $.post(Constants.apiUrl, {
+        requestType: 'getDGSGood',
+        goods: listingid,
+        includeCounts: "true"
+      },
+      function(request) {
+        var data = JSON.parse(request.description);
+        var id = request.goods;
+        var seller = request.sellerRS;
+        var displayCurrency = escapeHtml(data.c);
+        var displayPrice = escapeHtml(data.p);
+        var displayPriceWithCurrency = displayPrice + " " + displayCurrency;
+        document.getElementById("title").innerHTML = escapeHtml(request.name);
+        document.getElementById("itemID").innerHTML = escapeHtml(id);
+        document.getElementById("price").innerHTML = escapeHtml(displayPriceWithCurrency);
+        sessionStorage.setItem("price", displayPrice);
+        sessionStorage.setItem("seller", seller);
+      }, "json"); 
+      $.post(Constants.apiUrl, { 
+        requestType: 'getTransaction',
+        transaction: listingid
+      },
+      function(result) {
+        var info = JSON.parse(result);
+        var attachment = info.attachment;
+        var data = JSON.parse(attachment.description);
+        var displayCurrency = data.c;
+        var message = JSON.parse(attachment.message);
+        var location = data.l;
+        getCityName(location);
+        document.getElementById("description").innerHTML = escapeHtml(message.d);
+        if (message.s != "") {
+        document.getElementById("shipping").innerHTML = escapeHtml(message.s);
+        } else {
+        document.getElementById("shipping").innerHTML = "Local Pickup Only";
+        }
+        if (message.sp != ""){
+        document.getElementById("shipping_price").innerHTML = escapeHtml(message.sp)+' '+escapeHtml(displayCurrency);
+        } else {
+        document.getElementById("shipping_price").innerHTML = "N/A";
+        }
+        if (message.i != "") {
+          main_image_url = "Yes";
+        }
+        if (main_image_url) {
+          // If there is a main_image_url, check it
+          // Clean the main image URL using validator.min.js
+          if (validator.isURL(message.i)) {
+            // Field is a URL
+            // Now check to make sure the URL is for an image
+            var Extension = message.i.substring(message.i.lastIndexOf('.') + 1).toLowerCase();
+            if (Extension == "gif" || Extension == "png" || Extension == "jpeg" || Extension == "jpg") {
+              // Valid image extension
+              var main_image_url = escapeHtml(message.i);
+            } else {
+              // URL is not for an image file
+              var main_image_url = "../img/Box-icon.png";
+            }
+          } else {
+            // Field is not a valid URL
+            var main_image_url = "../img/Box-icon.png";
+          }
+          // Add the image to the page
+          document.getElementById("top_image").innerHTML = '<a id="previewMainImageLink" class="fancybox" rel="group" href="' + main_image_url + '"><img alt="" src="' + main_image_url + '"></a>';
+        } // End of if (main_image_url)
+        });
+        var cities = {   
+        "fuk":  " Fukuoka,  Japan ",
+        "hir":  " Hiroshima,  Japan ",
+        "kaw":  " Kawasaki, Japan ",
+        "kit":  " Kitakyushu, Japan ",
+        "kob":  " Kobe, Japan ",
+        "kyo":  " Kyoto,  Japan ",
+        "nag":  " Nagoya, Japan ",
+        "osa":  " Osaka,  Japan ",
+        "sai":  " Saitama,  Japan ",
+        "sap":  " Sapporo,  Japan ",
+        "sen":  " Sendai, Japan ",
+        "tok":  " Tokyo,  Japan ",
+        "yok":  " Yokohama, Japan ",
+        "yon":  " Yono, Japan "
+        }
+        function getCityName(name){
+          var city = (cities[name]);
+          document.getElementById("location").innerHTML = escapeHtml(city);
+        }};
+  </script>
+</head>
+<body class="full-width" onload="setAccountNumber(); showItem(); setLanguage();">
+  <section id="container">
+    <script type="text/javascript" src="../js/menu.js"></script>
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="row">
+          <div class="col-lg-12">
+            <section class="panel">
+              <header class="panel-heading" id="panel-heading">
+                <span data-i18n="item_id">Item ID</span>: <span id="itemID"></span>
+              </header>
+              <div class="panel-body" style="padding:30px;padding-bottom:0px;padding-top:20px;" id="panel-body">
+                <div class="form-group">
+                    <aside class="profile-nav alt">
+                      <section class="panel" style="box-shadow:none">
+                        <div class="user-heading alt">
+                          <span id="top_image"><a href="#"><img alt="" src="../img/Box-icon.png"></a></span>
+                          <h1 id="title">No Item Title</h1>
+                          <p><b> <span data-i18n="pending">Pending</span></b></p>
+                          </div>
+                          <div>
+                          <p><b> <span data-i18n="description">Description</span>:</b> <span id="description"></span></p></b>
+                          <p><b> <span data-i18n="price">Price</span>:</b> <span id="price"></span></p>
+                          <p><b> <span data-i18n="location">Location</span>:</b> <span id="location"></span></p>
+                          </div>
+                      </section>
+                    </aside>
+                    <span id="listingResult"></span>
+                    <span id="payment"></span>
+                    <div id="purchaseButtonSection">
+                      <button class="btn btn-default"><span data-i18n="message_to_buyer">Message Buyer</span></button>
+                      <button class="btn btn-danger" data-toggle="modal" data-target="#myModal"><span data-i18n="button_finalize_purchase">Finalize Sale</span></button>
+                    </div> 
+                    <!-- Purchase Modal -->
+                    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                              <h4 class="modal-title"><span data-i18n="button_finalize_purchase">Finalize Sale</span></h4>
+                            </div>
+                            <div class="modal-body">
+                              <p><span>Enter your account secret phrase to finalize this sale.</span></p>
+                              <div class="form-group">
+                              <label for="secret_phrase"><b><span data-i18n="account_number">BLX Account Number</span></b> :</label>
+                              <div class="iconic-input">
+                                <i class="fa fa-bars"></i>
+                                <input type="password" class="form-control" data-i18n="[placeholder]placeholder_required" id="secret_phrase" autofocus>
+                              </div>
+                              <br/>
+                                <button data-dismiss="modal" class="btn btn-secondary" type="button">Close</button>&nbsp;
+                                <button data-dismiss="modal" class="btn btn-default" type="button" onclick=""><span data-i18n="button_finalize_purchase">Finalize Sale</span></button>
+                            </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <!--Modal-->
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+        </div>
+      </section>
+    </section>
+  </section>
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/jquery.dcjqaccordion.2.7.min.js"></script>
+  <script src="../js/bootstrap-hover-dropdown.min.js"></script>
+  <script src="../assets/fancybox/jquery.fancybox.js"></script>
+  <script src="../js/validator.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    jQuery(".fancybox").fancybox();
+  });
+  </script>
+  <script src="../js/constants.js"></script>
+  <script src="../js/freemarket_scripts.js"></script>
+  <script src="../js/common-scripts.js"></script>
+  <script src="../js/i18next.min.js"></script>
+  <script src="../js/freemarket_localization_scripts.js"></script>
+</body>
+</html>

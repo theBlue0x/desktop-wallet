@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Blue0x Decentralized Exchange">
+	<link rel="shortcut icon" href="img/favicon.ico">
+	<title>Blue0x | EXCHANGE</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/bootstrap-reset.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Assistant" rel="stylesheet">
+	<link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<link href="css/style.min.css" rel="stylesheet">
+	<link href="css/style-responsive.min.css" rel="stylesheet">
+	<style>
+	.table-striped>tbody>tr:nth-child(odd)>td,
+	.table-striped>tbody>tr:nth-child(odd)>th {
+		background-color: transparent;
+	}
+	.table>thead>tr>th {
+		border: none;
+	}
+	p {
+		color: #d1d1d1;
+		font-weight: 600;
+	}
+	.table>thead>tr>th,
+	.table>tbody>tr>th,
+	.table>tfoot>tr>th,
+	.table>thead>tr>td,
+	.table>tbody>tr>td,
+	.table>tfoot>tr>td {
+		border-top: 1px solid #444;
+	}
+	.centered {
+		margin-right: 60px;
+	}
+	input {
+		text-align: center;
+	}
+	input[type='password'] {
+		text-align: left;
+	}
+	</style>
+</head>
+<body class="full-width" onload="jpyxChart(); jpyxPrice(); buyOffers(); sellOffers(); setAccountNumber();">
+	<section id="container">
+		<script type="text/javascript" src="js/menu.js"></script>
+		<section id="main-content">
+			<section class="wrapper"> <span id="txID">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="panel">
+							<header class="panel-heading" style="color:white;">
+								<p>JPYX - United States Dollar Market</p>
+								<p style="font-weight:500;font-size:14px;">Last Price : <span id="jpyx">00.00</span> BLX</p>
+				</header>
+				<div class="panel-body">
+					<div class="table-responsive">
+						<canvas id="myChart" class="table" style="max-height:38vh;display: inline-block;"></canvas>
+					</div>
+				</div>
+				</div>
+				</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="panel">
+							<header class="panel-heading" style="color:#d1d1d1;"> <span>Buy JPYX</span><a data-target="#buyLimitModal" data-toggle="modal" onclick="previewBuyLimitModal();"style="float:right;font-size:14px;cursor:pointer;">Limit Order Buy</a> </header>
+							<div class="panel-body" style="max-height:140px;overflow:auto;padding-left:15px;">
+								<table class="display table table-striped">
+									<thead>
+										<tr>
+											<th>Expiration</th>
+											<th>Amount</th>
+											<th>Price</th>
+										</tr>
+									</thead>
+									<tbody id="buy_table_body"></tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="panel">
+							<header class="panel-heading" style="color:#d1d1d1;"> <span>Sell JPYX</span><a data-toggle="modal" data-target="#sellLimitModal" onclick="previewSellLimitModal();" style="float:right;font-size:14px;cursor:pointer;">Limit Order Sell</a> </header>
+							<div class="panel-body" style="max-height:140px;overflow:auto;padding-left: 15px;">
+								<table class="display table table-striped">
+									<thead>
+										<tr>
+											<th>Expiration</th>
+											<th>Amount</th>
+											<th>Price</th>
+										</tr>
+									</thead>
+									<tbody id="sell_table_body"></tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				</span>
+				<div class="modal fade" id="sellLimitModal">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title"><b>Sell JPYX (Limit Order)</b></h4> </div>
+							<div class="modal-body" align="center">
+								<p class="centered">Amount to Sell:</p>
+								<div class="input-group" style="max-width:300px;">
+									<input type="number" id="sellLimitBaseAmount" required class="form-control" onkeyup="previewSellLimit();" oninput="validate(this);"> <span class="input-group-addon">JPYX</span> </div>
+								<br/>
+								<p class="centered">Price:</p>
+								<div class="input-group" style="max-width:300px;">
+									<input type="number" id="sellLimitRate" required class="form-control" onkeyup="previewSellLimit();" oninput="validate(this);"> <span class="input-group-addon">&nbsp;BLX&nbsp;</span> </div>
+								<br/>
+								<p class="centered">Order Total:</p>
+								<div class="input-group" style="max-width:300px;">
+									<input type="number" id="sellLimitTargetAmount" required class="form-control" onkeyup="preview();"> <span class="input-group-addon">&nbsp;BLX&nbsp;</span> </div>
+								<br/> 
+								<br/>
+								<div class="form-group" style="max-width:400px;color:white;">
+									<label for="secretPhrase"><b>Enter Your Account Secret Phrase:</b></label>
+									<!--button type="button" class="btn btn-qr btn-xs" data-toggle="modal" data-target="#reader1">
+            					<i class="fa fa-qrcode"></i>
+            				</button-->
+									<div class="iconic-input"> <i class="fa fa-key"></i>
+										<input type="password" class="form-control" id="sellLimitSecretPhrase" placeholder="required" required>
+										<br/>
+										<div id="limitError" style="color:red;"></div>
+									</div>
+								</div>
+								<p><i style="font-weight:100;">Transaction Fee : 0.01 BLX</i></p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+								<button type="button" class="btn btn-info" onclick="sellLimitOrder();" data-dismiss="modal">Submit</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal fade" id="buyLimitModal">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title"><b>Buy JPYX (Limit Order)</b></h4> </div>
+							<div class="modal-body" align="center">
+								<p class="centered">Amount to Buy:</p>
+								<div class="input-group" style="max-width:300px;">
+									<input type="number" id="buyLimitBaseAmount" required class="form-control" onkeyup="previewBuyLimit();" oninput="validate(this);"> <span class="input-group-addon">JPYX</span> </div>
+								<br/>
+								<p class="centered">Price:</p>
+								<div class="input-group" style="max-width:300px;">
+									<input type="number" id="buyLimitRate" required class="form-control" onkeyup="previewBuyLimit();" oninput="validate(this);"> <span class="input-group-addon">&nbsp;BLX&nbsp;</span> </div>
+								<br/>
+								<p class="centered">Order Total:</p>
+								<div class="input-group" style="max-width:300px;">
+									<input type="text" id="buyLimitTargetAmount" required class="form-control"> <span class="input-group-addon">&nbsp;BLX&nbsp;</span> </div>
+								<br/>
+								<br/>
+								<div class="form-group" style="max-width:400px;color:white;">
+									<label for="secretPhrase"><b>Enter Your Account Secret Phrase:</b></label>
+									<!--button type="button" class="btn btn-qr btn-xs" data-toggle="modal" data-target="#reader1">
+            					<i class="fa fa-qrcode"></i>
+            				</button-->
+									<div class="iconic-input"> <i class="fa fa-key"></i>
+										<input type="password" class="form-control" id="buyLimitSecretPhrase" placeholder="required" required>
+										<br/>
+										<div id="limitError" style="color:red;"></div>
+									</div>
+								</div>
+								<p><i style="font-weight:100;">Transaction Fee : 0.01 BLX</i></p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+								<button type="button" class="btn btn-info" onclick="buyLimitOrder();" data-dismiss="modal">Submit</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal fade" id="buyModal">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title"><b>Buy JPYX</b></h4> </div>
+							<div class="modal-body" align="center">
+								<p class="centered">Amount to Buy:</p>
+								<div class="input-group" style="max-width:300px;">
+									<input type="number" id="buyBaseAmount" required class="form-control" onkeyup="previewBuyMarket();" oninput="validate(this);"> <span class="input-group-addon">JPYX</span> </div>
+								<br/>
+								<p class="centered">Price:</p>
+								<div class="input-group" style="max-width:300px;"> <span id="modalBuyRateDisplay" class="form-control"></span> <span class="input-group-addon">&nbsp;BLX&nbsp;</span> </div>
+								<br/>
+								<p class="centered">Order Total:</p>
+								<div class="input-group" style="max-width:300px;">
+									<input type="text" id="buyTargetAmount" required class="form-control"> <span class="input-group-addon">&nbsp;BLX&nbsp;</span> </div>
+								<br/> <span id="buyModalRateNQT" style="display:none;"></span>
+								<br/>
+								<div class="form-group" style="max-width:400px;color:white;">
+									<label for="secretPhrase"><b>Enter Your Account Secret Phrase:</b></label>
+									<!--button type="button" class="btn btn-qr btn-xs" data-toggle="modal" data-target="#reader1">
+            					<i class="fa fa-qrcode"></i>
+            				</button-->
+									<div class="iconic-input"> <i class="fa fa-key"></i>
+										<input type="password" class="form-control" id="buySecretPhrase" placeholder="required" required>
+										<br/>
+										<div id="buyModalError" style="color:red;"></div>
+									</div>
+								</div>
+								<p><i style="font-weight:100;">Transaction Fee : 0.01 BLX</i></p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+								<button type="button" class="btn btn-info" onclick="buyMarketOrder();" data-dismiss="modal">Submit</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal fade" id="sellModal">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title"><b>Sell JPYX</b></h4> </div>
+							<div class="modal-body">
+								<div class="modal-body" align="center">
+									<p class="centered">Amount to Sell:</p>
+									<div class="input-group" style="max-width:300px;">
+										<input type="number" id="sellBaseAmount" required class="form-control" onkeyup="previewSellMarket();" oninput="validate(this);"> <span class="input-group-addon">JPYX</span> </div>
+									<br/>
+									<p class="centered">Price:</p>
+									<div class="input-group" style="max-width:300px;"> <span id="modalSellRateDisplay" class="form-control"></span> <span class="input-group-addon">&nbsp;BLX&nbsp;</span> </div>
+									<br/>
+									<p class="centered">Order Total:</p>
+									<div class="input-group" style="max-width:300px;">
+										<input type="text" id="sellTargetAmount" required class="form-control"> <span class="input-group-addon">&nbsp;BLX&nbsp;</span> </div>
+									<br/> <span id="sellModalRateNQT" style="display:none;"></span>
+									<br/>
+									<div class="form-group" style="max-width:400px;color:white;">
+										<label for="secretPhrase"><b>Enter Your Account Secret Phrase:</b></label>
+										<!--button type="button" class="btn btn-qr btn-xs" data-toggle="modal" data-target="#reader1">
+            					<i class="fa fa-qrcode"></i>
+            				</button-->
+										<div class="iconic-input"> <i class="fa fa-key"></i>
+											<input type="password" class="form-control" id="sellSecretPhrase" placeholder="required" required>
+											<br/>
+											<div id="sellModalError" style="color:red;"></div>
+										</div>
+									</div>
+									<p><i style="font-weight:100;">Transaction Fee : 0.01 BLX</i></p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+									<button type="button" class="btn btn-info" onclick="sellMarketOrder();" data-dismiss="modal">Submit</button>
+								</div>
+							</div>
+						</div>
+			</section>
+		</section>
+	</section>
+	</section>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/constants.js"></script>
+	<script src="js/freemarket_scripts.js"></script>
+	<script src="js/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+	<script>
+  var validate = function(e) {
+    var t = e.value;
+    e.value = (t.indexOf(".") >= 0) ? (t.substr(0, t.indexOf(".")) + t.substr(t.indexOf("."), 3)) : t;
+  }
+  </script>
+	<script>
+	setInterval(jpyxPrice, 6000);
+	function jpyxPrice() {
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getExchanges",
+			currency: Constants.JPYXId
+		}, function(request) {
+			var rate = request.exchanges[0].rateNQT / 1000000;
+			document.getElementById("jpyx").innerText = rate.toFixed(2);
+	})}
+	</script>
+	<script>
+	function jpyxChart () {
+	$.getJSON(Constants.apiUrl, {
+		requestType: "getExchanges",
+		currency: Constants.JPYXId
+	}, function(request) {
+		var data = [];
+		var labels = [];
+		for(i = request.exchanges.length - 1; i >= 0; i--) {
+			var genesisDate = 1620390840;
+			var date = request.exchanges[i].timestamp;
+			var blockEpoch = (genesisDate + date) * 1000;
+			var blockDate = new Date(blockEpoch);
+			var price = request.exchanges[i].rateNQT / 1000000;
+			data.push(price);
+			labels.push(moment(blockDate).format('MM/DD'));
+		}
+		renderChart(data, labels);
+	})
+	function renderChart(data, labels) {
+		var ctx = document.getElementById("myChart").getContext('2d');
+		ctx.canvas.width = window.innerWidth;
+		ctx.canvas.height = window.innerHeight;
+		var gradient = ctx.createLinearGradient(0, 0, 0, 300);
+		gradient.addColorStop(0, 'rgba(3, 201, 169, 0.4)');
+		gradient.addColorStop(1, 'rgba(3, 201, 169, 0)');
+		var myChart = new Chart(ctx, {
+			type: 'line',
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					xAxes: [{
+						display: false
+					}]
+				}
+			},
+			data: {
+				labels: labels,
+				datasets: [{
+					label: 'JPYX / BLX Price',
+					data: data,
+					borderColor: 'rgba(3, 201, 169, 1)',
+					backgroundColor: gradient,
+					borderWidth: 2,
+					pointRadius: 2
+	}]}})}}
+	</script>
+	<script>
+	setInterval(sellOffers, 6000);
+	function sellOffers() {
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getSellOffers",
+			currency: Constants.JPYXId,
+			availableOnly: "true"
+		}, function(request) {
+			for(var i = 0; i < request.offers.length; i++) {
+				var buyRate = request.offers[i].rateNQT;
+				var expiry = request.offers[i].expirationHeight;
+				var buyOfferRate = request.offers[i].rateNQT / 1000000;
+				var buyOfferLimit = request.offers[i].limit / 100;
+				var buyOfferSupply = request.offers[i].supply / 100;
+				var rows;
+				rows += '<tr>';
+				rows += '<td><a style="color:#3fcd59;" href="#buyModal" data-val="' + buyRate + '" data-toggle="modal" data-target="#buyModal" onclick="previewBuyModal();">' + expiry.toLocaleString() + '</a></td>';
+				rows += '<td><a style="color:#3fcd59;" href="#buyModal" data-val="' + buyRate + '" data-toggle="modal" data-target="#buyModal" onclick="previewBuyModal();">' + buyOfferLimit.toFixed(2) + '</a></td>';
+				rows += '<td><a style="color:#3fcd59;" href="#buyModal" data-val="' + buyRate + '" data-toggle="modal" data-target="#buyModal" onclick="previewBuyModal();">' + buyOfferRate.toFixed(2) + ' BLX</a></td>';
+				rows += '</tr>';
+			}
+			$("#buy_table_body").html(rows);
+		})}
+	</script>
+	<script>
+	setInterval(buyOffers, 6000);
+	function buyOffers() {
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getBuyOffers",
+			currency: Constants.JPYXId,
+			availableOnly: "true"
+		}, function(request) {
+			for(var i = 0; i < request.offers.length; i++) {
+				var sellRate = request.offers[i].rateNQT;
+				var expiry = request.offers[i].expirationHeight;
+				var sellOfferRate = request.offers[i].rateNQT / 1000000;
+				var sellOfferLimit = request.offers[i].limit / 100;
+				var sellOfferSupply = request.offers[i].supply / 100;
+				var rows;
+				rows += '<tr>';
+				rows += '<td><a style="color:#ff363c;" href="#sellModal" data-val="' + sellRate + '" data-toggle="modal" data-target="#sellModal" onclick="previewSellModal();">' + expiry.toLocaleString() + '</a></td>';
+				rows += '<td><a style="color:#ff363c;" href="#sellModal" data-val="' + sellRate + '" data-toggle="modal" data-target="#sellModal" onclick="previewSellModal();">' + sellOfferLimit.toFixed(2) + '</a></td>';
+				rows += '<td><a style="color:#ff363c;" href="#sellModal" data-val="' + sellRate + '" data-toggle="modal" data-target="#sellModal" onclick="previewSellModal();">' + sellOfferRate.toFixed(2) + ' BLX</a></td>';
+				rows += '</tr>';
+			}
+			$("#sell_table_body").html(rows);
+		})}
+	</script>
+	<script>
+	function previewBuyModal() {
+		$('#buyModal').on('show.bs.modal', function(event) {
+			$("#buyBaseAmount").val('');
+			$("#buyTargetAmount").val('');
+			$("#buyModalError").html('');
+			$("#buySecretPhrase").val('');
+			var rate = $(event.relatedTarget).data('val');
+			$("#buyModalRateNQT").text(rate);
+			var displayRateBuy = rate / 1000000;
+			var displayRateBuy1 = displayRateBuy.toFixed(2);
+			$("#modalBuyRateDisplay").html(displayRateBuy1);
+	})}
+	</script>
+	<script>
+	function previewSellModal() {
+		$('#sellModal').on('show.bs.modal', function(event) {
+			$("#sellBaseAmount").val('');
+			$("#sellTargetAmount").val('');
+			$("#sellModalError").html('');
+			$("#sellSecretPhrase").val('');
+			var rate = $(event.relatedTarget).data('val');
+			$("#sellModalRateNQT").text(rate);
+			var displayRateSell = rate / 1000000;
+			var displayRateSell1 = displayRateSell.toFixed(2);
+			$("#modalSellRateDisplay").html(displayRateSell1);
+	})}
+	</script>
+	<script>
+	function previewBuyMarket() {
+		$("#buyModalError").text('');
+		var givenRateBuy = $("#buyModalRateNQT").text();
+		var baseAmount = $("#buyBaseAmount").val() * 100;
+		var baseAmountFormatted = Math.fround(baseAmount);
+		if(baseAmount > 0) {
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getAvailableToBuy",
+			currency: Constants.JPYXId,
+			units: baseAmountFormatted
+		}, function(request) {
+			
+			var error = request.errorDescription;
+			if(!error) {
+				var amountNeededBuy = request.amountNQT / 1000000;
+				var amountNeededBuyFormatted = Math.floor(amountNeededBuy)/100;
+				$("#buyTargetAmount").val(amountNeededBuyFormatted.toFixed(2));
+			} else {
+				$("#buyModalError").text('Error:' + error);
+	}})}}
+	</script>
+	<script>
+	function previewSellMarket() {
+		$("#sellModalError").text('');
+		var givenRateSell = $("#sellModalRateNQT").text();
+		var baseAmount = $("#sellBaseAmount").val() * 100;
+		var baseAmountFormatted = Math.fround(baseAmount);
+		if(baseAmount > 0) {
+		$.getJSON(Constants.apiUrl, {
+			requestType: "getAvailableToSell",
+			currency: Constants.JPYXId,
+			units: baseAmountFormatted
+		}, function(request) {
+			var error = request.errorDescription;
+			if(!error) {
+				var amountNeededSell = request.amountNQT / 1000000;
+				var amountNeededSellFormatted = Math.floor(amountNeededSell)/100;
+				$("#sellTargetAmount").val(amountNeededSellFormatted.toFixed(2));
+			} else {
+				$("#sellModalError").text('Error:' + error);
+	}})}}
+	</script>
+	<script>
+	function sellMarketOrder() {
+		var units = $("#sellBaseAmount").val() * 100;
+		var unitsFormatted = Math.fround(units);
+		$.post(Constants.apiUrl, {
+			requestType: "currencySell",
+			currency: Constants.JPYXId,
+			rateNQT: $("#sellModalRateNQT").text(),
+			units: unitsFormatted,
+			secretPhrase: $("#sellSecretPhrase").val(),
+			feeNQT: 1000000,
+			deadline: 60
+		}, function(request) {
+			var parse = JSON.parse(request);
+			var error = parse.errorDescription;
+			var txID = parse.transaction;
+			if(!error) {
+				var rows = '';
+				rows += '<div class="row">';
+				rows += '<div class="col-lg-12">'
+				rows += '<div class="panel" style="padding:20px;">';
+				rows += '<p>Transaction Successful!</p>';
+				rows += '<p>TX ID: ' + txID + '</p>';
+				rows += '<br/>';
+				rows += '<a class="btn btn-info" href="jpyxMarket.html" role="button">Go Back</a>&nbsp;&nbsp;<a class="btn btn-info" href="account_details.html" role="button">View Account</a>';
+				$("#txID").html(rows);
+			} else {
+				var rows = '';
+				rows += '<div class="row">';
+				rows += '<div class="col-lg-12">'
+				rows += '<div class="panel" style="padding:20px;">';
+				rows += '<p>Transaction Error:</p>';
+				rows += '<p style="color:red">' + error + '</p>';
+				rows += '<br/>';
+				rows += '<a class="btn btn-info" href="jpyxMarket.html" role="button">Go Back</a>&nbsp;&nbsp;<a class="btn btn-info" href="account_details.html" role="button">View Account</a>';
+				$("#txID").html(rows);
+	}})}
+	</script>
+	<script>
+	function buyMarketOrder() {
+		var units = $("#buyBaseAmount").val() * 100;
+		var unitsFormatted = Math.fround(units);
+		$.post(Constants.apiUrl, {
+			requestType: "currencyBuy",
+			currency: Constants.JPYXId,
+			rateNQT: $("#buyModalRateNQT").text(),
+			units: unitsFormatted,
+			secretPhrase: $("#buySecretPhrase").val(),
+			feeNQT: 1000000,
+			deadline: 60
+		}, function(request) {
+			var parse = JSON.parse(request);
+			var error = parse.errorDescription;
+			var txID = parse.transaction;
+			if(!error) {
+				var rows = '';
+				rows += '<div class="row">';
+				rows += '<div class="col-lg-12">'
+				rows += '<div class="panel" style="padding:20px;">';
+				rows += '<p>Transaction Successful!</p>';
+				rows += '<p>TX ID: ' + txID + '</p>';
+				rows += '<br/>';
+				rows += '<a class="btn btn-info" href="jpyxMarket.html" role="button">Go Back</a>&nbsp;&nbsp;<a class="btn btn-info" href="account_details.html" role="button">View Account</a>';
+				$("#txID").html(rows);
+			} else {
+				var rows = '';
+				rows += '<div class="row">';
+				rows += '<div class="col-lg-12">'
+				rows += '<div class="panel" style="padding:20px;">';
+				rows += '<p>Transaction Error:</p>';
+				rows += '<p style="color:red">' + error + '</p>';
+				rows += '<br/>';
+				rows += '<a class="btn btn-info" href="jpyxMarket.html" role="button">Go Back</a>&nbsp;&nbsp;<a class="btn btn-info" href="account_details.html" role="button">View Account</a>';
+				$("#txID").html(rows);
+	}})}
+	</script>
+	<script>
+	function previewSellLimitModal() {
+		$('#sellLimitModal').on('show.bs.modal', function(event) {
+			$("#sellLimitBaseAmount").val('');
+			$("#sellLimitRate").val('');
+			$("#sellLimitTargetAmount").val('');
+			$("#sellLimitSecretPhrase").val('');
+	})}
+	</script>
+	<script>
+	function previewBuyLimitModal() {
+		$('#buyLimitModal').on('show.bs.modal', function(event) {
+			$("#buyLimitBaseAmount").val('');
+			$("#buyLimitRate").val('');
+			$("#buyLimitTargetAmount").val('');
+			$("#buyLimitSecretPhrase").val('');
+	})}
+	</script>
+	<script>
+	function previewBuyLimit() {
+		var rate = $("#buyLimitRate").val();
+		var baseAmount = $("#buyLimitBaseAmount").val();
+		if(baseAmount > 0) {
+			var buyLimitTargetAmount = (baseAmount * rate) * 100;
+			var buyLimitTargetAmountFormatted = Math.floor(buyLimitTargetAmount) / 100;
+			$("#buyLimitTargetAmount").val(buyLimitTargetAmountFormatted);
+	}}
+	</script>
+	<script>
+	function previewSellLimit() {
+		var rate = $("#sellLimitRate").val();
+		var baseAmount = $("#sellLimitBaseAmount").val();
+		if(baseAmount > 0) {
+			var sellLimitTargetAmount = (baseAmount * rate) * 100;
+			var sellLimitTargetAmountFormatted = Math.floor(sellLimitTargetAmount) / 100;
+			$("#sellLimitTargetAmount").val(sellLimitTargetAmountFormatted);
+	}}
+	</script>
+	<script>
+	function buyLimitOrder() {
+		var units = $("#buyLimitBaseAmount").val() * 100;
+		var unitsFormatted = Math.fround(units);
+		var rate = $("#buyLimitRate").val() * 1000000;
+		var rateNQT = Math.fround(rate);
+		$.post(Constants.apiUrl, {
+			requestType: "publishExchangeOffer",
+			currency: Constants.JPYXId,
+			buyRateNQT: rateNQT,
+			sellRateNQT: rateNQT,
+			totalBuyLimit: unitsFormatted,
+			totalSellLimit: 0,
+			initialBuySupply: unitsFormatted,
+			initialSellSupply: 0,
+			secretPhrase: $("#buyLimitSecretPhrase").val(),
+			expirationHeight:100000000,
+			feeNQT: 1000000,
+			deadline: 60
+		}, function(request) {
+			var parse = JSON.parse(request);
+			var error = parse.errorDescription;
+			var txID = parse.transaction;
+			if(!error) {
+				var rows = '';
+				rows += '<div class="row">';
+				rows += '<div class="col-lg-12">'
+				rows += '<div class="panel" style="padding:20px;">';
+				rows += '<p>Transaction Successful!</p>';
+				rows += '<p>TX ID: ' + txID + '</p>';
+				rows += '<br/>';
+				rows += '<a class="btn btn-info" href="jpyxMarket.html" role="button">Go Back</a>&nbsp;&nbsp;<a class="btn btn-info" href="account_details.html" role="button">View Account</a>';
+				$("#txID").html(rows);
+			} else {
+				var rows = '';
+				rows += '<div class="row">';
+				rows += '<div class="col-lg-12">'
+				rows += '<div class="panel" style="padding:20px;">';
+				rows += '<p>Transaction Error:</p>';
+				rows += '<p style="color:red">' + error + '</p>';
+				rows += '<br/>';
+				rows += '<a class="btn btn-info" href="jpyxMarket.html" role="button">Go Back</a>&nbsp;&nbsp;<a class="btn btn-info" href="account_details.html" role="button">View Account</a>';
+				$("#txID").html(rows);
+	}})}
+	</script>
+	<script>
+	function sellLimitOrder() {
+		var units = $("#sellLimitBaseAmount").val() * 100;
+		var unitsFormatted = Math.fround(units);
+		var rate = $("#sellLimitRate").val() * 1000000;
+		var rateNQT = Math.fround(rate);
+		$.post(Constants.apiUrl, {
+			requestType: "publishExchangeOffer",
+			currency: Constants.JPYXId,
+			buyRateNQT: rateNQT,
+			sellRateNQT: rateNQT,
+			totalBuyLimit: 0,
+			totalSellLimit: unitsFormatted,
+			initialBuySupply: 0,
+			initialSellSupply: unitsFormatted,
+			secretPhrase: $("#sellLimitSecretPhrase").val(),
+			expirationHeight:100000000,
+			feeNQT: 1000000,
+			deadline: 60
+		}, function(request) {
+			var parse = JSON.parse(request);
+			var error = parse.errorDescription;
+			var txID = parse.transaction;
+			if(!error) {
+				var rows = '';
+				rows += '<div class="row">';
+				rows += '<div class="col-lg-12">'
+				rows += '<div class="panel" style="padding:20px;">';
+				rows += '<p>Transaction Successful!</p>';
+				rows += '<p>TX ID: ' + txID + '</p>';
+				rows += '<br/>';
+				rows += '<a class="btn btn-info" href="jpyxMarket.html" role="button">Go Back</a>&nbsp;&nbsp;<a class="btn btn-info" href="account_details.html" role="button">View Account</a>';
+				$("#txID").html(rows);
+			} else {
+				var rows = '';
+				rows += '<div class="row">';
+				rows += '<div class="col-lg-12">'
+				rows += '<div class="panel" style="padding:20px;">';
+				rows += '<p>Transaction Error:</p>';
+				rows += '<p style="color:red">' + error + '</p>';
+				rows += '<br/>';
+				rows += '<a class="btn btn-info" href="jpyxMarket.html" role="button">Go Back</a>&nbsp;&nbsp;<a class="btn btn-info" href="account_details.html" role="button">View Account</a>';
+				$("#txID").html(rows);
+	}})}
+	</script>
+</body>
+</html>

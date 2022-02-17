@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blue0x Decentralized Marketplace">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Blue0x | MARKET</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/bootstrap-reset.css" rel="stylesheet">
+  <link href="../assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="../css/style.min.css" rel="stylesheet">
+  <link href="../css/style-responsive.css" rel="stylesheet" />
+  <link href="../css/spinner.css" rel="stylesheet">
+</head>
+<body class="full-width" onload="setAccountNumber(); setLanguage();">
+  <section id="container">
+    <script type="text/javascript" src="../js/menu.js"></script>
+    <section id="main-content">
+      <section class="wrapper site-min-height">
+        <div class="row">
+          <div class="col-lg-12">
+            <section class="panel">
+              <header class="panel-heading">
+                <span data-i18n="header_search_by_category">Search by Item Category</span>
+              </header>
+              <div class="panel-body">
+                <div id="error-message">
+                <div class="form-group">
+                <select class="form-control m-bot15" style="width:50vw;border:1px solid #939393;" id="itemCategory" onchange="searchCategory()">
+                  <option value="">Select a Category</option>
+                  <option value="antiques" data-i18n="[text]antiques">Antiques</option>
+                  <option value="art" data-i18n="[text]art">Art</option>
+                  <option value="baby" data-i18n="[text]baby">Baby</option>
+                  <option value="books" data-i18n="[text]books">Books</option>
+                  <option value="business" data-i18n="[text]business">Business</option>
+                  <option value="industrial" data-i18n="[text]industrial">Industrial</option>
+                  <option value="cameras" data-i18n="[text]cameras">Cameras</option>
+                  <option value="phones" data-i18n="[text]cell_phones">Cell Phones</option>
+                  <option value="clothing" data-i18n="[text]clothing">Clothing</option>
+                  <option value="coins" data-i18n="[text]coins">Coins</option>
+                  <option value="collectibles" data-i18n="[text]collectibles">Collectibles</option>
+                  <option value="computers" data-i18n="[text]computers">Computers</option>
+                  <option value="consumables" data-i18n="[text]consumables">Consumables</option>
+                  <option value="electronics" data-i18n="[text]electronics">Electronics</option>
+                  <option value="crafts" data-i18n="[text]crafts">Crafts</option>
+                  <option value="movies" data-i18n="[text]dvds">DVDs and Movies</option>
+                  <option value="everything" data-i18n="[text]everything_else">Everything Else</option>
+                  <option value="food" data-i18n="[text]food_drink">Food and Drink</option>
+                  <option value="gift" data-i18n="[text]gift_cards">Gift Cards</option>
+                  <option value="health" data-i18n="[text]health_beauty">Health and Beauty</option>
+                  <option value="home" data-i18n="[text]home_garden">Home and Garden</option>
+                  <option value="jewelry" data-i18n="[text]jewelry">Jewelry and Watches</option>
+                  <option value="music" data-i18n="[text]music">Music</option>
+                  <option value="instruments" data-i18n="[text]instruments">Musical Instruments</option>
+                  <option value="networking" data-i18n="[text]networking">Networking</option>
+                  <option value="pet" data-i18n="[text]pets">Pet Supplies</option>
+                  <option value="pottery" data-i18n="[text]pottery">Pottery and Glass</option>
+                  <option value="estate" data-i18n="[text]real_estate">Real Estate</option>
+                  <option value="defense" data-i18n="[text]self_defense">Self Defense</option>
+                  <option value="services" data-i18n="[text]services">Specialty Services</option>
+                  <option value="sporting" data-i18n="[text]sporting_goods">Sporting Goods</option>
+                  <option value="memorabilia" data-i18n="[text]sports_memo">Sports Memorabilia</option>
+                  <option value="stamps" data-i18n="[text]stamps">Stamps</option>
+                  <option value="tickets" data-i18n="[text]tickets">Tickets</option>
+                  <option value="toys" data-i18n="[text]toys">Toys and Hobbies</option>
+                  <option value="travel" data-i18n="[text]travel">Travel</option>
+                  <option value="games" data-i18n="[text]video_games">Video Games</option>
+                </select>
+              </div>
+                  <div class="adv-table">
+                    <hr style="width:100%">
+                    <div id="error-message">
+                  <div class="adv-table">
+                    <input type="text" class="form-control m-bot15" style="float:right;width:50vw;" id="searchInput" onkeyup="searchTable()" placeholder=" Search ...">
+                    <table class="display table table-bordered table-striped" id="example">
+                      <thead>
+                        <tr>
+                          <th class="hidden-phone"><span data-i18n="item_id">Item ID</span></th>
+                          <th><span data-i18n="item_title">Title</span></th>
+                          <th><span data-i18n="price">Price</span></th>
+                        </tr>
+                      </thead>
+                      <tbody id="table_body"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </section>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.dcjqaccordion.2.7.min.js"></script>
+    <script src="../js/bootstrap-hover-dropdown.min.js"></script>
+    <script src="../js/respond.min.js"></script>
+    <script src="../js/constants.js"></script>
+    <script src="../js/freemarket_scripts.js"></script>
+    <script src="../js/common-scripts.js"></script>
+    <script src="../js/i18next.min.js"></script>
+    <script src="../js/freemarket_localization_scripts.js"></script>
+    <script src="../js/moment.min.js"></script>
+    
+    <script>
+    function searchCategory() {
+    document.getElementById("table_body").innerHTML = "";
+    var fmlang = localStorage.getItem("fmlang");
+    $.getJSON(Constants.apiUrl, {
+      requestType: "searchDGSGoods",
+      inStockOnly: "true",
+      hideDelisted: "true",
+      includeCounts: "true",
+      tag: $('#itemCategory').val()
+    }, 
+      function(request) {
+      for (var i = 0; i < request.goods.length ; i++) {
+      var goods = request.goods[i];
+      var data = JSON.parse(request.goods[i].description);
+      var id = request.goods[i].goods;
+      var rows;
+      rows += '<tr>';
+      rows += '<td class="hidden-phone"><a href=\'ViewItem.html?setLng=' + fmlang + '&itemid=' + id + '\'>' + id + '</a></td>';
+      rows += '<td><a href=\'ViewItem.html?setLng=' + fmlang + '&itemid=' + id + '\'>' + escapeHtml(goods.name) + '</a></td>';
+      rows += '<td>'+ escapeHtml(data.p) +'&nbsp;'+ escapeHtml(data.c) +'</td>';
+      rows += '</tr>';
+    };
+    $("#table_body").html(rows);
+    })};
+    </script>
+    <script>
+    function searchTable() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("table_body");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                }}
+            if (found) {
+                tr[i].style.display = "";
+                found = false;
+            } else {
+                tr[i].style.display = "none";
+            }}}
+    </script>
+</body>
+</html>

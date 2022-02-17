@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blue0x Decentralized Marketplace">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Blue0x | MARKET</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/bootstrap-reset.css" rel="stylesheet">
+  <link href="../assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="../css/style.min.css" rel="stylesheet">
+  <link href="../css/style-responsive.css" rel="stylesheet" />
+  <link href="../assets/fancybox/jquery.fancybox.css" rel="stylesheet" />
+  <link href="../css/gallery.css" rel="stylesheet" />
+  <script>
+  function setButtonText() {
+    var translatedPostButtonText = $.t("button_post_item");
+    document.getElementById("postButtonText").innerHTML = translatedPostButtonText;
+  };
+</script>
+<script>
+  function setCurrencyText(currency) {
+    document.getElementById("itemCurrencyText").innerHTML = currency;
+    };
+</script>
+<script>
+  function setPreviewImageURL(url, num) {
+    var imageLink = url.value;
+    var numstr = "";
+    if(num != 0) numstr = "" + num;
+    if (imageLink == "" || !imageLink) {
+      document.getElementById("previewImageErrorMessage" + numstr).innerHTML = "";
+    } else {
+      var link = document.getElementById("previewImageLink" + numstr);
+      link.setAttribute('href', imageLink);
+      document.getElementById("previewImageErrorMessage" + numstr).innerHTML = "";
+      imageLink = "";
+    }};
+</script>
+<script>
+  function testFieldPrice(field) {
+    var regExpr = new RegExp("^[0-9]+(\.[0-9]{1,10})?$");
+    if (!regExpr.test(field.value)) {
+      // Case of error
+      field.value = "";
+      var error_price = $.t("error_price");
+      document.getElementById("itemPriceErrorMessage").innerHTML = "<p class=\"validation_message\">The price may only contain numbers.</p>";
+    } else {
+      document.getElementById("itemPriceErrorMessage").innerHTML = "";
+    }};
+</script>
+<script >
+function docReady(fn) {
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        setTimeout(fn, 1);
+    } else {
+        document.addEventListener("DOMContentLoaded", fn);
+    }} 
+docReady(function() {
+    var lastResult, countResults = 0;
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+        "qr-reader1", { fps: 10, qrbox: 250 });
+    function onScanSuccess(decodedText, decodedResult) {
+        if (decodedText !== lastResult) {
+            ++countResults;
+            lastResult = decodedText;
+            document.getElementById('secretPhrase').value = decodedText;
+            html5QrcodeScanner.clear();
+            setTimeout(function(){ $('#reader1').modal('hide'); }, 300);
+        }}
+    function onScanError(qrCodeError) {
+    }
+    html5QrcodeScanner.render(onScanSuccess, onScanError);
+});
+</script>
+<script>
+  function postNewItem() {
+    var itemCurrency = "BLX"; 
+    var currencyRadios = document.getElementsByName('item_currency');
+    for (var i = 0, length = currencyRadios.length; i < length; i++) {
+      if (currencyRadios[i].checked) {
+        var duration = currencyRadios[i].value;
+        if (duration == "BLX") { 
+          itemCurrency = "BLX"; 
+        } else { 
+          itemCurrency = "RUBX";
+        }}}
+    document.getElementById("listingResult").innerHTML = "";
+    var itemTitleCheck = document.getElementById("itemTitle").value;
+    var itemPriceCheck = document.getElementById("itemPrice").value;
+    var itemDescriptionCheck = document.getElementById("itemDescription").value;
+    var secretPhraseCheck = document.getElementById('secretPhrase').value;
+    if (itemTitleCheck == "") {
+      document.getElementById("listingResult").innerHTML = "<p class=\"validation_message\">Missing Title</p>";
+      document.getElementById("itemTitleErrorMessage").innerHTML = "<p class=\"validation_message\">A title is required for your item.</p>";
+    } else if (itemPriceCheck == "") {
+      document.getElementById("listingResult").innerHTML = "<p class=\"validation_message\">Missing Price</p>";
+      document.getElementById("itemTitleErrorMessage").innerHTML = "";
+      document.getElementById("itemPriceErrorMessage").innerHTML = "<p class=\"validation_message\">A price is required for your item.</p>";
+    } else if (itemDescriptionCheck == "") {
+      document.getElementById("listingResult").innerHTML = "<p class=\"validation_message\">Missing Description</p>";
+      document.getElementById("itemTitleErrorMessage").innerHTML = "";
+      document.getElementById("itemPriceErrorMessage").innerHTML = "";
+      document.getElementById("itemDescriptionErrorMessage").innerHTML = "<p class=\"validation_message\">A description is required for your item.</p>";
+    } else if (secretPhraseCheck == "") {
+      document.getElementById("listingResult").innerHTML = "";
+      document.getElementById("itemTitleErrorMessage").innerHTML = "";
+      document.getElementById("itemPriceErrorMessage").innerHTML = "";
+      document.getElementById("itemDescriptionErrorMessage").innerHTML = "";
+      var translatedSecretPhraseErrorMessage = $.t("error_secret_phrase");
+      document.getElementById("secretPhraseErrorMessage").innerHTML = "<p class=\"validation_message\">" + translatedSecretPhraseErrorMessage + "</p>";
+    } else {
+      document.getElementById("listingResult").innerHTML = "";
+      document.getElementById("postButtonSection").innerHTML = "<button type=\"button\" id=\"postButton\" class=\"btn btn-default\"><i class=\"fa fa-refresh fa-spin\"></i> &nbsp;Processing...</button>";
+      var description = {
+        p: $('#itemPrice').val(),
+        c: itemCurrency,
+        l: $('#itemLocation').val()
+      };
+      var message = {
+        d: $('#itemDescription').val(),
+        i: $('#main_image_url').val(),
+        i1: $('#additional_image_1_url').val(),
+        i2: $('#additional_image_2_url').val(),
+        i3: $('#additional_image_3_url').val(),
+        i4: $('#additional_image_4_url').val(),
+      };
+      $.post(Constants.apiUrl, {
+        requestType: "dgsListing",
+        name: $('#itemTitle').val(),
+        description: JSON.stringify(description, null, 4),
+        tags: $('#itemCategory').val(),
+        secretPhrase: $('#secretPhrase').val(),
+        message: JSON.stringify(message, null, 4),
+        messageIsText: "true",
+        messageIsPrunable: "true",
+        quantity: $('#quantitySell').val(),
+        feeNQT: 10000000,
+        priceNQT: 1000000,
+        deadline: 60  
+      },
+      function(result) {
+        var errorCode = result.errorCode;
+        if (!errorCode) {
+          var listingID = result.transaction;
+          var fmlang = localStorage.getItem("fmlang");
+          var success = $.t("success");
+          document.getElementById("panel-heading").innerHTML = success;
+          var post_successful_part1 = $.t("post_successful_part1");
+          var post_successful_part2 = $.t("post_successful_part2");
+          document.getElementById("successMessage").innerHTML = post_successful_part1 + "<b>" + listingID + "</b><br/><br/>" + post_successful_part2;
+          } else { 
+            var errorDescription = result.errorDescription;
+            var errorCode = result.errorCode;
+              document.getElementById("postButtonSection").innerHTML = "<button type=\"button\" id=\"postButton\" class=\"btn btn-default\" onclick=\"postNewItem();\"><div id=\"postButtonText\"></div></button>";
+              setButtonText();
+              var post_failure = $.t("post_failure");
+              document.getElementById("listingResult").innerHTML = post_failure + "<b> " + errorDescription + "</b>";
+            }
+        }, "json");
+    }};
+</script>
+<style>
+hr {
+  margin-top: 5px;
+};
+</style>
+</head>
+<body class="full-width" onload="setAccountNumber(); setLanguage(); setButtonText();">
+  <section id="container">
+    <script type="text/javascript" src="../js/menu.js"></script>
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="row">
+         <div class="col-lg-12">
+          <section class="panel">
+            <header class="panel-heading" id="panel-heading">
+              <span data-i18n="header_list_new_item">List New Item</span>
+            </span>
+          </header>
+          <div class="panel-body">
+            <span id="successMessage">
+              <div class="form-group">
+                <label for="itemTitle"><span data-i18n="item_title">Item Title</span></label>
+                <div class="iconic-input">
+                  <i class="fa fa-book"></i>
+                  <input type="text" class="form-control" data-i18n="[placeholder]placeholder_required" id="itemTitle" maxlength="35">
+                  <div id="itemTitleErrorMessage"></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="itemQuantity"><span data-i18n="item_quantity_sell">Quantity</span></label>
+                <div id="quantity">
+                  <div class="input-group" style="width:150px;">
+                    <input type="text" id="quantitySell" class="spinner-input form-control" maxlength="3" readonly>
+                    <div class="spinner-buttons input-group-btn">
+                      <button type="button" class="btn btn-secondary spinner-up" style="border:.1px solid #e2e2e4;">
+                        <i class="fa fa-angle-up"></i>
+                      </button>
+                      <button type="button" class="btn btn-secondary spinner-down" style="border:.1px solid #e2e2e4;">
+                        <i class="fa fa-angle-down"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="itemCategory"><span data-i18n="category">Category</span></label>
+                <select class="form-control m-bot15" id="itemCategory">
+                  <option value="antiques" data-i18n="[text]antiques">Antiques</option>
+                  <option value="art" data-i18n="[text]art">Art</option>
+                  <option value="baby" data-i18n="[text]baby">Baby</option>
+                  <option value="books" data-i18n="[text]books">Books</option>
+                  <option value="business" data-i18n="[text]business">Business</option>
+                  <option value="industrial" data-i18n="[text]industrial">Industrial</option>
+                  <option value="cameras" data-i18n="[text]cameras">Cameras</option>
+                  <option value="phones" data-i18n="[text]cell_phones">Cell Phones</option>
+                  <option value="clothing" data-i18n="[text]clothing">Clothing</option>
+                  <option value="coins" data-i18n="[text]coins">Coins</option>
+                  <option value="collectibles" data-i18n="[text]collectibles">Collectibles</option>
+                  <option value="computers" data-i18n="[text]computers">Computers</option>
+                  <option value="consumables" data-i18n="[text]consumables">Consumables</option>
+                  <option value="electronics" data-i18n="[text]electronics">Electronics</option>
+                  <option value="crafts" data-i18n="[text]crafts">Crafts</option>
+                  <option value="movies" data-i18n="[text]dvds">DVDs and Movies</option>
+                  <option value="everything" data-i18n="[text]everything_else">Everything Else</option>
+                  <option value="food" data-i18n="[text]food_drink">Food and Drink</option>
+                  <option value="gift" data-i18n="[text]gift_cards">Gift Cards</option>
+                  <option value="health" data-i18n="[text]health_beauty">Health and Beauty</option>
+                  <option value="home" data-i18n="[text]home_garden">Home and Garden</option>
+                  <option value="jewelry" data-i18n="[text]jewelry">Jewelry and Watches</option>
+                  <option value="music" data-i18n="[text]music">Music</option>
+                  <option value="instruments" data-i18n="[text]instruments">Musical Instruments</option>
+                  <option value="networking" data-i18n="[text]networking">Networking</option>
+                  <option value="pet" data-i18n="[text]pets">Pet Supplies</option>
+                  <option value="pottery" data-i18n="[text]pottery">Pottery and Glass</option>
+                  <option value="estate" data-i18n="[text]real_estate">Real Estate</option>
+                  <option value="defense" data-i18n="[text]self_defense">Self Defense</option>
+                  <option value="services" data-i18n="[text]services">Specialty Services</option>
+                  <option value="sporting" data-i18n="[text]sporting_goods">Sporting Goods</option>
+                  <option value="memorabilia" data-i18n="[text]sports_memo">Sports Memorabilia</option>
+                  <option value="stamps" data-i18n="[text]stamps">Stamps</option>
+                  <option value="tickets" data-i18n="[text]tickets">Tickets</option>
+                  <option value="toys" data-i18n="[text]toys">Toys and Hobbies</option>
+                  <option value="travel" data-i18n="[text]travel">Travel</option>
+                  <option value="games" data-i18n="[text]video_games">Video Games</option>
+                </select>
+              </div>
+              <label><span data-i18n="select_item_currency">Item Currency</span></label>
+              <form class="form-horizontal tasi-form" role="form">
+                <div class="form-group">
+                  <div id="item_currency_section" style="margin-left:5px;">
+                    <div class="input-group m-bot15">
+                      <div class="col-lg-12">
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="item_currency" id="item_currency" value="RUBX" checked onclick="setCurrencyText('RUBX')"> RUBX
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="itemCurrencyErrorMessage"></div>
+                </div>
+              </form>
+              <div class="form-group">
+                <label for="itemPrice"><span data-i18n="price">Price</span></label>
+                <div class="input-group m-bot15">
+                  <span id="itemCurrencyText" class="input-group-addon">RUBX</span>
+                  <input type="text" pattern="[0-9.]+" onblur="testFieldPrice(this);" class="form-control" data-i18n="[placeholder]placeholder_required" id="itemPrice">
+                </div>
+                <div id="itemPriceErrorMessage"></div>
+              </div>
+              <div class="form-group">
+                <label for="itemLocation"><span data-i18n="location">Location</span></label>
+                <select class="form-control m-bot15" id="itemLocation">
+                  <option disabled selected hidden>Select a Location</option>
+                  <option value="che"> Челябинск Chelyabinsk </option>
+                  <option value="kaz"> Казань Kazan </option>
+                  <option value="kra"> Краснодар Krasnodar </option>
+                  <option value="krs"> Красноярск Krasnoyarsk </option>
+                  <option value="mos"> Москва Moscow </option>
+                  <option value="niz"> Нижний Новгород Nizhny Novgorod </option>
+                  <option value="nov"> Новосибирск Novosibirsk </option>
+                  <option value="oms"> Омск Omsk </option>
+                  <option value="per"> Пермь Perm </option>
+                  <option value="ros"> Ростов-на-Дону Rostov-on-Don </option>
+                  <option value="stp"> Санкт-Петербург Saint Petersburg </option>
+                  <option value="sam"> Самара Samara </option>
+                  <option value="ufa"> Уфа Ufa </option>
+                  <option value="vol"> Волгоград Volgograd </option>
+                  <option value="vor"> Воронеж Voronezh </option>
+                  <option value="yek"> Екатеринбург Yekaterinburg </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="main_image_url"><span data-i18n="main_image_url">Main Image URL</span></label> <a href="#myModal" data-toggle="modal" class="btn btn-xs btn-info"><i class="fa fa-question"></i></a>
+                <div class="iconic-input">
+                  <i class="fa fa-camera-retro"></i>
+                  <input type="text" maxlength="50" class="form-control" data-i18n="[placeholder]placeholder_optional" id="main_image_url" onblur="setPreviewImageURL(this, 0);">
+                </div>
+                <a id="previewImageLink" class="fancybox" rel="group" href="../img/package.png">Preview Image</a>
+                <div id="previewImageErrorMessage"></div>
+              </div>
+              <!--Image Help Modal-->
+              <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                      <h4 class="modal-title"><span data-i18n="image_url_help">Image URL Help</span></h4>
+                    </div>
+                    <div class="modal-body">
+                      <p><span data-i18n="image_url_help_para1">You may include up to 4 URLs for images. While your item is listed in the BLX blockchain, the images are not, and therefore they must be uploaded to some location on the internet, and then that location, in the form of a URL, may be included in your listing.</span>
+                      </p>
+                      <p><span data-i18n="image_url_help_para2">The blockchain preserves your privacy, but the location of your item's images may inadvertently reveal your identity, so it is important to upload your images to a location that will preserve your anonymity. There is a variety of services on the internet that will anonymously host images for you. You will need to do your own due diligence to determine which service you trust. Some of these services are listed below, but their inclusion here is not an endorsement. Remember, only you can preserve your own privacy. </span>
+                      </p>
+                      <p><b><span data-i18n="image_url_help_para3">Only use services you are confident you can trust.</span></b>
+                      </p>
+                      <p>
+                        <ul>
+                          <li><a href="https://postimage.org" target="_blank">Postimage.org</a>
+                            <li><a href="https://imgur.com" target="_blank">Imgur</a>
+                            </ul>
+                          </p>
+                          <p><span data-i18n="image_url_help_para4">Images should be <b>200 pixels by 200 pixels</b>. Images with other dimensions  will be resized to 200x200 for display.</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--End Image Help Modal-->
+                  <div class="form-group">
+                    <label for="itemDescription"><span data-i18n="description">Description</span></label>
+                    <textarea class="form-control" data-i18n="[placeholder]description_field" cols="25" rows="4" id="itemDescription" maxlength="203"></textarea>
+                    <div id="itemDescriptionErrorMessage"></div>
+                  </div>
+                  <div class="form-group">
+                    <label for="additional_image_urls"><span data-i18n="optional_additional_image_urls">Optional Additional Image URLs</span></label>
+                    <div class="iconic-input">
+                      <i class="fa fa-camera-retro"></i>
+                      <input type="text" maxlength="75" class="form-control" data-i18n="[placeholder]image1" id="additional_image_1_url" onblur="setPreviewImageURL(this, 2);">
+                    </div>
+                    <a id="previewImageLink2" class="fancybox" rel="group" href="../img/package.png">Preview Image</a>
+                    <div id="previewImageErrorMessage2"></div>
+                    <br />
+                    <div class="iconic-input">
+                      <i class="fa fa-camera-retro"></i>
+                      <input type="text" maxlength="75" class="form-control" data-i18n="[placeholder]image2" id="additional_image_2_url" onblur="setPreviewImageURL(this, 3);">
+                    </div>
+                    <a id="previewImageLink3" class="fancybox" rel="group" href="../img/package.png">Preview Image</a>
+                    <div id="previewImageErrorMessage3"></div>
+                    <br />
+                    <div class="iconic-input">
+                      <i class="fa fa-camera-retro"></i>
+                      <input type="text" maxlength="75" class="form-control" data-i18n="[placeholder]image3" id="additional_image_3_url" onblur="setPreviewImageURL(this, 4);">
+                    </div>
+                    <a id="previewImageLink4" class="fancybox" rel="group" href="../img/package.png">Preview Image</a>
+                    <div id="previewImageErrorMessage4"></div>
+                    <br />
+                    <div class="iconic-input">
+                      <i class="fa fa-camera-retro"></i>
+                      <input type="text" maxlength="75" class="form-control" data-i18n="[placeholder]image4" id="additional_image_4_url" onblur="setPreviewImageURL(this, 5);">
+                    </div>
+                    <a id="previewImageLink5" class="fancybox" rel="group" href="../img/package.png">Preview Image</a>
+                    <div id="previewImageErrorMessage5"></div>
+                  </div>
+                  <hr>
+                  <div class="form-group">
+                    <label for="secretPhrase"><span data-i18n="secret_phrase">Account Secret Phrase</span></label>
+                    <button type="button" class="btn btn-qr btn-xs" data-toggle="modal" data-target="#reader1">
+                    <i class="fa fa-qrcode"></i>
+                  </button>
+                    <div class="iconic-input">
+                      <i class="fa fa-key"></i>
+                      <input type="password" class="form-control" id="secretPhrase" data-i18n="[placeholder]placeholder_required">
+                      <div id="secretPhraseErrorMessage"></div>
+                    </div>
+                  </div>
+                  <div class="modal fade" style="top:10vh" id="reader1">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Scan Your Secret Phrase</h4>
+                      </div>
+                        <div class="modal-body" style="position: static">
+                         <div id="qr-reader1"></div>
+                        </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div> <!-- /.modal-content -->
+                  </div> <!-- /.modal-dialog -->
+                </div> <!-- /.modal -->
+                  <span id="listingResult"></span>
+                  <div id="postButtonSection">
+                    <button type="button" id="postButton" class="btn btn-default" onclick="postNewItem();">
+                      <div id="postButtonText"></div>
+                    </button>
+                  </div>
+                  <br />
+                  <p>The network fee of this transaction is 0.1 BLX.</p>
+                </div>
+              </span>
+            </div>
+          </section>
+        </div>
+      </section>
+    </section>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../assets/fuelux/js/spinner.min.js"></script>
+    <script src="../assets/fancybox/jquery.fancybox.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/advanced-form-components.js"></script>
+    <script>
+      $(function() {
+        jQuery(".fancybox").fancybox();
+      });
+    </script>
+    <script src="../js/constants.js"></script>
+    <script src="../js/freemarket_scripts.js"></script>
+    <script src="../js/i18next.min.js"></script>
+    <script src="../js/freemarket_localization_scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.0.1/html5-qrcode.min.js"></script>
+</body>
+</html>

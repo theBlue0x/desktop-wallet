@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="Blue0x Decentralized Marketplace">
+    <link rel="shortcut icon" href="./assets/img/favicon.ico">
+    <title>Blue0x | MARKET</title>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/main.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>	
+    <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+	<section id="home" name="home"></section>
+	<div id="headerwrap">
+		<div class="container">
+			<div class="row">
+				<img src="assets/img/logo.png" class="img-fluid" style="margin-bottom:-42px;">
+				<h1>BLUE0X|<span>MARKET</span></h1>
+				<h2>BLUE0X|<span>MARKET</span></h2>
+				<p style="color:white;margin-top:20px;margin-bottom:18px;line-height:22px;">Decentralized Global Marketplace</p>
+				<form action="#">
+				<select class="form-control m-bot15" name="market">
+					<option value="#">Select A Market...</option>
+					<option value="market/usdx/ViewAll.html">USDX - United States Dollar</option>
+					<option value="market/audx/ViewAll.html">AUDX - Australian Dollar</option>
+					<option value="market/cadx/ViewAll.html">CADX - Canadian Dollar</option>
+					<option value="market/chfx/ViewAll.html">CHFX - Swiss Franc</option>
+					<option value="market/cnyx/ViewAll.html">CNYX - Chinese Yuan</option>
+					<option value="market/eurx/ViewAll.html">EURX - Euro</option>
+					<option value="market/gbpx/ViewAll.html">GBPX - British Pound</option>
+					<option value="market/iqdx/ViewAll.html">IQDX - Iraqi Dinar</option>
+					<option value="market/irrx/ViewAll.html">IRRX - Iranian Rial</option>
+					<option value="market/jpyx/ViewAll.html">JPYX - Japanese Yen</option>
+					<option value="market/nzdx/ViewAll.html">NZDX - New Zealand Dollar</option>
+					<option value="market/rubx/ViewAll.html">RUBX - Russian Ruble</option>
+				</select>
+				<br/>
+				<input type="button" class="myButton" onclick="window.open(this.form.market.options[this.form.market.selectedIndex].value,'_top')" value="Continue">
+				</form>
+			</div><!-- /row -->
+		</div><!-- /container -->
+	</div><!-- /headerwrap -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/classie.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/smoothscroll.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blue0x Decentralized Marketplace">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Blue0x | MARKET</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/bootstrap-reset.css" rel="stylesheet">
+  <link href="../assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="../css/style.min.css" rel="stylesheet">
+  <link href="../css/style-responsive.css" rel="stylesheet" />
+  <link href="../css/spinner.css" rel="stylesheet">
+  <link href="../assets/fancybox/jquery.fancybox.css" rel="stylesheet" />
+  <link href="../css/gallery.css" rel="stylesheet" />
+<script>
+  function showItem() {
+    var listingid = (getQueryVariable("itemid"));
+    $.post(Constants.apiUrl, {
+        requestType: 'getDGSGood',
+        goods: listingid,
+        includeCounts: "true"
+      },
+      function(request) {
+        var data = JSON.parse(request.description);
+        var id = request.goods;
+        var seller = request.sellerRS;
+        var displayCurrency = escapeHtml(data.c);
+        var displayPrice = escapeHtml(data.p);
+        var displayPriceWithCurrency = displayPrice + " " + displayCurrency;
+        document.getElementById("title").innerHTML = escapeHtml(request.name);
+        document.getElementById("itemID").innerHTML = escapeHtml(id);
+        document.getElementById("price").innerHTML = escapeHtml(displayPriceWithCurrency);
+        document.getElementById("sellerID").innerHTML = seller;
+        sessionStorage.setItem("price", displayPrice);
+        sessionStorage.setItem("seller", seller);
+      }, "json"); 
+      $.post(Constants.apiUrl, { 
+        requestType: 'getTransaction',
+        transaction: listingid
+      },
+      function(result) {
+        var info = JSON.parse(result);
+        var attachment = info.attachment;
+        var data = JSON.parse(attachment.description);
+        var displayCurrency = data.c;
+        var message = JSON.parse(attachment.message);
+        var location = data.l;
+        getCityName(location);
+        document.getElementById("description").innerHTML = escapeHtml(message.d);
+        if (message.i != "") {
+          main_image_url = "Yes";
+        }
+        if (message.i1 != "") {
+          additional_image_1_URL = "Yes";
+        }
+        if (additional_image_2_URL != "") {
+          additional_image_2_URL = "Yes";
+        }
+        if (additional_image_3_URL != "") {
+          additional_image_3_URL = "Yes";
+        }
+        if (additional_image_4_URL != "") {
+          additional_image_4_URL = "Yes";
+        }
+        if (main_image_url) {
+          if (validator.isURL(message.i)) {
+            var Extension = message.i.substring(message.i.lastIndexOf('.') + 1).toLowerCase();
+            if (Extension == "gif" || Extension == "png" || Extension == "jpeg" || Extension == "jpg") {
+              var main_image_url = escapeHtml(message.i);
+            } else {
+              var main_image_url = "../img/Box-icon.png";
+            }
+          } else {
+            var main_image_url = "../img/Box-icon.png";
+          }
+          document.getElementById("top_image").innerHTML = '<a id="previewMainImageLink" class="fancybox" rel="group" href="' + main_image_url + '"><img alt="" src="' + main_image_url + '"></a>';
+        } 
+        var additional_images_section = '<div>';
+        if (additional_image_1_URL) {
+          if (validator.isURL(message.i1)) {
+            var Extension = message.i1.substring(message.i1.lastIndexOf('.') + 1).toLowerCase();
+            if (Extension == "gif" || Extension == "png" || Extension == "jpeg" || Extension == "jpg") {
+              var additional_image_1_URL = escapeHtml(message.i1);
+              additional_images_section += '<a id="previewMainImageLink" class="fancybox" rel="group" href="' + additional_image_1_URL + '"><img src="' + additional_image_1_URL + '" width="200" height="200" alt="Image 1" /></a>';
+            } else {
+              var additional_image_1_URL = "../img/Box-icon.png";
+            }
+          } else {
+            var additional_image_1_URL = "../img/Box-icon.png";
+          }} 
+        if (additional_image_2_URL) {
+          if (validator.isURL(message.i2)) {
+            var Extension = message.i2.substring(message.i2.lastIndexOf('.') + 1).toLowerCase();
+            if (Extension == "gif" || Extension == "png" || Extension == "jpeg" || Extension == "jpg") {
+              var additional_image_2_URL = escapeHtml(message.i2);
+              additional_images_section += '<a id="previewMainImageLink" class="fancybox" rel="group" href="' + additional_image_2_URL + '"><img src="' + additional_image_2_URL + '" width="200" height="200" alt="Image 2" /></a>';
+            } else {
+              var additional_image_2_URL = "../img/Box-icon.png";
+            }
+          } else {
+            var additional_image_2_URL = "../img/Box-icon.png";
+          }} 
+        if (additional_image_3_URL) {
+          if (validator.isURL(message.i3)) {
+            var Extension = message.i3.substring(message.i3.lastIndexOf('.') + 1).toLowerCase();
+            if (Extension == "gif" || Extension == "png" || Extension == "jpeg" || Extension == "jpg") {
+              var additional_image_3_URL = escapeHtml(message.i3);
+              additional_images_section += '<a id="previewMainImageLink" class="fancybox" rel="group" href="' + additional_image_3_URL + '"><img src="' + additional_image_3_URL + '" width="200" height="200" alt="Image 3" /></a>';
+            } else {
+              var additional_image_3_URL = "../img/Box-icon.png";
+            }
+          } else {
+            var additional_image_3_URL = "../img/Box-icon.png";
+          }}
+        if (additional_image_4_URL) {
+          if (validator.isURL(message.i4)) {
+            var Extension = message.i4.substring(message.i4.lastIndexOf('.') + 1).toLowerCase();
+            if (Extension == "gif" || Extension == "png" || Extension == "jpeg" || Extension == "jpg") {
+              var additional_image_4_URL = escapeHtml(message.i4);
+              additional_images_section += '<a id="previewMainImageLink" class="fancybox" rel="group" href="' + additional_image_4_URL + '"><img src="' + additional_image_4_URL + '" width="200" height="200" alt="Image 4" /></a>';
+            } else {
+              var additional_image_4_URL = "../img/Box-icon.png";
+            }
+          } else {
+            var additional_image_4_URL = "../img/Box-icon.png";
+          }}
+        if (additional_images_section) {
+          additional_images_section += '</div><br />';
+          document.getElementById("extra_images_section").innerHTML = additional_images_section;
+        }});
+        var cities = {   
+        "aub":  " Auburn, Alabama ",
+        "bhm":  " Birmingham, Alabama ",
+        "dhn":  " Dothan, Alabama ",
+        "msl":  " Florence, Alabama ",
+        "anb":  " Gadsden-Anniston, Alabama ",
+        "hsv":  " Huntsville, Alabama ",
+        "mob":  " Mobile, Alabama ",
+        "mgm":  " Montgomery, Alabama ",
+        "tsc":  " Tuscaloosa, Alabama ",
+        "anc":  " Anchorage, Alaska ",
+        "fai":  " Fairbanks, Alaska ",
+        "ena":  " Kenai Peninsula, Alaska ",
+        "flg":  " Flagstaff, Arizona ",
+        "mhv":  " Mohave County, Arizona ",
+        "phx":  " Phoenix, Arizona ",
+        "prc":  " Prescott, Arizona ",
+        "tus":  " Tucson, Arizona ",
+        "yum":  " Yuma, Arizona ",
+        "fyv":  " Fayetteville, Arkansas ",
+        "jbr":  " Jonesboro, Arkansas ",
+        "lit":  " Little Rock, Arkansas ",
+        "txk":  " Texarkana, Arkansas ",
+        "bak":  " Bakersfield, California ",
+        "chc":  " Chico, California ",
+        "fre":  " Fresno, California ",
+        "hmb":  " Humboldt County, California ",
+        "imp":  " Imperial County, California ",
+        "inl":  " Inland Empire, California ",
+        "lax":  " Los Angeles, California ",
+        "mdo":  " Mendocino County, California ",
+        "mer":  " Merced, California ",
+        "mod":  " Modesto, California ",
+        "mtb":  " Monterey Bay, California ",
+        "orc":  " Orange County, California ",
+        "psp":  " Palm Springs, California ",
+        "rdd":  " Redding, California ",
+        "sac":  " Sacramento, California ",
+        "sdo":  " San Diego, California ",
+        "slo":  " San Luis Obispo, California ",
+        "sba":  " Santa Barbara, California ",
+        "smx":  " Santa Maria, California ",
+        "sfo":  " San Francisco Bay Area, California ",
+        "ssk":  " Siskiyou County, California ",
+        "stk":  " Stockton, California ",
+        "ssn":  " Susanville, California ",
+        "oxr":  " Ventura County, California ",
+        "vis":  " Visalia-Tulare, California ",
+        "ybs":  " Yuba-Sutter, California ",
+        "bou":  " Boulder, Colorado ",
+        "cos":  " Colorado Springs, Colorado ",
+        "den":  " Denver, Colorado ",
+        "ftc":  " Fort Collins, Colorado ",
+        "rck":  " High Rockies, Colorado ",
+        "pub":  " Pueblo, Colorado ",
+        "gjt":  " Western Slope, Colorado ",
+        "htf":  " Hartford, Connecticut ",
+        "hvn":  " New Haven, Connecticut ",
+        "dlw":  " Delaware",
+        "wdc":  " Washington D.C.",
+        "dab":  " Daytona Beach, Florida ",
+        "key":  " Florida Keys, Florida ",
+        "ftl":  " Fort Lauderdale, Florida ",
+        "fmy":  " Ft Myers, Florida ",
+        "gnv":  " Gainesville, Florida ",
+        "jax":  " Jacksonville, Florida ",
+        "lal":  " Lakeland, Florida ",
+        "mia":  " Miami, Florida ",
+        "oca":  " Ocala, Florida ",
+        "yps":  " Okaloosa, Florida ",
+        "orl":  " Orlando, Florida ",
+        "pfn":  " Panama City, Florida ",
+        "pns":  " Pensacola, Florida ",
+        "srq":  " Sarasota-Bradenton, Florida ",
+        "ust":  " St Augustine, Florida ",
+        "tal":  " Tallahassee, Florida ",
+        "tpa":  " Tampa Bay, Florida ",
+        "psl":  " Treasure Coast, Florida ",
+        "wpb":  " West Palm Beach, Florida ",
+        "aby":  " Albany, Georgia ",
+        "ahn":  " Athens, Georgia ",
+        "atl":  " Atlanta, Georgia ",
+        "aug":  " Augusta, Georgia ",
+        "bwk":  " Brunswick, Georgia ",
+        "csg":  " Columbus, Georgia ",
+        "mcn":  " Macon, Georgia ",
+        "sav":  " Savannah, Georgia ",
+        "tbr":  " Statesboro, Georgia ",
+        "vld":  " Valdosta, Georgia ",
+        "hnl":  " Hawaii ",
+        "boi":  " Boise, Idaho ",
+        "lws":  " Lewiston, Idaho ",
+        "twf":  " Twin Falls, Idaho ",
+        "bln":  " Bloomington, Illinois ",
+        "chm":  " Champaign Urbana, Illinois ",
+        "chi":  " Chicago, Illinois ",
+        "dil":  " Decatur, Illinois ",
+        "lsl":  " La Salle Co, Illinois ",
+        "mto":  " Mattoon-Charleston, Illinois ",
+        "pia":  " Peoria, Illinois ",
+        "rfd":  " Rockford, Illinois ",
+        "spi":  " Springfield, Illinois ",
+        "bmg":  " Bloomington, Indiana ",
+        "evw":  " Evansville, Indiana ",
+        "fwa":  " Fort Wayne, Indiana ",
+        "ind":  " Indianapolis, Indiana ",
+        "okk":  " Kokomo, Indiana ",
+        "laf":  " Lafayette, Indiana ",
+        "mun":  " Muncie, Indiana ",
+        "rin":  " Richmond, Indiana ",
+        "sbn":  " South Bend, Indiana ",
+        "tha":  " Terre Haute, Indiana ",
+        "ame":  " Ames, Iowa ",
+        "ced":  " Cedar Rapids, Iowa ",
+        "dsm":  " Des Moines, Iowa ",
+        "dbq":  " Dubuque, Iowa ",
+        "ftd":  " Fort Dodge, Iowa ",
+        "iac":  " Iowa City, Iowa ",
+        "msc":  " Mason City, Iowa ",
+        "mli":  " Quad Cities, Iowa ",
+        "sux":  " Sioux City, Iowa ",
+        "wlo":  " Waterloo, Iowa ",
+        "lwr":  " Lawrence, Kansas ",
+        "mhk":  " Manhattan, Kansas ",
+        "sns":  " Salina, Kansas ",
+        "tpk":  " Topeka, Kansas ",
+        "wic":  " Wichita, Kansas ",
+        "blg":  " Bowling Green, Kentucky ",
+        "lex":  " Lexington, Kentucky ",
+        "lou":  " Louisville, Kentucky ",
+        "owb":  " Owensboro, Kentucky ",
+        "btr":  " Baton Rouge, Louisiana ",
+        "hum":  " Houma, Louisiana ",
+        "lft":  " Lafayette, Louisiana ",
+        "lkc":  " Lake Charles, Louisiana ",
+        "mlu":  " Monroe, Louisiana ",
+        "nor":  " New Orleans, Louisiana ",
+        "shv":  " Shreveport, Louisiana ",
+        "mne":  " Bangor, Maine ",
+        "por":  " Portland, Maine ",
+        "anp":  " Annapolis, Maryland ",
+        "bal":  " Baltimore, Maryland ",
+        "fdk":  " Frederick, Maryland ",
+        "bos":  " Boston, Massachusetts ",
+        "cap":  " Cape Cod, Massachusetts ",
+        "sma":  " South Coast, Massachusetts ",
+        "wor":  " Worcester, Massachusetts ",
+        "aaa":  " Ann Arbor, Michigan ",
+        "btc":  " Battle Creek, Michigan ",
+        "det":  " Detroit, Michigan ",
+        "fnt":  " Flint, Michigan ",
+        "grr":  " Grand Rapids, Michigan ",
+        "hld":  " Holland, Michigan ",
+        "jxn":  " Jackson, Michigan ",
+        "kzo":  " Kalamazoo, Michigan ",
+        "lan":  " Lansing, Michigan ",
+        "mnr":  " Monroe, Michigan ",
+        "mkg":  " Muskegon, Michigan ",
+        "phn":  " Port Huron, Michigan ",
+        "mbs":  " Saginaw-Midland-Baycity, Michigan ",
+        "thb":  " The Thumb, Michigan ",
+        "yup":  " Upper Peninsula, Michigan ",
+        "bji":  " Bemidji, Minnesota ",
+        "brd":  " Brainerd, Minnesota ",
+        "dlh":  " Duluth, Minnesota ",
+        "mkt":  " Mankato, Minnesota ",
+        "min":  " Minneapolis / St Paul, Minnesota ",
+        "rmn":  " Rochester, Minnesota ",
+        "stc":  " St Cloud, Minnesota ",
+        "gpt":  " Gulfport, Mississippi ",
+        "usm":  " Hattiesburg, Mississippi ",
+        "jan":  " Jackson, Mississippi ",
+        "mei":  " Meridian, Mississippi ",
+        "cou":  " Columbia, Missouri ",
+        "jln":  " Joplin, Missouri ",
+        "ksc":  " Kansas City, Missouri ",
+        "krk":  " Kirksville, Missouri ",
+        "loz":  " Lake Of The Ozarks, Missouri ",
+        "sgf":  " Springfield, Missouri ",
+        "stj":  " St Joseph, Missouri ",
+        "stl":  " St Louis, Missouri ",
+        "bil":  " Billings, Montana ",
+        "bzn":  " Bozeman, Montana ",
+        "btm":  " Butte, Montana ",
+        "gtf":  " Great Falls, Montana ",
+        "hln":  " Helena, Montana ",
+        "fca":  " Kalispell, Montana ",
+        "mso":  " Missoula, Montana ",
+        "gil":  " Grand Island, Nebraska ",
+        "lnk":  " Lincoln, Nebraska ",
+        "lbf":  " North Platte, Nebraska ",
+        "oma":  " Omaha, Nebraska ",
+        "bff":  " Scottsbluff, Nebraska ",
+        "elk":  " Elko, Nevada ",
+        "lvg":  " Las Vegas, Nevada ",
+        "rno":  " Reno, Nevada ",
+        "nhm":  " New Hampshire",
+        "cnj":  " Central New Jersey ",
+        "jys":  " Jersey Shore, New Jersey ",
+        "njy":  " North New Jersey ",
+        "snj":  " South New Jersey ",
+        "abq":  " Albuquerque, New Mexico ",
+        "cvn":  " Clovis, New Mexico ",
+        "fnm":  " Farmington, New Mexico ",
+        "lcr":  " Las Cruces, New Mexico ",
+        "row":  " Roswell, New Mexico ",
+        "saf":  " Santa Fe, New Mexico ",
+        "alb":  " Albany, New York ",
+        "bgm":  " Binghamton, New York ",
+        "buf":  " Buffalo, New York ",
+        "cat":  " Catskills, New York ",
+        "chq":  " Chautauqua, New York ",
+        "elm":  " Elmira-Corning, New York ",
+        "fgl":  " Finger Lakes, New York ",
+        "gfl":  " Glens Falls, New York ",
+        "hud":  " Hudson Valley, New York ",
+        "ith":  " Ithaca, New York ",
+        "isp":  " Long Island, New York ",
+        "nyc":  " New York City, New York ",
+        "onh":  " Oneonta, New York ",
+        "plb":  " Plattsburgh-Adirondacks, New York ",
+        "ptd":  " Potsdam-Canton-Massena, New York ",
+        "rcs":  " Rochester, New York ",
+        "syr":  " Syracuse, New York ",
+        "tts":  " Twin Tiers, New York ",
+        "uti":  " Utica-Rome-Oneida, New York ",
+        "wtn":  " Watertown, New York ",
+        "ash":  " Asheville, North Carolina ",
+        "bnc":  " Boone, North Carolina ",
+        "cha":  " Charlotte, North Carolina ",
+        "fay":  " Fayetteville, North Carolina ",
+        "gbo":  " Greensboro, North Carolina ",
+        "hky":  " Hickory, North Carolina ",
+        "oaj":  " Jacksonville, North Carolina ",
+        "obx":  " Outer Banks, North Carolina ",
+        "ral":  " Raleigh / Durham , North Carolina ",
+        "wnc":  " Wilmington, North Carolina ",
+        "wsl":  " Winston-Salem, North Carolina ",
+        "bis":  " Bismarck, North Dakota ",
+        "far":  " Fargo, North Dakota ",
+        "gfk":  " Grand Forks, North Dakota ",
+        "cak":  " Akron, Ohio ",
+        "jfn":  " Ashtabula, Ohio ",
+        "ohu":  " Athens, Ohio ",
+        "chl":  " Chillicothe, Ohio ",
+        "cin":  " Cincinnati, Ohio ",
+        "cle":  " Cleveland, Ohio ",
+        "col":  " Columbus, Ohio ",
+        "day":  " Dayton, Ohio ",
+        "lma":  " Lima, Ohio ",
+        "mfd":  " Mansfield, Ohio ",
+        "sky":  " Sandusky, Ohio ",
+        "tol":  " Toledo, Ohio ",
+        "nph":  " Tuscarawas Co, Ohio ",
+        "yng":  " Youngstown, Ohio ",
+        "zyl":  " Zanesville, Ohio ",
+        "law":  " Lawton, Oklahoma ",
+        "okc":  " Oklahoma City, Oklahoma ",
+        "osu":  " Stillwater, Oklahoma ",
+        "tul":  " Tulsa, Oklahoma ",
+        "bnd":  " Bend, Oregon ",
+        "crv":  " Corvallis, Oregon ",
+        "eug":  " Eugene, Oregon ",
+        "klf":  " Klamath Falls, Oregon ",
+        "mfr":  " Medford-Ashland, Oregon ",
+        "cor":  " Oregon Coast, Oregon ",
+        "pdx":  " Portland, Oregon ",
+        "rbg":  " Roseburg, Oregon ",
+        "sle":  " Salem, Oregon ",
+        "aoo":  " Altoona-Johnstown, Pennsylvania ",
+        "cbg":  " Cumberland Valley, Pennsylvania ",
+        "eri":  " Erie, Pennsylvania ",
+        "hrs":  " Harrisburg, Pennsylvania ",
+        "lns":  " Lancaster, Pennsylvania ",
+        "alt":  " Lehigh Valley, Pennsylvania ",
+        "mdv":  " Meadville, Pennsylvania ",
+        "phi":  " Philadelphia, Pennsylvania ",
+        "pit":  " Pittsburgh, Pennsylvania ",
+        "poc":  " Poconos, Pennsylvania ",
+        "rea":  " Reading, Pennsylvania ",
+        "avp":  " Scranton/Wilkes-Barre, Pennsylvania ",
+        "psu":  " State College, Pennsylvania ",
+        "wpt":  " Williamsport, Pennsylvania ",
+        "yrk":  " York, Pennsylvania ",
+        "prv":  " Rhode Island",
+        "chs":  " Charleston, South Carolina ",
+        "cae":  " Columbia, South Carolina ",
+        "flo":  " Florence, South Carolina ",
+        "gsp":  " Greenville, South Carolina ",
+        "hhi":  " Hilton Head, South Carolina ",
+        "myr":  " Myrtle Beach, South Carolina ",
+        "csd":  " Pierre, South Dakota ",
+        "rap":  " Rapid City, South Dakota ",
+        "fsd":  " Sioux Falls, South Dakota ",
+        "cht":  " Chattanooga, Tennessee ",
+        "ckv":  " Clarksville, Tennessee ",
+        "coo":  " Cookeville, Tennessee ",
+        "jxt":  " Jackson , Tennessee ",
+        "knx":  " Knoxville, Tennessee ",
+        "mem":  " Memphis, Tennessee ",
+        "nsh":  " Nashville, Tennessee ",
+        "tri":  " Tri-Cities, Tennessee ",
+        "abi":  " Abilene, Texas ",
+        "ama":  " Amarillo, Texas ",
+        "aus":  " Austin, Texas ",
+        "bpt":  " Beaumont / Port Arthur, Texas ",
+        "bro":  " Brownsville, Texas ",
+        "cst":  " College Station, Texas ",
+        "crp":  " Corpus Christi, Texas ",
+        "dal":  " Dallas / Fort Worth, Texas ",
+        "drt":  " Del Rio, Texas ",
+        "elp":  " El Paso, Texas ",
+        "gls":  " Galveston, Texas ",
+        "hou":  " Houston, Texas ",
+        "grk":  " Killeen, Texas ",
+        "lrd":  " Laredo, Texas ",
+        "lbb":  " Lubbock, Texas ",
+        "mca":  " Mcallen, Texas ",
+        "odm":  " Odessa / Midland, Texas ",
+        "sjt":  " San Angelo, Texas ",
+        "sat":  " San Antonio, Texas ",
+        "tsu":  " San Marcos, Texas ",
+        "txm":  " Texoma, Texas ",
+        "etx":  " Tyler, Texas ",
+        "vtx":  " Victoria, Texas ",
+        "wco":  " Waco, Texas ",
+        "wtf":  " Wichita Falls, Texas ",
+        "lgu":  " Logan, Utah ",
+        "ogd":  " Ogden-Clearfield, Utah ",
+        "pvu":  " Provo, Utah ",
+        "slc":  " Salt Lake City, Utah ",
+        "stg":  " St George, Utah ",
+        "brl":  " Burlington, Vermont ",
+        "mon":  " Montpelier, Vermont ",
+        "brb":  " Brattleboro, Vermont ",
+        "uva":  " Charlottesville, Virginia ",
+        "dnv":  " Danville, Virginia ",
+        "ezf":  " Fredericksburg, Virginia ",
+        "nfk":  " Hampton Roads, Virginia ",
+        "shd":  " Harrisonburg, Virginia ",
+        "lyn":  " Lynchburg, Virginia ",
+        "vpi":  " New River Valley, Virginia ",
+        "ric":  " Richmond, Virginia ",
+        "roa":  " Roanoke, Virginia ",
+        "okv":  " Winchester, Virginia ",
+        "bli":  " Bellingham, Washington ",
+        "kpr":  " Kennewick-Pasco-Richland, Washington ",
+        "mlk":  " Moses Lake, Washington ",
+        "olp":  " Olympic Peninsula, Washington ",
+        "plm":  " Pullman, Washington ",
+        "sea":  " Seattle-Tacoma, Washington ",
+        "mvw":  " Skagit, Washington ",
+        "spk":  " Spokane, Washington ",
+        "wen":  " Wenatchee, Washington ",
+        "yak":  " Yakima, Washington ",
+        "crw":  " Charleston, West Virginia ",
+        "hts":  " Huntington, West Virginia ",
+        "wvu":  " Morgantown, West Virginia ",
+        "pkb":  " Parkersburg, West Virginia ",
+        "wva":  " Wheeling, West Virginia ",
+        "app":  " Appleton, Wisconsin ",
+        "eau":  " Eau Claire, Wisconsin ",
+        "grb":  " Green Bay, Wisconsin ",
+        "jvl":  " Janesville, Wisconsin ",
+        "rac":  " Kenosha-Racine, Wisconsin ",
+        "lse":  " La Crosse, Wisconsin ",
+        "mad":  " Madison, Wisconsin ",
+        "mil":  " Milwaukee, Wisconsin ",
+        "sbm":  " Sheboygan, Wisconsin ",
+        "wau":  " Wausau, Wisconsin ",
+        "wyo":  " Cheyenne, Wyoming"
+        }
+        function getCityName(name){
+          var city = (cities[name]);
+          document.getElementById("location").innerHTML = escapeHtml(city);
+        }};
+  </script>
+</head>
+<body class="full-width" onload="setAccountNumber(); showItem(); setLanguage();">
+  <section id="container">
+    <script type="text/javascript" src="../js/menu.js"></script>
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="row">
+          <div class="col-lg-12">
+            <section class="panel">
+              <header class="panel-heading" id="panel-heading">
+                <span data-i18n="item_id">Item ID</span>: <span id="itemID"></span>
+              </header>
+              <div class="panel-body" style="padding:30px;padding-bottom:0px;padding-top:20px;" id="panel-body">
+                <div class="form-group">
+                    <aside class="profile-nav alt">
+                      <section class="panel" style="box-shadow:none">
+                        <div class="user-heading alt">
+                          <span id="top_image"><a href="#"><img alt="" src="../img/Box-icon.png"></a></span>
+                          <h1 id="title">No Item Title</h1>
+                          <p><b> <span data-i18n="seller_id">Seller ID</span>:</b> <span id="sellerID"></span></p>
+                          </div>
+                          <div>
+                          <p><b> <span data-i18n="description">Description</span>:</b> <span id="description"></span></p></b>
+                          <p><b> <span data-i18n="price">Price</span>:</b> <span id="price"></span></p>
+                          <p><b> <span data-i18n="location">Location</span>:</b> <span id="location"></span></p>
+                          </div>
+                          <div class="user-heading alt" id="extra_images_section"></div>
+                          </div>
+                      </section>
+                    </aside>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+        </div>
+      </section>
+    </section>
+  </section>
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/jquery.dcjqaccordion.2.7.min.js"></script>
+  <script src="../js/bootstrap-hover-dropdown.min.js"></script>
+  <script src="../assets/fancybox/jquery.fancybox.js"></script>
+  <script src="../js/validator.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    jQuery(".fancybox").fancybox();
+  });
+  </script>
+  <script src="../js/constants.js"></script>
+  <script src="../js/freemarket_scripts.js"></script>
+  <script src="../js/common-scripts.js"></script>
+  <script src="../js/i18next.min.js"></script>
+  <script src="../js/freemarket_localization_scripts.js"></script>
+</body>
+</html>

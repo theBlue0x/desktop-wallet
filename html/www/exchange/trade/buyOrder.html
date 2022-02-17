@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blue0x Decentralized Exchange">
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <title>Blue0x | EXCHANGE</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap-reset.min.css" rel="stylesheet">
+  <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="css/style.min.css" rel="stylesheet">
+  <link href="css/style-responsive.min.css" rel="stylesheet" />
+</head>
+<style>
+.btn-secondary {
+	color: #626262;
+}
+</style>
+<body class="full-width" onload="setAccountNumber();">
+  <section id="container">
+    <script type="text/javascript" src="js/menu.js"></script>
+    <section id="main-content">
+      <section class="wrapper"> <span id="txID">
+        <div class="row">
+          <div class="col-lg-12">
+            <section class="panel" style="color:#c1c1c1">
+              <header class="panel-heading"> <b>Order # <span id="order_number"></span></b> </header>
+              <div class="panel-body">
+                <div class="media-body"> <p class="p-head">Order #</p>
+                  <p><span id="order">Order</span></p> 
+                  <p class="p-head"><span >Account</span></p>
+                  <p><span id="account">Account...</span></p>
+                  <p class="p-head"><span >Order Type</span></p>
+                  <p>Buy</p> 
+                  <p class="p-head"><span >Order Currency</span></p>
+                  <p><span id="currency">Currency...</span></p>
+                  <p class="p-head"><span >Buy Rate</span></p>
+                  <p><span id="rate">Rate...</span> BLX</p>
+                  <p class="p-head"><span >Amount</span></p>
+                  <p><span id="amount">Amount...</span> <span id="currency2"></span></p>
+                  <p class="p-head"><span >Expiration Height</span></p>
+                  <p>Block # <span id="expiration">Expiration...</span></p>
+                  <span style="display:none;" id="currencyCode"></span>
+                </div>
+                <br/>
+                <div id="cancelButtonSection">
+                  <button type="button" id="cancelButton" data-toggle="modal" data-target="#Modal"class="btn btn-danger">Cancel Order</button>
+                </div>
+              </div>
+              </span>
+              <div class="modal fade" id="Modal">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title"><b>Cancel Order</b></h4> </div>
+							<div class="modal-body">
+								<div class="form-group" style="color:white;">
+									<label for="secretPhrase"><b>Enter Your Account Secret Phrase:</b></label>
+									<!--button type="button" class="btn btn-qr btn-xs" data-toggle="modal" data-target="#reader1">
+            							<i class="fa fa-qrcode"></i>
+            						</button-->
+									<div class="iconic-input"> <i class="fa fa-key"></i>
+										<input type="password" class="form-control" id="modalSecretPhrase" placeholder="required" required>
+									</div>
+								</div>
+								<p><i style="font-weight:100;">Cancel Order Fee : 0.01 BLX</i></p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+								<button type="button" class="btn btn-danger" onclick="cancelOrder();" data-dismiss="modal">Cancel Order</button>
+							</div>
+						</div>
+					</div>
+				</div>
+            </section>
+          </div>
+      </section>
+      </div>
+    </section>
+  </section>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/constants.js"></script>
+  <script src="js/freemarket_scripts.js"></script>
+  <script>
+  	var buyOrder = getQueryVariable("order");
+  	$("#order_number").text(buyOrder);
+  	$("#order").text(buyOrder);
+  	$.getJSON(Constants.apiUrl, {
+  		requestType: "getOffer",
+  		offer: buyOrder
+  	}, function (request) {
+  		var order = request.buyOffer;
+  		var account = order.accountRS;
+  		$("#account").text(account);
+  		var rate = (order.rateNQT) / 1000000;
+  		$("#rate").text(rate.toFixed(2));
+  		var amount = Number(order.supply)/100;
+  		$("#amount").text(amount.toLocaleString());
+  		var expiration = order.expirationHeight;
+  		$("#expiration").text(expiration.toLocaleString());
+  		var currencyCode = order.currency;
+  		$("#currencyCode").text(currencyCode);
+    		let currency;
+    		switch(currencyCode){
+    			case Constants.USDXId:
+    			currency = "USDX";
+    			break;
+    			case Constants.AUDXId:
+    			currency = "AUDX";
+    			break;
+    			case Constants.CADXId:
+    			currency = "CADX";
+    			break;
+    			case Constants.CHFXId:
+    			currency = "CHFX";
+    			break;
+    			case Constants.CNYXId:
+    			currency = "CNYX";
+    			break;
+    			case Constants.EURXId:
+    			currency = "EURX";
+    			break;
+    			case Constants.GBPXId:
+    			currency = "GBPX";
+    			break;
+    			case Constants.IQDXId:
+    			currency = "IQDX";
+    			break;
+    			case Constants.IRRXId:
+    			currency = "IRRX";
+    			break;
+    			case Constants.JPYXId:
+    			currency = "JPYX";
+    			break;
+    			case Constants.NZDXId:
+    			currency = "NZDX";
+    			break;
+    			case Constants.RUBXId:
+    			currency = "RUBX";
+    			break;
+    		}
+    	$("#currency").text(currency);
+    	$("#currency2").text(currency);
+  	})
+  </script>
+  <script>
+  	function cancelOrder() {
+  	var buyOrder = getQueryVariable("order");
+  	$.getJSON(Constants.apiUrl, {
+  		requestType: "getOffer",
+  		offer: buyOrder
+  	}, function (request) {
+  		var order = request.buyOffer;
+  		var rateNQT = order.rateNQT;
+  		var amount = order.supply;
+  		var currencyCode = order.currency;
+	  		$.getJSON(Constants.apiUrl, {
+	  		requestType: "getBlockchainStatus"
+	  		}, function (block) {
+	  		console.log(block);
+	  		var height = block.numberOfBlocks;
+	  			$.post(Constants.apiUrl, {
+		  		requestType: "publishExchangeOffer",
+					currency: currencyCode,
+					buyRateNQT: rateNQT,
+					sellRateNQT: rateNQT,
+					totalBuyLimit: amount,
+					totalSellLimit: 0,
+					initialBuySupply: amount,
+					initialSellSupply: 0,
+					secretPhrase: $("#modalSecretPhrase").val(),
+					expirationHeight: height,
+					feeNQT: 1000000,
+					deadline: 60		  		
+			}, function (cancel) {
+				var parse = JSON.parse(cancel)
+				var error = parse.errorDescription;
+				var txID = parse.transaction;
+				if(!error) {
+				var rows = '';
+				rows += '<div class="row">';
+				rows += '<div class="col-lg-12">'
+				rows += '<div class="panel" style="padding:20px;">';
+				rows += '<p style="color:white">Transaction Successful!</p>';
+				rows += '<p style="color:white">TX ID: ' + txID + '</p>';
+				rows += '<br/>';
+				rows += '<a class="btn btn-info" href="markets.html" role="button">View Markets</a>&nbsp;&nbsp;<a class="btn btn-info" href="account_details.html" role="button">View Account</a>';
+				$("#txID").html(rows);
+			}	 else {
+				var rows = '';
+				rows += '<div class="row">';
+				rows += '<div class="col-lg-12">'
+				rows += '<div class="panel" style="padding:20px;">';
+				rows += '<p style="color:white">Transaction Error:</p>';
+				rows += '<p style="color:red">' + error + '</p>';
+				rows += '<br/>';
+				rows += '<a class="btn btn-info" href="markets.html" role="button">View Markets</a>&nbsp;&nbsp;<a class="btn btn-info" href="account_details.html" role="button">View Account</a>';
+				$("#txID").html(rows);
+	}})})})}
+  </script>
+</body>
+</html>

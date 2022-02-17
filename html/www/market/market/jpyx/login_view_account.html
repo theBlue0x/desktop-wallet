@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blue0x Decentralized Marketplace">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Blue0x | MARKET</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/bootstrap-reset.css" rel="stylesheet">
+  <link href="../assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="../css/style.min.css" rel="stylesheet">
+  <link href="../css/style-responsive.css" rel="stylesheet" />
+  <script>
+  function setButtonText() {
+    var translatedLoginButtonText = $.t("button_login");
+    document.getElementById("loginButtonText").innerHTML = translatedLoginButtonText;
+  };
+  </script>
+  <script>
+  function login() {
+    var Account = document.getElementById('user_entered_account_number').value;
+    if (!Account) { 
+      document.getElementById("user_entered_account_numberErrorMessage").innerHTML = "<p>Account Number Required</p>";
+    } else {
+      var currentRSAccountNumber =$('#user_entered_account_number').val();
+      $.post(Constants.apiUrl, {
+        requestType: 'getAccount',
+        account: $('#user_entered_account_number').val(),
+        includeEffectiveBalance: "true"
+      },
+      function(result) {
+          if (result.errorDescription == 'Unknown account') { 
+            document.getElementById("user_entered_account_numberErrorMessage").innerHTML = "<p class=\"validation_message\">New or invalid BLX account.  New BLX accounts must first make an outgoing transaction from the Blue0x wallet.</p>";
+            } else {
+            var balance = result.balanceNQT / 100000000;
+            sessionStorage.setItem("accountRS", result.accountRS);
+            sessionStorage.setItem("accountBalance", balance);
+            var replace_loginResult = '';
+            replace_loginResult += '<div class="media-body">';
+            replace_loginResult += '<p>You have logged in with the following account:</p>';
+            replace_loginResult += '<a class="p-head">Account ID</a>';
+            replace_loginResult += '<p>' + result.accountRS + '</p>';
+            replace_loginResult += '</div>';
+            replace_loginResult += '<div class="media-body">';
+            replace_loginResult += '<a class="p-head">BLX Balance</a>';
+            replace_loginResult += '<p>' + balance + ' BLX </p>';
+            replace_loginResult += '</div>';
+            document.getElementById("loginResult").innerHTML = replace_loginResult;
+          }
+        }, "json");
+      $.post(Constants.apiUrl, {
+        requestType: 'getAccountCurrencies',
+        account: currentRSAccountNumber,
+        currency: Constants.JPYXId
+      },
+      function(coinquery) {
+        if (Object.keys(coinquery).length == 0) {
+            sessionStorage.setItem("JPYXAccountBalance", "0 JPYX");
+            var replace_JPYXAccountBalance = '';
+            replace_JPYXAccountBalance += '<div class="media-body">';
+            replace_JPYXAccountBalance += '<a class="p-head">JPYX Balance</a>';
+            replace_JPYXAccountBalance += '<p>0 JPYX</p>';
+            replace_JPYXAccountBalance += '</div>';
+            replace_JPYXAccountBalance += '</br>';
+            replace_JPYXAccountBalance += '<a class="btn btn-default" href="ViewAll.html" role="button">View Items</a>&nbsp;&nbsp;<a class="btn btn-default" href="account_details.html" role="button">My Account</a>';
+            document.getElementById("JPYXAccountBalance").innerHTML = replace_JPYXAccountBalance;
+          } else {
+            var JPYXAccountBalance = coinquery.units;
+            sessionStorage.setItem("JPYXAccountBalance", coinquery.units);
+            var convertedJPYXAccountBalance = JPYXAccountBalance / 100;
+            var replace_JPYXAccountBalance = '';
+            replace_JPYXAccountBalance += '<div class="media-body">';
+            replace_JPYXAccountBalance += '<a class="p-head">JPYX Balance</a>';
+            replace_JPYXAccountBalance += '<p>' + convertedJPYXAccountBalance + ' JPYX</p>';
+            replace_JPYXAccountBalance += '</div>';
+            replace_JPYXAccountBalance += '</br>';
+            replace_JPYXAccountBalance += '<a class="btn btn-default" href="ViewAll.html" role="button">View Items</a>&nbsp;&nbsp;<a class="btn btn-default" href="account_details.html" role="button">My Account</a>';
+            document.getElementById("JPYXAccountBalance").innerHTML = replace_JPYXAccountBalance;
+          }
+        }, "json");}};
+</script>
+  <script>
+  function loadAccountInfo() {
+    if (sessionStorage.getItem("loginStatus") == "loggedin") {
+      var fmlang = localStorage.getItem("fmlang");
+      window.location.assign("account_details.html?setLng=" + fmlang);
+    }};
+  </script>
+</head>
+<body class="full-width" onload="loadAccountInfo(); setLanguage(); setButtonText();">
+  <section id="container">
+    <script type="text/javascript" src="../js/menu.js"></script>
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="row">
+          <div class="col-lg-12">
+            <section class="panel">
+              <header class="panel-heading">
+                <b><span data-i18n="header_login">Log In</span></b>
+              </header>
+              <div class="panel-body">
+                <div id="loginResult">
+                  <p><span data-i18n="account_number_welcome">Enter your BLX account number below. This will allow Blue0x Market to know which items for sale are yours, and to display your BLX account balance. Your secret passphrase is NOT required for this.</span></p>
+                  <div class="form-group">
+                    <label for="user_entered_account_number"><span data-i18n="account_number">BLX Account Number</span></label>
+                    <div class="iconic-input">
+                      <i class="fa fa-bars"></i>
+                      <input type="text" class="form-control" data-i18n="[placeholder]placeholder_required" id="user_entered_account_number" autofocus>
+                      <div id="user_entered_account_numberErrorMessage"></div>
+                    </div>
+                  </div>
+                  <div id="loginButtonSection">
+                    <button type="button" id="loginButton" class="btn btn-default" onclick="login();">
+                      <div id="loginButtonText"></div>
+                    </button>
+                  </div>
+                </div>
+                <div id="JPYXAccountBalance">
+                </div>
+              </div>
+            </section>
+          </div>
+      </section>
+      </div>
+    </section>
+  </section>
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/jquery.dcjqaccordion.2.7.min.js"></script>
+  <script src="../js/bootstrap-hover-dropdown.min.js"></script>
+  <script src="../js/constants.js"></script>
+  <script src="../js/freemarket_scripts.js"></script>
+  <script src="../js/common-scripts.js"></script>
+  <script src="../js/i18next.min.js"></script>
+  <script src="../js/freemarket_localization_scripts.js"></script>
+</body>
+</html>

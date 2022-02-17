@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blue0x Decentralized Marketplace">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Blue0x | MARKET</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/bootstrap-reset.css" rel="stylesheet">
+  <link href="../assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="../css/style.min.css" rel="stylesheet">
+  <link href="../css/style-responsive.css" rel="stylesheet" />
+  <link href="../assets/fancybox/jquery.fancybox.css" rel="stylesheet" />
+  <link href="../css/gallery.css" rel="stylesheet" />
+  <script>
+  function setButtonText() {
+    var translatedPostButtonText = $.t("button_post_item");
+    document.getElementById("postButtonText").innerHTML = translatedPostButtonText;
+  };
+</script>
+<script>
+  function setCurrencyText(currency) {
+    document.getElementById("itemCurrencyText").innerHTML = currency;
+    };
+</script>
+<script>
+  function setPreviewImageURL(url, num) {
+    var imageLink = url.value;
+    var numstr = "";
+    if(num != 0) numstr = "" + num;
+    if (imageLink == "" || !imageLink) {
+      document.getElementById("previewImageErrorMessage" + numstr).innerHTML = "";
+    } else {
+      var link = document.getElementById("previewImageLink" + numstr);
+      link.setAttribute('href', imageLink);
+      document.getElementById("previewImageErrorMessage" + numstr).innerHTML = "";
+      imageLink = "";
+    }};
+</script>
+<script>
+  function testFieldPrice(field) {
+    var regExpr = new RegExp("^[0-9]+(\.[0-9]{1,10})?$");
+    if (!regExpr.test(field.value)) {
+      // Case of error
+      field.value = "";
+      var error_price = $.t("error_price");
+      document.getElementById("itemPriceErrorMessage").innerHTML = "<p class=\"validation_message\">The price may only contain numbers.</p>";
+    } else {
+      document.getElementById("itemPriceErrorMessage").innerHTML = "";
+    }};
+</script>
+<script >
+function docReady(fn) {
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        setTimeout(fn, 1);
+    } else {
+        document.addEventListener("DOMContentLoaded", fn);
+    }} 
+docReady(function() {
+    var lastResult, countResults = 0;
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+        "qr-reader1", { fps: 10, qrbox: 250 });
+    function onScanSuccess(decodedText, decodedResult) {
+        if (decodedText !== lastResult) {
+            ++countResults;
+            lastResult = decodedText;
+            document.getElementById('secretPhrase').value = decodedText;
+            html5QrcodeScanner.clear();
+            setTimeout(function(){ $('#reader1').modal('hide'); }, 300);
+        }}
+    function onScanError(qrCodeError) {
+    }
+    html5QrcodeScanner.render(onScanSuccess, onScanError);
+});
+</script>
+<script>
+  function postNewItem() {
+    var itemCurrency = "BLX"; 
+    var currencyRadios = document.getElementsByName('item_currency');
+    for (var i = 0, length = currencyRadios.length; i < length; i++) {
+      if (currencyRadios[i].checked) {
+        var duration = currencyRadios[i].value;
+        if (duration == "BLX") { 
+          itemCurrency = "BLX"; 
+        } else { 
+          itemCurrency = "USDX";
+        }}}
+    document.getElementById("listingResult").innerHTML = "";
+    var itemTitleCheck = document.getElementById("itemTitle").value;
+    var itemPriceCheck = document.getElementById("itemPrice").value;
+    var itemDescriptionCheck = document.getElementById("itemDescription").value;
+    var secretPhraseCheck = document.getElementById('secretPhrase').value;
+    if (itemTitleCheck == "") {
+      document.getElementById("listingResult").innerHTML = "<p class=\"validation_message\">Missing Title</p>";
+      document.getElementById("itemTitleErrorMessage").innerHTML = "<p class=\"validation_message\">A title is required for your item.</p>";
+    } else if (itemPriceCheck == "") {
+      document.getElementById("listingResult").innerHTML = "<p class=\"validation_message\">Missing Price</p>";
+      document.getElementById("itemTitleErrorMessage").innerHTML = "";
+      document.getElementById("itemPriceErrorMessage").innerHTML = "<p class=\"validation_message\">A price is required for your item.</p>";
+    } else if (itemDescriptionCheck == "") {
+      document.getElementById("listingResult").innerHTML = "<p class=\"validation_message\">Missing Description</p>";
+      document.getElementById("itemTitleErrorMessage").innerHTML = "";
+      document.getElementById("itemPriceErrorMessage").innerHTML = "";
+      document.getElementById("itemDescriptionErrorMessage").innerHTML = "<p class=\"validation_message\">A description is required for your item.</p>";
+    } else if (secretPhraseCheck == "") {
+      document.getElementById("listingResult").innerHTML = "";
+      document.getElementById("itemTitleErrorMessage").innerHTML = "";
+      document.getElementById("itemPriceErrorMessage").innerHTML = "";
+      document.getElementById("itemDescriptionErrorMessage").innerHTML = "";
+      var translatedSecretPhraseErrorMessage = $.t("error_secret_phrase");
+      document.getElementById("secretPhraseErrorMessage").innerHTML = "<p class=\"validation_message\">" + translatedSecretPhraseErrorMessage + "</p>";
+    } else {
+      document.getElementById("listingResult").innerHTML = "";
+      document.getElementById("postButtonSection").innerHTML = "<button type=\"button\" id=\"postButton\" class=\"btn btn-default\"><i class=\"fa fa-refresh fa-spin\"></i> &nbsp;Processing...</button>";
+      var description = {
+        p: $('#itemPrice').val(),
+        c: itemCurrency,
+        l: $('#itemLocation').val()
+      };
+      var message = {
+        d: $('#itemDescription').val(),
+        i: $('#main_image_url').val(),
+        i1: $('#additional_image_1_url').val(),
+        i2: $('#additional_image_2_url').val(),
+        i3: $('#additional_image_3_url').val(),
+        i4: $('#additional_image_4_url').val(),
+      };
+      $.post(Constants.apiUrl, {
+        requestType: "dgsListing",
+        name: $('#itemTitle').val(),
+        description: JSON.stringify(description, null, 4),
+        tags: $('#itemCategory').val(),
+        secretPhrase: $('#secretPhrase').val(),
+        message: JSON.stringify(message, null, 4),
+        messageIsText: "true",
+        messageIsPrunable: "true",
+        quantity: $('#quantitySell').val(),
+        feeNQT: 10000000,
+        priceNQT: 1000000,
+        deadline: 60  
+      },
+      function(result) {
+        var errorCode = result.errorCode;
+        if (!errorCode) {
+          var listingID = result.transaction;
+          var fmlang = localStorage.getItem("fmlang");
+          var success = $.t("success");
+          document.getElementById("panel-heading").innerHTML = success;
+          var post_successful_part1 = $.t("post_successful_part1");
+          var post_successful_part2 = $.t("post_successful_part2");
+          document.getElementById("successMessage").innerHTML = post_successful_part1 + "<b>" + listingID + "</b><br/><br/>" + post_successful_part2;
+          } else { 
+            var errorDescription = result.errorDescription;
+            var errorCode = result.errorCode;
+              document.getElementById("postButtonSection").innerHTML = "<button type=\"button\" id=\"postButton\" class=\"btn btn-default\" onclick=\"postNewItem();\"><div id=\"postButtonText\"></div></button>";
+              setButtonText();
+              var post_failure = $.t("post_failure");
+              document.getElementById("listingResult").innerHTML = post_failure + "<b> " + errorDescription + "</b>";
+            }
+        }, "json");
+    }};
+</script>
+<style>
+hr {
+  margin-top: 5px;
+};
+</style>
+</head>
+<body class="full-width" onload="setAccountNumber(); setLanguage(); setButtonText();">
+  <section id="container">
+    <script type="text/javascript" src="../js/menu.js"></script>
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="row">
+         <div class="col-lg-12">
+          <section class="panel">
+            <header class="panel-heading" id="panel-heading">
+              <span data-i18n="header_list_new_item">List New Item</span>
+            </span>
+          </header>
+          <div class="panel-body">
+            <span id="successMessage">
+              <div class="form-group">
+                <label for="itemTitle"><span data-i18n="item_title">Item Title</span></label>
+                <div class="iconic-input">
+                  <i class="fa fa-book"></i>
+                  <input type="text" class="form-control" data-i18n="[placeholder]placeholder_required" id="itemTitle" maxlength="35">
+                  <div id="itemTitleErrorMessage"></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="itemQuantity"><span data-i18n="item_quantity_sell">Quantity</span></label>
+                <div id="quantity">
+                  <div class="input-group" style="width:150px;">
+                    <input type="text" id="quantitySell" class="spinner-input form-control" maxlength="3" readonly>
+                    <div class="spinner-buttons input-group-btn">
+                      <button type="button" class="btn btn-secondary spinner-up" style="border:.1px solid #e2e2e4;">
+                        <i class="fa fa-angle-up"></i>
+                      </button>
+                      <button type="button" class="btn btn-secondary spinner-down" style="border:.1px solid #e2e2e4;">
+                        <i class="fa fa-angle-down"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="itemCategory"><span data-i18n="category">Category</span></label>
+                <select class="form-control m-bot15" id="itemCategory">
+                  <option value="antiques" data-i18n="[text]antiques">Antiques</option>
+                  <option value="art" data-i18n="[text]art">Art</option>
+                  <option value="baby" data-i18n="[text]baby">Baby</option>
+                  <option value="books" data-i18n="[text]books">Books</option>
+                  <option value="business" data-i18n="[text]business">Business</option>
+                  <option value="industrial" data-i18n="[text]industrial">Industrial</option>
+                  <option value="cameras" data-i18n="[text]cameras">Cameras</option>
+                  <option value="phones" data-i18n="[text]cell_phones">Cell Phones</option>
+                  <option value="clothing" data-i18n="[text]clothing">Clothing</option>
+                  <option value="coins" data-i18n="[text]coins">Coins</option>
+                  <option value="collectibles" data-i18n="[text]collectibles">Collectibles</option>
+                  <option value="computers" data-i18n="[text]computers">Computers</option>
+                  <option value="consumables" data-i18n="[text]consumables">Consumables</option>
+                  <option value="electronics" data-i18n="[text]electronics">Electronics</option>
+                  <option value="crafts" data-i18n="[text]crafts">Crafts</option>
+                  <option value="movies" data-i18n="[text]dvds">DVDs and Movies</option>
+                  <option value="everything" data-i18n="[text]everything_else">Everything Else</option>
+                  <option value="food" data-i18n="[text]food_drink">Food and Drink</option>
+                  <option value="gift" data-i18n="[text]gift_cards">Gift Cards</option>
+                  <option value="health" data-i18n="[text]health_beauty">Health and Beauty</option>
+                  <option value="home" data-i18n="[text]home_garden">Home and Garden</option>
+                  <option value="jewelry" data-i18n="[text]jewelry">Jewelry and Watches</option>
+                  <option value="music" data-i18n="[text]music">Music</option>
+                  <option value="instruments" data-i18n="[text]instruments">Musical Instruments</option>
+                  <option value="networking" data-i18n="[text]networking">Networking</option>
+                  <option value="pet" data-i18n="[text]pets">Pet Supplies</option>
+                  <option value="pottery" data-i18n="[text]pottery">Pottery and Glass</option>
+                  <option value="estate" data-i18n="[text]real_estate">Real Estate</option>
+                  <option value="defense" data-i18n="[text]self_defense">Self Defense</option>
+                  <option value="services" data-i18n="[text]services">Specialty Services</option>
+                  <option value="sporting" data-i18n="[text]sporting_goods">Sporting Goods</option>
+                  <option value="memorabilia" data-i18n="[text]sports_memo">Sports Memorabilia</option>
+                  <option value="stamps" data-i18n="[text]stamps">Stamps</option>
+                  <option value="tickets" data-i18n="[text]tickets">Tickets</option>
+                  <option value="toys" data-i18n="[text]toys">Toys and Hobbies</option>
+                  <option value="travel" data-i18n="[text]travel">Travel</option>
+                  <option value="games" data-i18n="[text]video_games">Video Games</option>
+                </select>
+              </div>
+              <label><span data-i18n="select_item_currency">Item Currency</span></label>
+              <form class="form-horizontal tasi-form" role="form">
+                <div class="form-group">
+                  <div id="item_currency_section" style="margin-left:5px;">
+                    <div class="input-group m-bot15">
+                      <div class="col-lg-12">
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="item_currency" id="item_currency" value="USDX" checked onclick="setCurrencyText('USDX')"> USDX
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="itemCurrencyErrorMessage"></div>
+                </div>
+              </form>
+              <div class="form-group">
+                <label for="itemPrice"><span data-i18n="price">Price</span></label>
+                <div class="input-group m-bot15">
+                  <span id="itemCurrencyText" class="input-group-addon">USDX</span>
+                  <input type="text" pattern="[0-9.]+" onblur="testFieldPrice(this);" class="form-control" data-i18n="[placeholder]placeholder_required" id="itemPrice">
+                </div>
+                <div id="itemPriceErrorMessage"></div>
+              </div>
+              <div class="form-group">
+                <label for="itemLocation"><span data-i18n="location">Location</span></label>
+                <select class="form-control m-bot15" id="itemLocation">
+                  <option disabled selected hidden>Select a Location</option>
+                  <optgroup label="Alabama">
+                  <option value="aub"> Auburn, Alabama </option>
+                  <option value="bhm"> Birmingham, Alabama </option>
+                  <option value="dhn"> Dothan, Alabama </option>
+                  <option value="msl"> Florence, Alabama </option>
+                  <option value="anb"> Gadsden-Anniston, Alabama </option>
+                  <option value="hsv"> Huntsville, Alabama </option>
+                  <option value="mob"> Mobile, Alabama </option>
+                  <option value="mgm"> Montgomery, Alabama </option>
+                  <option value="tsc"> Tuscaloosa, Alabama </option>
+                  <optgroup label="Alaska">
+                  <option value="anc"> Anchorage, Alaska </option>
+                  <option value="fai"> Fairbanks, Alaska </option>
+                  <option value="ena"> Kenai Peninsula, Alaska </option>
+                  <optgroup label="Arizona">
+                  <option value="flg"> Flagstaff, Arizona </option>
+                  <option value="mhv"> Mohave County, Arizona </option>
+                  <option value="phx"> Phoenix, Arizona </option>
+                  <option value="prc"> Prescott, Arizona </option>
+                  <option value="tus"> Tucson, Arizona </option>
+                  <option value="yum"> Yuma, Arizona </option>
+                  <optgroup label="Arkansas">
+                  <option value="fyv"> Fayetteville, Arkansas </option>
+                  <option value="jbr"> Jonesboro, Arkansas </option>
+                  <option value="lit"> Little Rock, Arkansas </option>
+                  <option value="txk"> Texarkana, Arkansas </option>
+                  <optgroup label="California">
+                  <option value="bak"> Bakersfield, California </option>
+                  <option value="chc"> Chico, California </option>
+                  <option value="fre"> Fresno, California </option>
+                  <option value="hmb"> Humboldt County, California </option>
+                  <option value="imp"> Imperial County, California </option>
+                  <option value="inl"> Inland Empire, California </option>
+                  <option value="lax"> Los Angeles, California </option>
+                  <option value="mdo"> Mendocino County, California </option>
+                  <option value="mer"> Merced, California </option>
+                  <option value="mod"> Modesto, California </option>
+                  <option value="mtb"> Monterey Bay, California </option>
+                  <option value="orc"> Orange County, California </option>
+                  <option value="psp"> Palm Springs, California </option>
+                  <option value="rdd"> Redding, California </option>
+                  <option value="sac"> Sacramento, California </option>
+                  <option value="sdo"> San Diego, California </option>
+                  <option value="slo"> San Luis Obispo, California </option>
+                  <option value="sba"> Santa Barbara, California </option>
+                  <option value="smx"> Santa Maria, California </option>
+                  <option value="sfo"> San Francisco Bay Area, California </option>
+                  <option value="ssk"> Siskiyou County, California </option>
+                  <option value="stk"> Stockton, California </option>
+                  <option value="ssn"> Susanville, California </option>
+                  <option value="oxr"> Ventura County, California </option>
+                  <option value="vis"> Visalia-Tulare, California </option>
+                  <option value="ybs"> Yuba-Sutter, California </option>
+                  <optgroup label="Colorado">
+                  <option value="bou"> Boulder, Colorado </option>
+                  <option value="cos"> Colorado Springs, Colorado </option>
+                  <option value="den"> Denver, Colorado </option>
+                  <option value="ftc"> Fort Collins, Colorado </option>
+                  <option value="rck"> High Rockies, Colorado </option>
+                  <option value="pub"> Pueblo, Colorado </option>
+                  <option value="gjt"> Western Slope, Colorado </option>
+                  <optgroup label="Connecticut">
+                  <option value="htf"> Hartford, Connecticut </option>
+                  <option value="hvn"> New Haven, Connecticut </option>
+                  <optgroup label="Delaware">
+                  <option value="dlw"> Delaware</option>
+                  <optgroup label="District of Columbia">
+                  <option value="wdc"> Washington D.C., District of Columbia</option>
+                  <optgroup label="Florida">
+                  <option value="dab"> Daytona Beach, Florida </option>
+                  <option value="key"> Florida Keys, Florida </option>
+                  <option value="ftl"> Fort Lauderdale, Florida </option>
+                  <option value="fmy"> Ft Myers, Florida </option>
+                  <option value="gnv"> Gainesville, Florida </option>
+                  <option value="jax"> Jacksonville, Florida </option>
+                  <option value="lal"> Lakeland, Florida </option>
+                  <option value="mia"> Miami, Florida </option>
+                  <option value="oca"> Ocala, Florida </option>
+                  <option value="yps"> Okaloosa, Florida </option>
+                  <option value="orl"> Orlando, Florida </option>
+                  <option value="pfn"> Panama City, Florida </option>
+                  <option value="pns"> Pensacola, Florida </option>
+                  <option value="srq"> Sarasota-Bradenton, Florida </option>
+                  <option value="ust"> St Augustine, Florida </option>
+                  <option value="tal"> Tallahassee, Florida </option>
+                  <option value="tpa"> Tampa Bay, Florida </option>
+                  <option value="psl"> Treasure Coast, Florida </option>
+                  <option value="wpb"> West Palm Beach, Florida </option>
+                  <optgroup label="Georgia">
+                  <option value="aby"> Albany, Georgia </option>
+                  <option value="ahn"> Athens, Georgia </option>
+                  <option value="atl"> Atlanta, Georgia </option>
+                  <option value="aug"> Augusta, Georgia </option>
+                  <option value="bwk"> Brunswick, Georgia </option>
+                  <option value="csg"> Columbus, Georgia </option>
+                  <option value="mcn"> Macon, Georgia </option>
+                  <option value="sav"> Savannah, Georgia </option>
+                  <option value="tbr"> Statesboro, Georgia </option>
+                  <option value="vld"> Valdosta, Georgia </option>
+                  <optgroup label="Hawaii">
+                  <option value="hnl"> Hawaii </option>
+                  <optgroup label="Idaho">
+                  <option value="boi"> Boise, Idaho </option>
+                  <option value="lws"> Lewiston, Idaho </option>
+                  <option value="twf"> Twin Falls, Idaho </option>
+                  <optgroup label="Illinois">
+                  <option value="bln"> Bloomington, Illinois </option>
+                  <option value="chm"> Champaign Urbana, Illinois </option>
+                  <option value="chi"> Chicago, Illinois </option>
+                  <option value="dil"> Decatur, Illinois </option>
+                  <option value="lsl"> La Salle Co, Illinois </option>
+                  <option value="mto"> Mattoon-Charleston, Illinois </option>
+                  <option value="pia"> Peoria, Illinois </option>
+                  <option value="rfd"> Rockford, Illinois </option>
+                  <option value="spi"> Springfield, Illinois </option>
+                  <optgroup label="Indiana">
+                  <option value="bmg"> Bloomington, Indiana </option>
+                  <option value="evw"> Evansville, Indiana </option>
+                  <option value="fwa"> Fort Wayne, Indiana </option>
+                  <option value="ind"> Indianapolis, Indiana </option>
+                  <option value="okk"> Kokomo, Indiana </option>
+                  <option value="laf"> Lafayette, Indiana </option>
+                  <option value="mun"> Muncie, Indiana </option>
+                  <option value="rin"> Richmond, Indiana </option>
+                  <option value="sbn"> South Bend, Indiana </option>
+                  <option value="tha"> Terre Haute, Indiana </option>
+                  <optgroup label="Iowa">
+                  <option value="ame"> Ames, Iowa </option>
+                  <option value="ced"> Cedar Rapids, Iowa </option>
+                  <option value="dsm"> Des Moines, Iowa </option>
+                  <option value="dbq"> Dubuque, Iowa </option>
+                  <option value="ftd"> Fort Dodge, Iowa </option>
+                  <option value="iac"> Iowa City, Iowa </option>
+                  <option value="msc"> Mason City, Iowa </option>
+                  <option value="mli"> Quad Cities, Iowa </option>
+                  <option value="sux"> Sioux City, Iowa </option>
+                  <option value="wlo"> Waterloo, Iowa </option>
+                  <optgroup label="Kansas">
+                  <option value="lwr"> Lawrence, Kansas </option>
+                  <option value="mhk"> Manhattan, Kansas </option>
+                  <option value="sns"> Salina, Kansas </option>
+                  <option value="tpk"> Topeka, Kansas </option>
+                  <option value="wic"> Wichita, Kansas </option>
+                  <optgroup label="Kentucky">
+                  <option value="blg"> Bowling Green, Kentucky </option>
+                  <option value="lex"> Lexington, Kentucky </option>
+                  <option value="lou"> Louisville, Kentucky </option>
+                  <option value="owb"> Owensboro, Kentucky </option>
+                  <optgroup label="Louisiana">
+                  <option value="btr"> Baton Rouge, Louisiana </option>
+                  <option value="hum"> Houma, Louisiana </option>
+                  <option value="lft"> Lafayette, Louisiana </option>
+                  <option value="lkc"> Lake Charles, Louisiana </option>
+                  <option value="mlu"> Monroe, Louisiana </option>
+                  <option value="nor"> New Orleans, Louisiana </option>
+                  <option value="shv"> Shreveport, Louisiana </option>
+                  <optgroup label="Maine">
+                  <option value="mne"> Bangor, Maine </option>
+                  <option value="por"> Portland, Maine </option>
+                  <optgroup label="Maryland">
+                  <option value="anp"> Annapolis, Maryland </option>
+                  <option value="bal"> Baltimore, Maryland </option>
+                  <option value="fdk"> Frederick, Maryland </option>
+                  <optgroup label="Massachusetts">
+                  <option value="bos"> Boston, Massachusetts </option>
+                  <option value="cap"> Cape Cod, Massachusetts </option>
+                  <option value="sma"> South Coast, Massachusetts </option>
+                  <option value="wor"> Worcester, Massachusetts </option>
+                  <optgroup label="Michigan">
+                  <option value="aaa"> Ann Arbor, Michigan </option>
+                  <option value="btc"> Battle Creek, Michigan </option>
+                  <option value="det"> Detroit, Michigan </option>
+                  <option value="fnt"> Flint, Michigan </option>
+                  <option value="grr"> Grand Rapids, Michigan </option>
+                  <option value="hld"> Holland, Michigan </option>
+                  <option value="jxn"> Jackson, Michigan </option>
+                  <option value="kzo"> Kalamazoo, Michigan </option>
+                  <option value="lan"> Lansing, Michigan </option>
+                  <option value="mnr"> Monroe, Michigan </option>
+                  <option value="mkg"> Muskegon, Michigan </option>
+                  <option value="phn"> Port Huron, Michigan </option>
+                  <option value="mbs"> Saginaw-Midland-Baycity, Michigan </option>
+                  <option value="thb"> The Thumb, Michigan </option>
+                  <option value="yup"> Upper Peninsula, Michigan </option>
+                  <optgroup label="Minnesota">
+                  <option value="bji"> Bemidji, Minnesota </option>
+                  <option value="brd"> Brainerd, Minnesota </option>
+                  <option value="dlh"> Duluth, Minnesota </option>
+                  <option value="mkt"> Mankato, Minnesota </option>
+                  <option value="min"> Minneapolis / St Paul, Minnesota </option>
+                  <option value="rmn"> Rochester, Minnesota </option>
+                  <option value="stc"> St Cloud, Minnesota </option>
+                  <optgroup label="Mississippi">
+                  <option value="gpt"> Gulfport, Mississippi </option>
+                  <option value="usm"> Hattiesburg, Mississippi </option>
+                  <option value="jan"> Jackson, Mississippi </option>
+                  <option value="mei"> Meridian, Mississippi </option>
+                  <optgroup label="Missouri">
+                  <option value="cou"> Columbia, Missouri </option>
+                  <option value="jln"> Joplin, Missouri </option>
+                  <option value="ksc"> Kansas City, Missouri </option>
+                  <option value="krk"> Kirksville, Missouri </option>
+                  <option value="loz"> Lake Of The Ozarks, Missouri </option>
+                  <option value="sgf"> Springfield, Missouri </option>
+                  <option value="stj"> St Joseph, Missouri </option>
+                  <option value="stl"> St Louis, Missouri </option>
+                  <optgroup label="Montana">
+                  <option value="bil"> Billings, Montana </option>
+                  <option value="bzn"> Bozeman, Montana </option>
+                  <option value="btm"> Butte, Montana </option>
+                  <option value="gtf"> Great Falls, Montana </option>
+                  <option value="hln"> Helena, Montana </option>
+                  <option value="fca"> Kalispell, Montana </option>
+                  <option value="mso"> Missoula, Montana </option>
+                  <optgroup label="Nebraska">
+                  <option value="gil"> Grand Island, Nebraska </option>
+                  <option value="lnk"> Lincoln, Nebraska </option>
+                  <option value="lbf"> North Platte, Nebraska </option>
+                  <option value="oma"> Omaha, Nebraska </option>
+                  <option value="bff"> Scottsbluff, Nebraska </option>
+                  <optgroup label="Nevada">
+                  <option value="elk"> Elko, Nevada </option>
+                  <option value="lvg"> Las Vegas, Nevada </option>
+                  <option value="rno"> Reno, Nevada </option>
+                  <optgroup label="New Hampshire">
+                  <option value="nhm">New Hampshire</option>
+                  <optgroup label="New Jersey">
+                  <option value="cnj"> Central New Jersey </option>
+                  <option value="jys"> Jersey Shore, New Jersey </option>
+                  <option value="njy"> North New Jersey </option>
+                  <option value="snj"> South New Jersey </option>
+                  <optgroup label="New Mexico">
+                  <option value="abq"> Albuquerque, New Mexico </option>
+                  <option value="cvn"> Clovis, New Mexico </option>
+                  <option value="fnm"> Farmington, New Mexico </option>
+                  <option value="lcr"> Las Cruces, New Mexico </option>
+                  <option value="row"> Roswell, New Mexico </option>
+                  <option value="saf"> Santa Fe, New Mexico </option>
+                  <optgroup label="New York">
+                  <option value="alb"> Albany, New York </option>
+                  <option value="bgm"> Binghamton, New York </option>
+                  <option value="buf"> Buffalo, New York </option>
+                  <option value="cat"> Catskills, New York </option>
+                  <option value="chq"> Chautauqua, New York </option>
+                  <option value="elm"> Elmira-Corning, New York </option>
+                  <option value="fgl"> Finger Lakes, New York </option>
+                  <option value="gfl"> Glens Falls, New York </option>
+                  <option value="hud"> Hudson Valley, New York </option>
+                  <option value="ith"> Ithaca, New York </option>
+                  <option value="isp"> Long Island, New York </option>
+                  <option value="nyc"> New York City, New York </option>
+                  <option value="onh"> Oneonta, New York </option>
+                  <option value="plb"> Plattsburgh-Adirondacks, New York </option>
+                  <option value="ptd"> Potsdam-Canton-Massena, New York </option>
+                  <option value="rcs"> Rochester, New York </option>
+                  <option value="syr"> Syracuse, New York </option>
+                  <option value="tts"> Twin Tiers, New York </option>
+                  <option value="uti"> Utica-Rome-Oneida, New York </option>
+                  <option value="wtn"> Watertown, New York </option>
+                  <optgroup label="North Carolina">
+                  <option value="ash"> Asheville, North Carolina </option>
+                  <option value="bnc"> Boone, North Carolina </option>
+                  <option value="cha"> Charlotte, North Carolina </option>
+                  <option value="fay"> Fayetteville, North Carolina </option>
+                  <option value="gbo"> Greensboro, North Carolina </option>
+                  <option value="hky"> Hickory, North Carolina </option>
+                  <option value="oaj"> Jacksonville, North Carolina </option>
+                  <option value="obx"> Outer Banks, North Carolina </option>
+                  <option value="ral"> Raleigh / Durham , North Carolina </option>
+                  <option value="wnc"> Wilmington, North Carolina </option>
+                  <option value="wsl"> Winston-Salem, North Carolina </option>
+                  <optgroup label="North Dakota">
+                  <option value="bis"> Bismarck, North Dakota </option>
+                  <option value="far"> Fargo, North Dakota </option>
+                  <option value="gfk"> Grand Forks, North Dakota </option>
+                  <optgroup label="Ohio">
+                  <option value="cak"> Akron, Ohio </option>
+                  <option value="jfn"> Ashtabula, Ohio </option>
+                  <option value="ohu"> Athens, Ohio </option>
+                  <option value="chl"> Chillicothe, Ohio </option>
+                  <option value="cin"> Cincinnati, Ohio </option>
+                  <option value="cle"> Cleveland, Ohio </option>
+                  <option value="col"> Columbus, Ohio </option>
+                  <option value="day"> Dayton, Ohio </option>
+                  <option value="lma"> Lima, Ohio </option>
+                  <option value="mfd"> Mansfield, Ohio </option>
+                  <option value="sky"> Sandusky, Ohio </option>
+                  <option value="tol"> Toledo, Ohio </option>
+                  <option value="nph"> Tuscarawas Co, Ohio </option>
+                  <option value="yng"> Youngstown, Ohio </option>
+                  <option value="zyl"> Zanesville, Ohio </option>
+                  <optgroup label="Oklahoma">
+                  <option value="law"> Lawton, Oklahoma </option>
+                  <option value="okc"> Oklahoma City, Oklahoma </option>
+                  <option value="osu"> Stillwater, Oklahoma </option>
+                  <option value="tul"> Tulsa, Oklahoma </option>
+                  <optgroup label="Oregon">
+                  <option value="bnd"> Bend, Oregon </option>
+                  <option value="crv"> Corvallis, Oregon </option>
+                  <option value="eug"> Eugene, Oregon </option>
+                  <option value="klf"> Klamath Falls, Oregon </option>
+                  <option value="mfr"> Medford-Ashland, Oregon </option>
+                  <option value="cor"> Oregon Coast, Oregon </option>
+                  <option value="pdx"> Portland, Oregon </option>
+                  <option value="rbg"> Roseburg, Oregon </option>
+                  <option value="sle"> Salem, Oregon </option>
+                  <optgroup label="Pennsylvania">
+                  <option value="aoo"> Altoona-Johnstown, Pennsylvania </option>
+                  <option value="cbg"> Cumberland Valley, Pennsylvania </option>
+                  <option value="eri"> Erie, Pennsylvania </option>
+                  <option value="hrs"> Harrisburg, Pennsylvania </option>
+                  <option value="lns"> Lancaster, Pennsylvania </option>
+                  <option value="alt"> Lehigh Valley, Pennsylvania </option>
+                  <option value="mdv"> Meadville, Pennsylvania </option>
+                  <option value="phi"> Philadelphia, Pennsylvania </option>
+                  <option value="pit"> Pittsburgh, Pennsylvania </option>
+                  <option value="poc"> Poconos, Pennsylvania </option>
+                  <option value="rea"> Reading, Pennsylvania </option>
+                  <option value="avp"> Scranton/Wilkes-Barre, Pennsylvania </option>
+                  <option value="psu"> State College, Pennsylvania </option>
+                  <option value="wpt"> Williamsport, Pennsylvania </option>
+                  <option value="yrk"> York, Pennsylvania </option>
+                  <optgroup label="Rhode Island">
+                  <option value="prv">Rhode Island</option>
+                  <optgroup label="South Carolina">
+                  <option value="chs"> Charleston, South Carolina </option>
+                  <option value="cae"> Columbia, South Carolina </option>
+                  <option value="flo"> Florence, South Carolina </option>
+                  <option value="gsp"> Greenville, South Carolina </option>
+                  <option value="hhi"> Hilton Head, South Carolina </option>
+                  <option value="myr"> Myrtle Beach, South Carolina </option>
+                  <optgroup label="South Dakota">
+                  <option value="csd"> Pierre, South Dakota </option>
+                  <option value="rap"> Rapid City, South Dakota </option>
+                  <option value="fsd"> Sioux Falls, South Dakota </option>
+                  <optgroup label="Tennessee">
+                  <option value="cht"> Chattanooga, Tennessee </option>
+                  <option value="ckv"> Clarksville, Tennessee </option>
+                  <option value="coo"> Cookeville, Tennessee </option>
+                  <option value="jxt"> Jackson , Tennessee </option>
+                  <option value="knx"> Knoxville, Tennessee </option>
+                  <option value="mem"> Memphis, Tennessee </option>
+                  <option value="nsh"> Nashville, Tennessee </option>
+                  <option value="tri"> Tri-Cities, Tennessee </option>
+                  <optgroup label="Texas">
+                  <option value="abi"> Abilene, Texas </option>
+                  <option value="ama"> Amarillo, Texas </option>
+                  <option value="aus"> Austin, Texas </option>
+                  <option value="bpt"> Beaumont / Port Arthur, Texas </option>
+                  <option value="bro"> Brownsville, Texas </option>
+                  <option value="cst"> College Station, Texas </option>
+                  <option value="crp"> Corpus Christi, Texas </option>
+                  <option value="dal"> Dallas / Fort Worth, Texas </option>
+                  <option value="drt"> Del Rio, Texas </option>
+                  <option value="elp"> El Paso, Texas </option>
+                  <option value="gls"> Galveston, Texas </option>
+                  <option value="hou"> Houston, Texas </option>
+                  <option value="grk"> Killeen, Texas </option>
+                  <option value="lrd"> Laredo, Texas </option>
+                  <option value="lbb"> Lubbock, Texas </option>
+                  <option value="mca"> Mcallen, Texas </option>
+                  <option value="odm"> Odessa / Midland, Texas </option>
+                  <option value="sjt"> San Angelo, Texas </option>
+                  <option value="sat"> San Antonio, Texas </option>
+                  <option value="tsu"> San Marcos, Texas </option>
+                  <option value="txm"> Texoma, Texas </option>
+                  <option value="etx"> Tyler, Texas </option>
+                  <option value="vtx"> Victoria, Texas </option>
+                  <option value="wco"> Waco, Texas </option>
+                  <option value="wtf"> Wichita Falls, Texas </option>
+                  <optgroup label="Utah">
+                  <option value="lgu"> Logan, Utah </option>
+                  <option value="ogd"> Ogden-Clearfield, Utah </option>
+                  <option value="pvu"> Provo, Utah </option>
+                  <option value="slc"> Salt Lake City, Utah </option>
+                  <option value="stg"> St George, Utah </option>
+                  <optgroup label="Vermont">
+                  <option value="brl"> Burlington, Vermont </option>
+                  <option value="mon"> Montpelier, Vermont </option>
+                  <option value="brb"> Brattleboro, Vermont </option>
+                  <optgroup label="Virginia">
+                  <option value="uva"> Charlottesville, Virginia </option>
+                  <option value="dnv"> Danville, Virginia </option>
+                  <option value="ezf"> Fredericksburg, Virginia </option>
+                  <option value="nfk"> Hampton Roads, Virginia </option>
+                  <option value="shd"> Harrisonburg, Virginia </option>
+                  <option value="lyn"> Lynchburg, Virginia </option>
+                  <option value="vpi"> New River Valley, Virginia </option>
+                  <option value="ric"> Richmond, Virginia </option>
+                  <option value="roa"> Roanoke, Virginia </option>
+                  <option value="okv"> Winchester, Virginia </option>
+                  <optgroup label="Washington">
+                  <option value="bli"> Bellingham, Washington </option>
+                  <option value="kpr"> Kennewick-Pasco-Richland, Washington </option>
+                  <option value="mlk"> Moses Lake, Washington </option>
+                  <option value="olp"> Olympic Peninsula, Washington </option>
+                  <option value="plm"> Pullman, Washington </option>
+                  <option value="sea"> Seattle-Tacoma, Washington </option>
+                  <option value="mvw"> Skagit, Washington </option>
+                  <option value="spk"> Spokane, Washington </option>
+                  <option value="wen"> Wenatchee, Washington </option>
+                  <option value="yak"> Yakima, Washington </option>
+                  <optgroup label="West Virginia">
+                  <option value="crw"> Charleston, West Virginia </option>
+                  <option value="hts"> Huntington, West Virginia </option>
+                  <option value="wvu"> Morgantown, West Virginia </option>
+                  <option value="pkb"> Parkersburg, West Virginia </option>
+                  <option value="wva"> Wheeling, West Virginia </option>
+                  <optgroup label="Wisconsin">
+                  <option value="app"> Appleton, Wisconsin </option>
+                  <option value="eau"> Eau Claire, Wisconsin </option>
+                  <option value="grb"> Green Bay, Wisconsin </option>
+                  <option value="jvl"> Janesville, Wisconsin </option>
+                  <option value="rac"> Kenosha-Racine, Wisconsin </option>
+                  <option value="lse"> La Crosse, Wisconsin </option>
+                  <option value="mad"> Madison, Wisconsin </option>
+                  <option value="mil"> Milwaukee, Wisconsin </option>
+                  <option value="sbm"> Sheboygan, Wisconsin </option>
+                  <option value="wau"> Wausau, Wisconsin </option>
+                  <optgroup label="Wyoming">
+                  <option value="wyo"> Cheyenne, Wyoming</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="main_image_url"><span data-i18n="main_image_url">Main Image URL</span></label> <a href="#myModal" data-toggle="modal" class="btn btn-xs btn-info"><i class="fa fa-question"></i></a>
+                <div class="iconic-input">
+                  <i class="fa fa-camera-retro"></i>
+                  <input type="text" maxlength="50" class="form-control" data-i18n="[placeholder]placeholder_optional" id="main_image_url" onblur="setPreviewImageURL(this, 0);">
+                </div>
+                <a id="previewImageLink" class="fancybox" rel="group" href="../img/package.png">Preview Image</a>
+                <div id="previewImageErrorMessage"></div>
+              </div>
+              <!--Image Help Modal-->
+              <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                      <h4 class="modal-title"><span data-i18n="image_url_help">Image URL Help</span></h4>
+                    </div>
+                    <div class="modal-body">
+                      <p><span data-i18n="image_url_help_para1">You may include up to 4 URLs for images. While your item is listed in the BLX blockchain, the images are not, and therefore they must be uploaded to some location on the internet, and then that location, in the form of a URL, may be included in your listing.</span>
+                      </p>
+                      <p><span data-i18n="image_url_help_para2">The blockchain preserves your privacy, but the location of your item's images may inadvertently reveal your identity, so it is important to upload your images to a location that will preserve your anonymity. There is a variety of services on the internet that will anonymously host images for you. You will need to do your own due diligence to determine which service you trust. Some of these services are listed below, but their inclusion here is not an endorsement. Remember, only you can preserve your own privacy. </span>
+                      </p>
+                      <p><b><span data-i18n="image_url_help_para3">Only use services you are confident you can trust.</span></b>
+                      </p>
+                      <p>
+                        <ul>
+                          <li><a href="https://postimage.org" target="_blank">Postimage.org</a>
+                            <li><a href="https://imgur.com" target="_blank">Imgur</a>
+                            </ul>
+                          </p>
+                          <p><span data-i18n="image_url_help_para4">Images should be <b>200 pixels by 200 pixels</b>. Images with other dimensions  will be resized to 200x200 for display.</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--End Image Help Modal-->
+                  <div class="form-group">
+                    <label for="itemDescription"><span data-i18n="description">Description</span></label>
+                    <textarea class="form-control" data-i18n="[placeholder]description_field" cols="25" rows="4" id="itemDescription" maxlength="203"></textarea>
+                    <div id="itemDescriptionErrorMessage"></div>
+                  </div>
+                  <div class="form-group">
+                    <label for="additional_image_urls"><span data-i18n="optional_additional_image_urls">Optional Additional Image URLs</span></label>
+                    <div class="iconic-input">
+                      <i class="fa fa-camera-retro"></i>
+                      <input type="text" maxlength="75" class="form-control" data-i18n="[placeholder]image1" id="additional_image_1_url" onblur="setPreviewImageURL(this, 2);">
+                    </div>
+                    <a id="previewImageLink2" class="fancybox" rel="group" href="../img/package.png">Preview Image</a>
+                    <div id="previewImageErrorMessage2"></div>
+                    <br />
+                    <div class="iconic-input">
+                      <i class="fa fa-camera-retro"></i>
+                      <input type="text" maxlength="75" class="form-control" data-i18n="[placeholder]image2" id="additional_image_2_url" onblur="setPreviewImageURL(this, 3);">
+                    </div>
+                    <a id="previewImageLink3" class="fancybox" rel="group" href="../img/package.png">Preview Image</a>
+                    <div id="previewImageErrorMessage3"></div>
+                    <br />
+                    <div class="iconic-input">
+                      <i class="fa fa-camera-retro"></i>
+                      <input type="text" maxlength="75" class="form-control" data-i18n="[placeholder]image3" id="additional_image_3_url" onblur="setPreviewImageURL(this, 4);">
+                    </div>
+                    <a id="previewImageLink4" class="fancybox" rel="group" href="../img/package.png">Preview Image</a>
+                    <div id="previewImageErrorMessage4"></div>
+                    <br />
+                    <div class="iconic-input">
+                      <i class="fa fa-camera-retro"></i>
+                      <input type="text" maxlength="75" class="form-control" data-i18n="[placeholder]image4" id="additional_image_4_url" onblur="setPreviewImageURL(this, 5);">
+                    </div>
+                    <a id="previewImageLink5" class="fancybox" rel="group" href="../img/package.png">Preview Image</a>
+                    <div id="previewImageErrorMessage5"></div>
+                  </div>
+                  <hr>
+                  <div class="form-group">
+                    <label for="secretPhrase"><span data-i18n="secret_phrase">Account Secret Phrase</span></label>
+                    <button type="button" class="btn btn-qr btn-xs" data-toggle="modal" data-target="#reader1">
+                    <i class="fa fa-qrcode"></i>
+                  </button>
+                    <div class="iconic-input">
+                      <i class="fa fa-key"></i>
+                      <input type="password" class="form-control" id="secretPhrase" data-i18n="[placeholder]placeholder_required">
+                      <div id="secretPhraseErrorMessage"></div>
+                    </div>
+                  </div>
+                  <div class="modal fade" style="top:10vh" id="reader1">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Scan Your Secret Phrase</h4>
+                      </div>
+                        <div class="modal-body" style="position: static">
+                         <div id="qr-reader1"></div>
+                        </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div> <!-- /.modal-content -->
+                  </div> <!-- /.modal-dialog -->
+                </div> <!-- /.modal -->
+                  <span id="listingResult"></span>
+                  <div id="postButtonSection">
+                    <button type="button" id="postButton" class="btn btn-default" onclick="postNewItem();">
+                      <div id="postButtonText"></div>
+                    </button>
+                  </div>
+                  <br />
+                  <p>The network fee of this transaction is 0.1 BLX.</p>
+                </div>
+              </span>
+            </div>
+          </section>
+        </div>
+      </section>
+    </section>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../assets/fuelux/js/spinner.min.js"></script>
+    <script src="../assets/fancybox/jquery.fancybox.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/advanced-form-components.js"></script>
+    <script>
+      $(function() {
+        jQuery(".fancybox").fancybox();
+      });
+    </script>
+    <script src="../js/constants.js"></script>
+    <script src="../js/freemarket_scripts.js"></script>
+    <script src="../js/i18next.min.js"></script>
+    <script src="../js/freemarket_localization_scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.0.1/html5-qrcode.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blue0x Decentralized Marketplace">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Blue0x | MARKET</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/bootstrap-reset.css" rel="stylesheet">
+  <link href="../assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="../css/style.min.css" rel="stylesheet">
+  <link href="../css/style-responsive.css" rel="stylesheet" />
+  <link href="../css/spinner.css" rel="stylesheet">
+</head>
+<body class="full-width" onload="setAccountNumber(); setLanguage();">
+  <section id="container">
+    <script type="text/javascript" src="../js/menu.js"></script>
+    <section id="main-content">
+      <section class="wrapper site-min-height">
+        <div class="row">
+          <div class="col-lg-12">
+            <section class="panel">
+              <header class="panel-heading">
+                <span>Search by Location</span>
+              </header>
+              <div class="panel-body">
+              	<div class="form-group">
+                <select class="form-control m-bot15" style="width:50vw;border:1px solid #939393;" id="itemLocation" onchange="searchLocation()">
+                  <option disabled selected hidden>Select a Location</option>
+                  <optgroup label="Austria">
+                  <option value="vie"> Vienna, Austria </option>
+                  <optgroup label="Belgium">
+                  <option value="ant"> Antwerp, Belgium </option>
+                  <option value="bru"> Brussels, Belgium </option>
+                  <optgroup label="Cypress">
+                  <option value="nic"> Nicosia, Cypress </option>
+                  <optgroup label="Estonia">
+                  <option value="tal"> Tallinn, Estonia </option>
+                  <optgroup label="Finland">
+                  <option value="hel"> Helsinki, Finland </option>
+                  <optgroup label="France">
+                  <option value="bod"> Bordeaux, France </option>
+                  <option value="rns"> Brittany, France </option>
+                  <option value="gnb"> Grenoble, France </option>
+                  <option value="lil"> Lille, France </option>
+                  <option value="nte"> Loire valley, France </option>
+                  <option value="lys"> Lyon, France </option>
+                  <option value="mrs"> Marseille, France </option>
+                  <option value="mpl"> Montpellier, France </option>
+                  <option value="nce"> Nice / Côte d'Azur, France </option>
+                  <option value="rou"> Normandy, France </option>
+                  <option value="par"> Paris, France </option>
+                  <option value="sxb"> Strasbourg, France </option>
+                  <option value="tls"> Toulouse, France </option>
+                  <optgroup label="Germany">
+                  <option value="ber"> Berlin, Germany </option>
+                  <option value="brm"> Bremen, Germany </option>
+                  <option value="cgn"> Cologne, Germany </option>
+                  <option value="drs"> Dresden, Germany </option>
+                  <option value="dus"> Dusseldorf, Germany </option>
+                  <option value="ess"> Essen / Ruhr, Germany </option>
+                  <option value="fra"> Frankfurt, Germany </option>
+                  <option value="ham"> Hamburg, Germany </option>
+                  <option value="haj"> Hannover,  Germany </option>
+                  <option value="hdb"> Heidelberg, Germany </option>
+                  <option value="klt"> Kaiserslautern, Germany </option>
+                  <option value="lej"> Leipzig, Germany </option>
+                  <option value="muc"> Munich, Germany </option>
+                  <option value="nue"> Nuremberg, Germany </option>
+                  <option value="str"> Stuttgart, Germany </option>
+                  <optgroup label="Greece">
+                  <option value="ath"> Athens, Greece </option>
+                  <option value="the"> Thessaloniki, Greece </option>
+                  <optgroup label="Ireland">
+                  <option value="dub"> Dublin, Ireland </option>
+                  <optgroup label="Italy">
+                  <option value="blg"> Bologna, Italy </option>
+                  <option value="flr"> Florence, Italy </option>
+                  <option value="gen"> Genoa, Italy </option>
+                  <option value="mxp"> Milan, Italy </option>
+                  <option value="nap"> Napoli, Italy </option>
+                  <option value="peg"> Perugia, Italy </option>
+                  <option value="rom"> Rome, Italy </option>
+                  <option value="srd"> Sardinia, Italy </option>
+                  <option value="sic"> Sicilia, Italy </option>
+                  <option value="trn"> Torino, Italy </option>
+                  <option value="vce"> Venice, Italy </option>
+                  <optgroup label="Latvia">
+                  <option value="rig"> Riga, Latvia </option>
+                  <optgroup label="Lithuania">
+                  <option value="vil"> Vilnius, Lithuania </option>
+                  <optgroup label="Luxembourg">
+                  <option value="lux"> Luxembourg, Luxembourg </option>
+                  <optgroup label="Malta">
+                  <option value="val"> Valleta, Malta </option>
+                  <optgroup label="Netherlands">
+                  <option value="ams"> Amsterdam, Netherlands </option>
+                  <option value="rot"> Rotterdam, Netherlands </option>
+                  <optgroup label="Portugal">
+                  <option value="lis"> Lisbon, Portugal </option>
+                  <optgroup label="Slovakia">
+                  <option value="bra"> Bratislava, Slovakia </option>
+                  <optgroup label="Slovenia">
+                  <option value="lju"> Ljubljana, Slovenia </option>
+                  <optgroup label="Spain">
+                  <option value="alc"> Alicante, Spain </option>
+                  <option value="ibz"> Baleares, Spain </option>
+                  <option value="bar"> Barcelona, Spain </option>
+                  <option value="bio"> Bilbao, Spain </option>
+                  <option value="cdz"> Cadiz, Spain </option>
+                  <option value="tfn"> Canarias, Spain </option>
+                  <option value="grx"> Granada, Spain </option>
+                  <option value="mdd"> Madrid, Spain </option>
+                  <option value="agp"> Malaga, Spain </option>
+                  <option value="sev"> Sevilla, Spain </option>
+                  <option value="val"> Valencia, Spain </option>
+                </select>
+              	</div>
+              	<hr style="width:100%">
+                <div id="error-message">
+                  <div class="adv-table">
+                  	<input type="text" class="form-control m-bot15" style="float:right;width:50vw;" id="searchInput" onkeyup="searchTable()" placeholder=" Search ...">
+                    <table class="display table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th class="hidden-phone"><span data-i18n="item_id">Item ID</span></th>
+                          <th><span data-i18n="item_title">Title</span></th>
+                          <th><span data-i18n="price">Price</span></th>
+                        </tr>
+                      </thead>
+                      <tbody id="table_body"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </section>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.dcjqaccordion.2.7.min.js"></script>
+    <script src="../js/bootstrap-hover-dropdown.min.js"></script>
+    <script src="../js/constants.js"></script>
+    <script src="../js/freemarket_scripts.js"></script>
+    <script src="../js/common-scripts.js"></script>
+    <script src="../js/i18next.min.js"></script>
+    <script src="../js/freemarket_localization_scripts.js"></script> 
+    <script>
+    function searchLocation() {
+    document.getElementById("table_body").innerHTML = "";
+    var fmlang = localStorage.getItem("fmlang");
+    $.getJSON(Constants.apiUrl, {
+      requestType: "searchDGSGoods",
+      inStockOnly: "true",
+      hideDelisted: "true",
+      includeCounts: "true",
+      query: $('#itemLocation').val()
+    }, 
+      function(request) {
+      for (var i = 0; i < request.goods.length ; i++) {
+      var goods = request.goods[i];
+      var data = JSON.parse(request.goods[i].description);
+      var id = request.goods[i].goods;
+      var rows;
+      rows += '<tr>';
+      rows += '<td class="hidden-phone"><a href=\'ViewItem.html?setLng=' + fmlang + '&itemid=' + id + '\'>' + id + '</a></td>';
+      rows += '<td><a href=\'ViewItem.html?setLng=' + fmlang + '&itemid=' + id + '\'>' + escapeHtml(goods.name) + '</a></td>';
+      rows += '<td>'+ escapeHtml(data.p) +'&nbsp;'+ escapeHtml(data.c) +'</td>';
+      rows += '</tr>';
+    };
+    $("#table_body").html(rows);
+    })};
+    </script>
+    <script>
+    function searchTable() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("table_body");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                }}
+            if (found) {
+                tr[i].style.display = "";
+                found = false;
+            } else {
+                tr[i].style.display = "none";
+            }}}
+    </script>
+    
+</body>
+</html>

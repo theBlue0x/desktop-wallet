@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blue0x Decentralized Marketplace">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Blue0x | MARKET</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/bootstrap-reset.css" rel="stylesheet">
+  <link href="../assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="../css/style.min.css" rel="stylesheet">
+  <link href="../css/style-responsive.css" rel="stylesheet" />
+  <script>
+    function setButtonText() {
+    var translatedLogoutButtonText = $.t("button_log_out");
+    document.getElementById("logoutButtonText").innerHTML = translatedLogoutButtonText;
+  };
+</script>
+<script>
+function checkLogin() {
+  var loginStatus = sessionStorage.getItem("loginStatus");
+  if (loginStatus == 'notloggedin') {
+    var fmlang = localStorage.getItem("fmlang");
+    window.location.href = 'login.html' + '?setLng=' + fmlang;
+  }};
+</script>
+<script>
+  function logoutFromChangeAccountPage() {
+    if (typeof(Storage) != "undefined") {
+      document.getElementById("logoutButtonSection").innerHTML = "<button type=\"button\" id=\"logoutButton\" class=\"btn btn-danger\"><i class=\"fa fa-refresh fa-spin\"></i> &nbsp;Processing...</button>";
+      sessionStorage.removeItem("accountNumber");
+      sessionStorage.removeItem("accountRS");
+      sessionStorage.removeItem("numericalAccountNumber");
+      sessionStorage.removeItem("accountBalance");
+      sessionStorage.removeItem("title");
+      sessionStorage.removeItem("price");
+      sessionStorage.removeItem("previous");
+      sessionStorage.removeItem("recipient");
+      sessionStorage.setItem("loginStatus", "notloggedin");
+      var fmlang = localStorage.getItem("fmlang");
+      window.location.assign("login.html?setLng=" + fmlang);
+    } else {
+      document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage.";
+    }};
+</script>
+<script>
+  function displayAccountInfo() {
+    var currentAccountNumber = sessionStorage.getItem("numericalAccountNumber");
+    var currentRSAccountNumber = sessionStorage.getItem("accountRS");
+    $.post(Constants.apiUrl, {
+      requestType: 'getAccount',
+      account: currentRSAccountNumber,
+      includeEffectiveBalance: "true"
+    },
+    function(result) {
+      var total = result.balanceNQT / 100000000;
+      var available = result.unconfirmedBalanceNQT/ 100000000;
+      var rows = ' ';
+          rows += '<p><b>Avail: </b> ' + Number(available).toLocaleString() + ' BLX</p>'; 
+          rows += '<p><b>Total: </b> ' + Number(total).toLocaleString() + ' BLX</p>';
+      document.getElementById("RSaccount_number").innerHTML = '<b>' + currentRSAccountNumber + '</b>';
+
+      document.getElementById("currentAccountBalance").innerHTML = rows;
+    }, "json");
+    $.post(Constants.apiUrl, {
+      requestType: 'getAccountCurrencies',
+      account: currentRSAccountNumber,
+      currency: Constants.AUDXId
+    },
+    function(coinquery) {
+      if (Object.keys(coinquery).length == 0) {
+          document.getElementById("AUDXAccountBalance").innerHTML = "0 AUDX";
+        } else {
+          var total1 = coinquery.units / 100;
+          var available1 = coinquery.unconfirmedUnits/ 100;
+          var rows1 = ' ';
+              rows1 += '<p><b>Avail: </b> ' + Number(available1).toLocaleString() + ' AUDX</p>'; 
+              rows1 += '<p><b>Total: </b> ' + Number(total1).toLocaleString() + ' AUDX</p>';
+
+          document.getElementById("AUDXAccountBalance").innerHTML = rows1;
+        }
+      }, "json");
+  };
+</script>
+</head>
+<body class="full-width" onload="checkLogin(); displayAccountInfo(); setAccountNumber(); setLanguage(); setButtonText();">
+  <section id="container">
+    <script type="text/javascript" src="../js/menu.js"></script>
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="row">
+          <div class="col-lg-12">
+            <section class="panel">
+              <header class="panel-heading">
+                <b><span data-i18n="header_current_account_info">Current Account Information</span></b>
+              </header>
+              <div class="panel-body">
+                <div class="media-body">
+                  <p class="p-head"><span data-i18n="account_id">Account ID</span></p>
+                  <p><span id="RSaccount_number">Account ID</span></p>
+                  <p class="p-head"><span >BLX Balance</span></p>
+                  <p><span id="currentAccountBalance">BLX Account Balance</span></p>
+                  <p class="p-head"><span >AUDX Balance</span></p>
+                  <p><span id="AUDXAccountBalance">Calculating AUDX Balance...</span></p>
+                </div>
+                <br/>
+                <div class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownButton" data-toggle="dropdown">
+                    Account Actions &emsp;<span class="caret"></span>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="ViewYourActiveItems.html">View Active Items</a></li>
+                    <li><a class="dropdown-item" href="ViewYourPurchases.html">View Purchases</a></li>
+                    <li><a class="dropdown-item" href="ViewYourPendingSales.html">View Pending Sales&emsp;</a></li>
+                    <li><a class="dropdown-item" href="ViewYourSoldItems.html">View Sold Items</a></li>
+                    <li><a class="dropdown-item" href="ViewYourExpiredItems.html">View Expired Items</a></li>
+                  </div>
+                </div>
+                <br/>
+                <a type="button" id="messageButton" class="btn btn-default" href="ViewYourMessages.html">View Your Messages</a>
+                <hr>
+                <div id="logoutButtonSection">
+                  <button type="button" id="logoutButton" class="btn btn-danger" onclick="logoutFromChangeAccountPage();">
+                    <div id="logoutButtonText"></div>
+                  </button>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+      </div>
+    </section>
+  </section>
+<script src="../js/jquery.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/jquery.dcjqaccordion.2.7.min.js"></script>
+  <script src="../js/bootstrap-hover-dropdown.min.js"></script>
+  <script src="../js/constants.js"></script>
+  <script src="../js/freemarket_scripts.js"></script>
+  <script src="../js/common-scripts.js"></script>
+  <script src="../js/i18next.min.js"></script>
+  <script src="../js/freemarket_localization_scripts.js"></script>
+</body>
+</html>

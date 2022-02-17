@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blue0x Decentralized Exchange">
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <title>Blue0x | EXCHANGE</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap-reset.min.css" rel="stylesheet">
+  <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="css/style.min.css" rel="stylesheet">
+  <link href="css/style-responsive.min.css" rel="stylesheet" />
+  <script>
+  function checkLogin() {
+    var loginStatus = sessionStorage.getItem("loginStatus");
+    if(loginStatus == 'notloggedin') {
+      window.location.href = 'login.html';
+    }
+  };
+  </script>
+  <script>
+  function logoutFromChangeAccountPage() {
+    if(typeof(Storage) != "undefined") {
+      document.getElementById("logoutButtonSection").innerHTML = "<button type=\"button\" id=\"logoutButton\" class=\"btn btn-danger\"><i class=\"fa fa-refresh fa-spin\"></i> &nbsp;Processing...</button>";
+      sessionStorage.removeItem("accountNumber");
+      sessionStorage.removeItem("accountRS");
+      sessionStorage.removeItem("numericalAccountNumber");
+      sessionStorage.removeItem("accountBalance");
+      sessionStorage.removeItem("title");
+      sessionStorage.removeItem("price");
+      sessionStorage.removeItem("previous");
+      sessionStorage.removeItem("recipient");
+      sessionStorage.setItem("loginStatus", "notloggedin");
+      window.location.assign("login.html");
+    } else {
+      document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage.";
+    }
+  };
+  </script>
+  <script>
+  function displayAccountInfo() {
+    var currentAccountNumber = sessionStorage.getItem("numericalAccountNumber");
+    var currentRSAccountNumber = sessionStorage.getItem("accountRS");
+    $.post(Constants.apiUrl, {
+      requestType: 'getAccount',
+      account: currentRSAccountNumber,
+      includeEffectiveBalance: "true"
+    }, function(result) {
+      var total = result.balanceNQT / 100000000;
+      var available = result.unconfirmedBalanceNQT/ 100000000;
+      var rows = ' ';
+          rows += '<p style="margin-left:10px;"><b>Avail:</b> ' + Number(available).toLocaleString() + ' BLX</p>'; 
+          rows += '<p style="margin-left:10px;"><b>Total:</b> ' + Number(total).toLocaleString() + ' BLX</p>';
+      document.getElementById("RSaccount_number").innerHTML = '<p style="margin-left:10px;">' +currentRSAccountNumber + '</p>';
+
+      document.getElementById("currentAccountBalance").innerHTML = rows;
+    }, "json");
+    $.getJSON(Constants.apiUrl, {
+      requestType: 'getAccountCurrencies',
+      account: currentRSAccountNumber
+    }, function(coinquery) {
+      var rows = ' ';
+      for (var i = 0; i < coinquery.accountCurrencies.length; i++) {
+        var available = (coinquery.accountCurrencies[i].unconfirmedUnits) / 100;
+        var total = (coinquery.accountCurrencies[i].units) / 100;
+        var currencyCode = coinquery.accountCurrencies[i].currency;
+        let currency;
+        switch(currencyCode){
+          case Constants.USDXId:
+          currency = "USDX";
+          break;
+          case Constants.AUDXId:
+          currency = "AUDX";
+          break;
+          case Constants.CADXId:
+          currency = "CADX";
+          break;
+          case Constants.CHFXId:
+          currency = "CHFX";
+          break;
+          case Constants.CNYXId:
+          currency = "CNYX";
+          break;
+          case Constants.EURXId:
+          currency = "EURX";
+          break;
+          case Constants.GBPXId:
+          currency = "GBPX";
+          break;
+          case Constants.IQDXId:
+          currency = "IQDX";
+          break;
+          case Constants.IRRXId:
+          currency = "IRRX";
+          break;
+          case Constants.JPYXId:
+          currency = "JPYX";
+          break;
+          case Constants.NZDXId:
+          currency = "NZDX";
+          break;
+          case Constants.RUBXId:
+          currency = "RUBX";
+          break;
+        }
+          rows += '<p class="p-head">' + currency + ' Balance</p>';
+          rows += '<p style="margin-left:10px;"><b>Avail:</b> ' + Number(available).toLocaleString() + ' ' + currency + '</p>'; 
+          rows += '<p style="margin-left:10px;"><b>Total:</b> ' + Number(total).toLocaleString() + ' ' + currency + '</p>';
+       $("#balances").html(rows); 
+      }})};
+  </script>
+</head>
+<body class="full-width" onload="checkLogin(); displayAccountInfo(); setAccountNumber();">
+  <section id="container">
+    <script type="text/javascript" src="js/menu.js"></script>
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="row">
+          <div class="col-lg-12">
+            <section class="panel" style="color:#c1c1c1">
+              <header class="panel-heading"> <b><span data-i18n="header_current_account_info">Current Account Information</span></b> </header>
+              <div class="panel-body" style="margin-left:10px">
+                <div class="media-body"> <p class="p-head">Account ID</p>
+                  <p><span id="RSaccount_number">Account ID</span></p> 
+                  <p class="p-head"><span >BLX Balance</span></p>
+                  <p><span id="currentAccountBalance">Calculating BLX Account Balance...</span></p> 
+                  <p><span id="balances"></span></p>
+                </div>
+                <br/>
+                <div id="ordersButtonSection">
+                  <button type="button" id="ordersButton" class="btn btn-default" onclick="showOrders();">View Limit Orders</button>
+                </div>
+                <br/>
+                <div id="logoutButtonSection">
+                  <button type="button" id="logoutButton" class="btn btn-danger" onclick="logoutFromChangeAccountPage();">Logout</button>
+                </div>
+              </div>
+            </section>
+          </div>
+      </section>
+      </div>
+    </section>
+  </section>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/constants.js"></script>
+  <script src="js/freemarket_scripts.js"></script>
+  <script>
+    function showOrders() {
+      window.location.href = 'accountOrders.html';
+    }
+  </script>
+</body>
+</html>

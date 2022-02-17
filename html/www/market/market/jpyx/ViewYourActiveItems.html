@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blue0x Decentralized Marketplace">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Blue0x | MARKET</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/bootstrap-reset.css" rel="stylesheet">
+  <link href="../assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="../css/style.min.css" rel="stylesheet">
+  <link href="../css/style-responsive.css" rel="stylesheet" />
+</head>
+<script>
+function checkLogin() {
+  var loginStatus = sessionStorage.getItem("loginStatus");
+  if (loginStatus == 'notloggedin') {
+    var fmlang = localStorage.getItem("fmlang");
+    window.location.href = 'login.html' + '?setLng=' + fmlang;
+  }};
+</script>
+<script>
+  function getAccount() {
+    var user = sessionStorage.getItem("accountRS");
+    document.getElementById("user_account").innerHTML = user;
+  }
+</script>
+<body class="full-width" onload="checkLogin(); getAccount(); setAccountNumber(); setLanguage();">
+  <section id="container">
+    <script type="text/javascript" src="../js/menu.js"></script>
+    <section id="main-content">
+      <section class="wrapper site-min-height">
+        <div class="row">
+          <div class="col-lg-12">
+            <section class="panel">
+              <header class="panel-heading">
+                <span data-i18n="header_all_your_items">All Your Items</span> ( <span id="user_account">...</span> )
+              </header>
+              <div class="panel-body">
+                <div id="error-message">
+                  <div class="adv-table">
+                    <input type="text" class="form-control m-bot15" style="float:right;width:50vw;" id="searchInput" onkeyup="searchTable()" placeholder=" Search ...">
+                    <table class="display table table-bordered table-striped" id="table">
+                      <thead>
+                        <tr>
+                          <th><span data-i18n="item_title">Title</span></th>
+                          <th class="hidden-phone">ID</span></th>
+                          <th><span data-i18n="price">Price</span></th>
+                        </tr>
+                      </thead>
+                        <tbody id="table_body"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </section>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.dcjqaccordion.2.7.min.js"></script>
+    <script src="../js/bootstrap-hover-dropdown.min.js"></script>
+    <script src="../js/constants.js"></script>
+    <script src="../js/freemarket_scripts.js"></script>
+    <script src="../js/common-scripts.js"></script>
+    <script src="../js/i18next.min.js"></script>
+    <script src="../js/freemarket_localization_scripts.js"></script>
+    <script>
+    var user = sessionStorage.getItem("accountRS");
+    var fmlang = localStorage.getItem("fmlang");
+    $.getJSON(Constants.apiUrl, {
+      requestType: "getDGSGoods", 
+      seller: user,
+      hideDelisted: "true"
+    }, 
+      function(request) {
+      for (var i = 0; i < request.goods.length ; i++) {
+      var goods = request.goods[i];
+      var data = JSON.parse(request.goods[i].description)
+      var id = request.goods[i].goods;
+      var rows;
+      rows += '<tr>';
+      rows += '<td><a href=\'ViewYourItemSingle.html?setLng=' + fmlang + '&itemid=' + id + '\'>' +escapeHtml(goods.name)+'</a></td>';
+      rows += '<td class="hidden-phone"><a href=\'ViewYourItemSingle.html?setLng=' + fmlang + '&itemid=' + id + '\'>' +id+ '</a></td>';
+      rows += '<td>'+escapeHtml(data.p)+'&nbsp;'+escapeHtml(data.c)+'</td>';;
+      rows += '</tr>';
+    };
+    $("#table_body").html(rows);
+    });
+</script>
+
+<script>
+function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("searchInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("table_body");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                found = true;
+            }
+        }
+        if (found) {
+            tr[i].style.display = "";
+            found = false;
+        } else {
+            tr[i].style.display = "none";
+        }}};
+</script>
+</body>
+</html>

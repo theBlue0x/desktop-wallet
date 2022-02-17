@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blue0x Decentralized Marketplace">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Blue0x | MARKET</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/bootstrap-reset.css" rel="stylesheet">
+  <link href="../assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="../css/style.min.css" rel="stylesheet">
+  <link href="../css/style-responsive.css" rel="stylesheet" />
+  <link href="../css/spinner.css" rel="stylesheet">
+  <link href="../assets/fancybox/jquery.fancybox.css" rel="stylesheet" />
+  <link href="../css/gallery.css" rel="stylesheet" />
+<script>
+  function cancelListing() {
+    var listingid = (getQueryVariable("itemid"));
+    $.post(Constants.apiUrl, {
+      requestType: 'dgsDelisting',
+      goods: listingid,
+      secretPhrase: $("#secret_phrase").val(),
+      feeNQT: 1000000,
+      deadline: 60
+    },
+    function(result) {
+        var errorCode = result.errorCode;
+        if (!errorCode) {
+          var listingID = result.transaction;
+          var fmlang = localStorage.getItem("fmlang");
+          var success = $.t("success");
+          document.getElementById("panel-heading").innerHTML = success;
+          var cancelMessage = $.t("success_cancel");
+          document.getElementById("panel-body").innerHTML = cancelMessage + "<b>" + listingID + "</b><br/><br/>";
+          document.getElementById("cancelButtonSection").style.display = "none";
+          } else { 
+            var errorDescription = result.errorDescription;
+            var errorCode = result.errorCode;
+              var post_failure = $.t("failure_cancel");
+              document.getElementById("listingResult").innerHTML = post_failure + "<b> " + errorDescription + "</b>";
+            }
+        }, "json");}
+</script>
+<script>
+  function showItem() {
+    var listingid = (getQueryVariable("itemid"));
+    $.post(Constants.apiUrl, {
+        requestType: 'getDGSGood',
+        goods: listingid,
+        includeCounts: "true"
+      },
+      function(request) {
+        var data = JSON.parse(request.description);
+        var id = request.goods;
+        var seller = request.sellerRS;
+        var delisted = request.delisted;
+        if (delisted == "true") {
+          document.getElementById("cancelButtonSection").innerHTML = " "; // Remove purchase button if delisted
+        } 
+        if (request.quantity == 0){
+          document.getElementById("cancelButtonSection").innerHTML = " "; // Remove purchase button if 0 avail
+        }
+        var displayCurrency = escapeHtml(data.c);
+        var displayPrice = escapeHtml(data.p);
+        var displayPriceWithCurrency = displayPrice + " " + displayCurrency;
+        document.getElementById("title").innerHTML = escapeHtml(request.name);
+        document.getElementById("itemID").innerHTML = escapeHtml(id);
+        document.getElementById("itemIDModal").innerHTML = escapeHtml(id);
+        document.getElementById("price").innerHTML = escapeHtml(displayPriceWithCurrency);
+        document.getElementById("sellerID").innerHTML = seller;
+        // Set Seller ID and Price Units in session
+        sessionStorage.setItem("price", displayPrice);
+        sessionStorage.setItem("seller", seller);
+      }, "json"); 
+      $.post(Constants.apiUrl, { 
+        requestType: 'getTransaction',
+        transaction: listingid
+      },
+      function(result) {
+        var info = JSON.parse(result);
+        var attachment = info.attachment;
+        var data = JSON.parse(attachment.description);
+        var displayCurrency = data.c;
+        var message = JSON.parse(attachment.message);
+        var location = data.l;
+        getCityName(location);
+        document.getElementById("description").innerHTML = escapeHtml(message.d);
+        if (message.i != "") {
+          main_image_url = "Yes";
+        }
+        if (message.i1 != "") {
+          additional_image_1_URL = "Yes";
+        }
+        if (additional_image_2_URL != "") {
+          additional_image_2_URL = "Yes";
+        }
+        if (additional_image_3_URL != "") {
+          additional_image_3_URL = "Yes";
+        }
+        if (additional_image_4_URL != "") {
+          additional_image_4_URL = "Yes";
+        }
+        if (main_image_url) {
+          if (validator.isURL(message.i)) {
+            var Extension = message.i.substring(message.i.lastIndexOf('.') + 1).toLowerCase();
+            if (Extension == "gif" || Extension == "png" || Extension == "jpeg" || Extension == "jpg") {
+              var main_image_url = escapeHtml(message.i);
+            } else {
+              var main_image_url = "../img/Box-icon.png";
+            }
+          } else {
+            var main_image_url = "../img/Box-icon.png";
+          }
+          document.getElementById("top_image").innerHTML = '<a id="previewMainImageLink" class="fancybox" rel="group" href="' + main_image_url + '"><img alt="" src="' + main_image_url + '"></a>';
+        } 
+        var additional_images_section = '<div>';
+        if (additional_image_1_URL) {
+          if (validator.isURL(message.i1)) {
+            var Extension = message.i1.substring(message.i1.lastIndexOf('.') + 1).toLowerCase();
+            if (Extension == "gif" || Extension == "png" || Extension == "jpeg" || Extension == "jpg") {
+              var additional_image_1_URL = escapeHtml(message.i1);
+              additional_images_section += '<a id="previewMainImageLink" class="fancybox" rel="group" href="' + additional_image_1_URL + '"><img src="' + additional_image_1_URL + '" width="200" height="200" alt="Image 1" /></a>';
+            } else {
+              var additional_image_1_URL = "../img/Box-icon.png";
+            }
+          } else {
+            var additional_image_1_URL = "../img/Box-icon.png";
+          }} 
+        if (additional_image_2_URL) {
+          if (validator.isURL(message.i2)) {
+            var Extension = message.i2.substring(message.i2.lastIndexOf('.') + 1).toLowerCase();
+            if (Extension == "gif" || Extension == "png" || Extension == "jpeg" || Extension == "jpg") {
+              var additional_image_2_URL = escapeHtml(message.i2);
+              additional_images_section += '<a id="previewMainImageLink" class="fancybox" rel="group" href="' + additional_image_2_URL + '"><img src="' + additional_image_2_URL + '" width="200" height="200" alt="Image 2" /></a>';
+            } else {
+              var additional_image_2_URL = "../img/Box-icon.png";
+            }
+          } else {
+            var additional_image_2_URL = "../img/Box-icon.png";
+          }} 
+        if (additional_image_3_URL) {
+          if (validator.isURL(message.i3)) {
+            var Extension = message.i3.substring(message.i3.lastIndexOf('.') + 1).toLowerCase();
+            if (Extension == "gif" || Extension == "png" || Extension == "jpeg" || Extension == "jpg") {
+              var additional_image_3_URL = escapeHtml(message.i3);
+              additional_images_section += '<a id="previewMainImageLink" class="fancybox" rel="group" href="' + additional_image_3_URL + '"><img src="' + additional_image_3_URL + '" width="200" height="200" alt="Image 3" /></a>';
+            } else {
+              var additional_image_3_URL = "../img/Box-icon.png";
+            }
+          } else {
+            var additional_image_3_URL = "../img/Box-icon.png";
+          }}
+        if (additional_image_4_URL) {
+          if (validator.isURL(message.i4)) {
+            var Extension = message.i4.substring(message.i4.lastIndexOf('.') + 1).toLowerCase();
+            if (Extension == "gif" || Extension == "png" || Extension == "jpeg" || Extension == "jpg") {
+              var additional_image_4_URL = escapeHtml(message.i4);
+              additional_images_section += '<a id="previewMainImageLink" class="fancybox" rel="group" href="' + additional_image_4_URL + '"><img src="' + additional_image_4_URL + '" width="200" height="200" alt="Image 4" /></a>';
+            } else {
+              var additional_image_4_URL = "../img/Box-icon.png";
+            }
+          } else {
+            var additional_image_4_URL = "../img/Box-icon.png";
+          }}
+        if (additional_images_section) {
+          additional_images_section += '</div><br />';
+          document.getElementById("extra_images_section").innerHTML = additional_images_section;
+        }});
+        var cities = {   
+        "vie":  " Vienna, Austria ",
+        "ant":  " Antwerp, Belgium ",
+        "bru":  " Brussels, Belgium ",
+        "nic":  " Nicosia, Cypress ",
+        "tal":  " Tallinn, Estonia ",
+        "hel":  " Helsinki, Finland ",
+        "bod":  " Bordeaux, France ",
+        "rns":  " Brittany, France ",
+        "gnb":  " Grenoble, France ",
+        "lil":  " Lille, France ",
+        "nte":  " Loire valley, France ",
+        "lys":  " Lyon, France ",
+        "mrs":  " Marseille, France ",
+        "mpl":  " Montpellier, France ",
+        "nce":  " Nice / Côte d'Azur, France ",
+        "rou":  " Normandy, France ",
+        "par":  " Paris, France ",
+        "sxb":  " Strasbourg, France ",
+        "tls":  " Toulouse, France ",
+        "ber":  " Berlin, Germany ",
+        "brm":  " Bremen, Germany ",
+        "cgn":  " Cologne, Germany ",
+        "drs":  " Dresden, Germany ",
+        "dus":  " Dusseldorf, Germany ",
+        "ess":  " Essen / Ruhr, Germany ",
+        "fra":  " Frankfurt, Germany ",
+        "ham":  " Hamburg, Germany ",
+        "haj":  " Hannover,  Germany ",
+        "hdb":  " Heidelberg, Germany ",
+        "klt":  " Kaiserslautern, Germany ",
+        "lej":  " Leipzig, Germany ",
+        "muc":  " Munich, Germany ",
+        "nue":  " Nuremberg, Germany ",
+        "str":  " Stuttgart, Germany ",
+        "ath":  " Athens, Greece ",
+        "the":  " Thessaloniki, Greece ",
+        "dub":  " Dublin, Ireland ",
+        "blg":  " Bologna, Italy ",
+        "flr":  " Florence, Italy ",
+        "gen":  " Genoa, Italy ",
+        "mxp":  " Milan, Italy ",
+        "nap":  " Napoli, Italy ",
+        "peg":  " Perugia, Italy ",
+        "rom":  " Rome, Italy ",
+        "srd":  " Sardinia, Italy ",
+        "sic":  " Sicilia, Italy ",
+        "trn":  " Torino, Italy ",
+        "vce":  " Venice, Italy ",
+        "rig":  " Riga, Latvia ",
+        "vil":  " Vilnius, Lithuania ",
+        "lux":  " Luxembourg, Luxembourg ",
+        "val":  " Valleta, Malta ",
+        "ams":  " Amsterdam, Netherlands ",
+        "rot":  " Rotterdam, Netherlands ",
+        "lis":  " Lisbon, Portugal ",
+        "bra":  " Bratislava, Slovakia ",
+        "lju":  " Ljubljana, Slovenia ",
+        "alc":  " Alicante, Spain ",
+        "ibz":  " Baleares, Spain ",
+        "bar":  " Barcelona, Spain ",
+        "bio":  " Bilbao, Spain ",
+        "cdz":  " Cadiz, Spain ",
+        "tfn":  " Canarias, Spain ",
+        "grx":  " Granada, Spain ",
+        "mdd":  " Madrid, Spain ",
+        "agp":  " Malaga, Spain ",
+        "sev":  " Sevilla, Spain ",
+        "val":  " Valencia, Spain "
+        }
+        function getCityName(name){
+          var city = (cities[name]);
+          document.getElementById("location").innerHTML = escapeHtml(city);
+        }};
+  </script>
+</head>
+<body class="full-width" onload="setAccountNumber(); showItem(); setLanguage();">
+  <section id="container">
+    <script type="text/javascript" src="../js/menu.js"></script>
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="row">
+          <div class="col-lg-12">
+            <section class="panel">
+              <header class="panel-heading" id="panel-heading">
+                <span data-i18n="item_id">Item ID</span>: <span id="itemID"></span>
+              </header>
+              <div class="panel-body" style="padding:30px;padding-bottom:0px;padding-top:20px;" id="panel-body">
+                <div class="form-group">
+                    <aside class="profile-nav alt">
+                      <section class="panel" style="box-shadow:none">
+                        <div class="user-heading alt">
+                          <span id="top_image"><a href="#"><img alt="" src="../img/Box-icon.png"></a></span>
+                          <h1 id="title">No Item Title</h1>
+                          <p><b> <span data-i18n="seller_id">Seller ID</span>:</b> <span id="sellerID"></span></p>
+                          </div>
+                          <div>
+                          <p><b> <span data-i18n="description">Description</span>:</b> <span id="description"></span></p></b>
+                          <p><b> <span data-i18n="price">Price</span>:</b> <span id="price"></span></p>
+                          <p><b> <span data-i18n="location">Location</span>:</b> <span id="location"></span></p>
+                          </div>
+                          <div class="user-heading alt" id="extra_images_section"></div>
+                      </section>
+                    </aside>
+                    <span id="listingResult"></span>
+                    <div id="cancelButtonSection">
+                      <button class="btn btn-danger" data-toggle="modal" data-target="#myModal"><span data-i18n="button_cancel_listing">Cancel Listing</span></button>
+                    </div> 
+                    <!-- Cancel Modal -->
+                    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                              <h4 class="modal-title"><span data-i18n="button_cancel_listing">Cancel Listing</span></h4>
+                            </div>
+                            <div class="modal-body">
+                          <p><b> <span data-i18n="item_id">Item ID</span>: </b> <span id="itemIDModal"></span></p>
+                              <p><span>Please confirm by entering your account secret phrase.</span></p>
+                              <div class="form-group">
+                              <label for="secret_phrase"><b><span data-i18n="secret_phrase">Your Account Secret Phrase</span></b> :</label>
+                              <div class="iconic-input">
+                                <i class="fa fa-bars"></i>
+                                <input type="password" class="form-control" data-i18n="[placeholder]placeholder_required" id="secret_phrase" autofocus>
+                              </div>
+                              <br/>
+                                <button data-dismiss="modal" class="btn btn-secondary" type="button">Close</button>&nbsp;
+                                <button data-dismiss="modal" class="btn btn-danger" type="button" onclick="cancelListing()"><span data-i18n="button_cancel_listing">Cancel Listing</span></button>
+                            </div>
+                            <p>The network fee of this transaction is 0.01 BLX.</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <!--Modal-->
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+        </div>
+      </section>
+    </section>
+  </section>
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/jquery.dcjqaccordion.2.7.min.js"></script>
+  <script src="../js/bootstrap-hover-dropdown.min.js"></script>
+  <script src="../assets/fancybox/jquery.fancybox.js"></script>
+  <script src="../js/validator.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    jQuery(".fancybox").fancybox();
+  });
+  </script>
+  <script src="../js/constants.js"></script>
+  <script src="../js/freemarket_scripts.js"></script>
+  <script src="../js/common-scripts.js"></script>
+  <script src="../js/i18next.min.js"></script>
+  <script src="../js/freemarket_localization_scripts.js"></script>
+</body>
+</html>

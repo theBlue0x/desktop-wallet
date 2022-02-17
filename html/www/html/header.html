@@ -1,0 +1,80 @@
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright © 2013-2016 The Nxt Core Developers.                            ~
+  ~ Copyright © 2016-2020 Jelurida IP B.V.                                    ~
+  ~                                                                           ~
+  ~ See the LICENSE.txt file at the top-level directory of this distribution  ~
+  ~ for licensing information.                                                ~
+  ~                                                                           ~
+  ~ Unless otherwise agreed in a custom licensing agreement with Jelurida B.V.,
+  ~ no part of the Nxt software, including this file, may be copied, modified,~
+  ~ propagated, or distributed except according to the terms contained in the ~
+  ~ LICENSE.txt file.                                                         ~
+  ~                                                                           ~
+  ~ Removal or modification of this copyright notice is prohibited.           ~
+  ~                                                                           ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+<header class="header">
+    <span id="logo">
+        <a href="#" class="logo" data-page="dashboard">
+            <img src="img/brand/logo_small.png" style="opacity:0.95; padding-bottom:2px;" />
+        </a>
+    </span>
+    <nav class="navbar navbar-static-top" role="navigation">
+        <div id="header_right" class="navbar-right" style="padding-right:20px;">
+            <ul class="nav navbar-nav sends">
+                <li><a href="#" class="goto-page" data-page="dashboard"></i><span style="font-weight:bold;" data-i18n="Home">Home</span></a>
+                </li>
+                <li id="header_send_money" class="dropdown">
+                <a href="#" data-toggle="modal" data-target="#send_money_modal">
+                <span data-i18n="send">Send</span> <span class="coin-symbol"></span></a>
+                </li>
+                <li id="header_transfer_currency" class="dropdown"><a href="#" data-toggle="modal" data-target="#transfer_currency_modal" data-i18n="send_currency">Send Currency</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li id="contacts_menu_li" role="presentation">
+                    <a href="#" class="goto-page" data-page="contacts">
+                        <i class="fa fa-user"></i>
+                    </a>
+                </li>
+                <li class="dropdown" role="presentation">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-cog"></i>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" class="goto-page" data-page="settings"><i class="fa fa-cog"></i><span data-i18n="account_settings">Account Settings</span></a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#start_forging_modal"><i class="fa fa-toggle-on"></i><span data-i18n="start_forging">Start Forging</span></a></li>
+                        <li><a onclick="window.open('market/index.html');"><i class="fa fa-shopping-cart"></i><span data-i18n="marketplace">Marketplace</span></a></li>
+                        <li><a onclick="window.open('exchange/index.html');"><i class="fa fa-briefcase"></i><span data-i18n="exchange">Exchange</span></a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#nrs_modal"><i class="fa fa-cube"></i><span data-i18n="status">Status</span></a></li>
+                        <li id="api_console_li"><a href="/test" target="_blank"><i class="fa fa-magic"></i><span data-i18n="api_console">API Console</span></a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-question-circle"></i>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" data-toggle="modal" data-target="#about_modal"><i class="fa fa-info-circle "></i><span class="help-about"></span></a></li>
+                    </ul>
+                </li>
+                <li class="dropdown" id="web_wallet_li">
+                    <a href="#" class="dropdown-toggle"  data-toggle="dropdown" id="header_open_web_wallet">
+                        <i class="fa fa-sitemap"></i>
+                    </a>
+                </li>
+                <li class="dropdown" id="logout_button_container">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="logout_button">
+                        <i class="fa fa-power-off"></i>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a role="menuitem" tabindex="-1" href="#" onclick="NRS.logout()" data-i18n="logout">Log Out</a></li>
+                        <li><a role="menuitem" tabindex="-1" href="#" onclick="NRS.logout(true)" data-i18n="logout_stop_forging">Log Out &amp; Stop Forging</a></li>
+                        <li><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#logout_clear_user_data_modal" data-i18n="logout_clear_user_data">Log Out and Clear User Data</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>

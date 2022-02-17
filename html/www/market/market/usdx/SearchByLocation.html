@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blue0x Decentralized Marketplace">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Blue0x | MARKET</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/bootstrap-reset.css" rel="stylesheet">
+  <link href="../assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="../css/style.min.css" rel="stylesheet">
+  <link href="../css/style-responsive.css" rel="stylesheet" />
+  <link href="../css/spinner.css" rel="stylesheet">
+</head>
+<body class="full-width" onload="setAccountNumber(); setLanguage();">
+  <section id="container">
+    <script type="text/javascript" src="../js/menu.js"></script>
+    <section id="main-content">
+      <section class="wrapper site-min-height">
+        <div class="row">
+          <div class="col-lg-12">
+            <section class="panel">
+              <header class="panel-heading">
+                <span>Search by Location</span>
+              </header>
+              <div class="panel-body">
+              	<div class="form-group">
+                <select class="form-control m-bot15" style="width:50vw;border:1px solid #939393;" id="itemLocation" onchange="searchLocation()">
+                  <option disabled selected hidden>Select a Location</option>
+                  <optgroup label="Alabama">
+                  <option value="aub"> Auburn, Alabama </option>
+                  <option value="bhm"> Birmingham, Alabama </option>
+                  <option value="dhn"> Dothan, Alabama </option>
+                  <option value="msl"> Florence, Alabama </option>
+                  <option value="anb"> Gadsden-Anniston, Alabama </option>
+                  <option value="hsv"> Huntsville, Alabama </option>
+                  <option value="mob"> Mobile, Alabama </option>
+                  <option value="mgm"> Montgomery, Alabama </option>
+                  <option value="tsc"> Tuscaloosa, Alabama </option>
+                  <optgroup label="Alaska">
+                  <option value="anc"> Anchorage, Alaska </option>
+                  <option value="fai"> Fairbanks, Alaska </option>
+                  <option value="ena"> Kenai Peninsula, Alaska </option>
+                  <optgroup label="Arizona">
+                  <option value="flg"> Flagstaff, Arizona </option>
+                  <option value="mhv"> Mohave County, Arizona </option>
+                  <option value="phx"> Phoenix, Arizona </option>
+                  <option value="prc"> Prescott, Arizona </option>
+                  <option value="tus"> Tucson, Arizona </option>
+                  <option value="yum"> Yuma, Arizona </option>
+                  <optgroup label="Arkansas">
+                  <option value="fyv"> Fayetteville, Arkansas </option>
+                  <option value="jbr"> Jonesboro, Arkansas </option>
+                  <option value="lit"> Little Rock, Arkansas </option>
+                  <option value="txk"> Texarkana, Arkansas </option>
+                  <optgroup label="California">
+                  <option value="bak"> Bakersfield, California </option>
+                  <option value="chc"> Chico, California </option>
+                  <option value="fre"> Fresno, California </option>
+                  <option value="hmb"> Humboldt County, California </option>
+                  <option value="imp"> Imperial County, California </option>
+                  <option value="inl"> Inland Empire, California </option>
+                  <option value="lax"> Los Angeles, California </option>
+                  <option value="mdo"> Mendocino County, California </option>
+                  <option value="mer"> Merced, California </option>
+                  <option value="mod"> Modesto, California </option>
+                  <option value="mtb"> Monterey Bay, California </option>
+                  <option value="orc"> Orange County, California </option>
+                  <option value="psp"> Palm Springs, California </option>
+                  <option value="rdd"> Redding, California </option>
+                  <option value="sac"> Sacramento, California </option>
+                  <option value="sdo"> San Diego, California </option>
+                  <option value="slo"> San Luis Obispo, California </option>
+                  <option value="sba"> Santa Barbara, California </option>
+                  <option value="smx"> Santa Maria, California </option>
+                  <option value="sfo"> San Francisco Bay Area, California </option>
+                  <option value="ssk"> Siskiyou County, California </option>
+                  <option value="stk"> Stockton, California </option>
+                  <option value="ssn"> Susanville, California </option>
+                  <option value="oxr"> Ventura County, California </option>
+                  <option value="vis"> Visalia-Tulare, California </option>
+                  <option value="ybs"> Yuba-Sutter, California </option>
+                  <optgroup label="Colorado">
+                  <option value="bou"> Boulder, Colorado </option>
+                  <option value="cos"> Colorado Springs, Colorado </option>
+                  <option value="den"> Denver, Colorado </option>
+                  <option value="ftc"> Fort Collins, Colorado </option>
+                  <option value="rck"> High Rockies, Colorado </option>
+                  <option value="pub"> Pueblo, Colorado </option>
+                  <option value="gjt"> Western Slope, Colorado </option>
+                  <optgroup label="Connecticut">
+                  <option value="htf"> Hartford, Connecticut </option>
+                  <option value="hvn"> New Haven, Connecticut </option>
+                  <optgroup label="Delaware">
+                  <option value="dlw"> Delaware</option>
+                  <optgroup label="District of Columbia">
+                  <option value="wdc"> Washington D.C., District of Columbia</option>
+                  <optgroup label="Florida">
+                  <option value="dab"> Daytona Beach, Florida </option>
+                  <option value="key"> Florida Keys, Florida </option>
+                  <option value="ftl"> Fort Lauderdale, Florida </option>
+                  <option value="fmy"> Ft Myers, Florida </option>
+                  <option value="gnv"> Gainesville, Florida </option>
+                  <option value="jax"> Jacksonville, Florida </option>
+                  <option value="lal"> Lakeland, Florida </option>
+                  <option value="mia"> Miami, Florida </option>
+                  <option value="oca"> Ocala, Florida </option>
+                  <option value="yps"> Okaloosa, Florida </option>
+                  <option value="orl"> Orlando, Florida </option>
+                  <option value="pfn"> Panama City, Florida </option>
+                  <option value="pns"> Pensacola, Florida </option>
+                  <option value="srq"> Sarasota-Bradenton, Florida </option>
+                  <option value="ust"> St Augustine, Florida </option>
+                  <option value="tal"> Tallahassee, Florida </option>
+                  <option value="tpa"> Tampa Bay, Florida </option>
+                  <option value="psl"> Treasure Coast, Florida </option>
+                  <option value="wpb"> West Palm Beach, Florida </option>
+                  <optgroup label="Georgia">
+                  <option value="aby"> Albany, Georgia </option>
+                  <option value="ahn"> Athens, Georgia </option>
+                  <option value="atl"> Atlanta, Georgia </option>
+                  <option value="aug"> Augusta, Georgia </option>
+                  <option value="bwk"> Brunswick, Georgia </option>
+                  <option value="csg"> Columbus, Georgia </option>
+                  <option value="mcn"> Macon, Georgia </option>
+                  <option value="sav"> Savannah, Georgia </option>
+                  <option value="tbr"> Statesboro, Georgia </option>
+                  <option value="vld"> Valdosta, Georgia </option>
+                  <optgroup label="Hawaii">
+                  <option value="hnl"> Hawaii </option>
+                  <optgroup label="Idaho">
+                  <option value="boi"> Boise, Idaho </option>
+                  <option value="lws"> Lewiston, Idaho </option>
+                  <option value="twf"> Twin Falls, Idaho </option>
+                  <optgroup label="Illinois">
+                  <option value="bln"> Bloomington, Illinois </option>
+                  <option value="chm"> Champaign Urbana, Illinois </option>
+                  <option value="chi"> Chicago, Illinois </option>
+                  <option value="dil"> Decatur, Illinois </option>
+                  <option value="lsl"> La Salle Co, Illinois </option>
+                  <option value="mto"> Mattoon-Charleston, Illinois </option>
+                  <option value="pia"> Peoria, Illinois </option>
+                  <option value="rfd"> Rockford, Illinois </option>
+                  <option value="spi"> Springfield, Illinois </option>
+                  <optgroup label="Indiana">
+                  <option value="bmg"> Bloomington, Indiana </option>
+                  <option value="evw"> Evansville, Indiana </option>
+                  <option value="fwa"> Fort Wayne, Indiana </option>
+                  <option value="ind"> Indianapolis, Indiana </option>
+                  <option value="okk"> Kokomo, Indiana </option>
+                  <option value="laf"> Lafayette, Indiana </option>
+                  <option value="mun"> Muncie, Indiana </option>
+                  <option value="rin"> Richmond, Indiana </option>
+                  <option value="sbn"> South Bend, Indiana </option>
+                  <option value="tha"> Terre Haute, Indiana </option>
+                  <optgroup label="Iowa">
+                  <option value="ame"> Ames, Iowa </option>
+                  <option value="ced"> Cedar Rapids, Iowa </option>
+                  <option value="dsm"> Des Moines, Iowa </option>
+                  <option value="dbq"> Dubuque, Iowa </option>
+                  <option value="ftd"> Fort Dodge, Iowa </option>
+                  <option value="iac"> Iowa City, Iowa </option>
+                  <option value="msc"> Mason City, Iowa </option>
+                  <option value="mli"> Quad Cities, Iowa </option>
+                  <option value="sux"> Sioux City, Iowa </option>
+                  <option value="wlo"> Waterloo, Iowa </option>
+                  <optgroup label="Kansas">
+                  <option value="lwr"> Lawrence, Kansas </option>
+                  <option value="mhk"> Manhattan, Kansas </option>
+                  <option value="sns"> Salina, Kansas </option>
+                  <option value="tpk"> Topeka, Kansas </option>
+                  <option value="wic"> Wichita, Kansas </option>
+                  <optgroup label="Kentucky">
+                  <option value="blg"> Bowling Green, Kentucky </option>
+                  <option value="lex"> Lexington, Kentucky </option>
+                  <option value="lou"> Louisville, Kentucky </option>
+                  <option value="owb"> Owensboro, Kentucky </option>
+                  <optgroup label="Louisiana">
+                  <option value="btr"> Baton Rouge, Louisiana </option>
+                  <option value="hum"> Houma, Louisiana </option>
+                  <option value="lft"> Lafayette, Louisiana </option>
+                  <option value="lkc"> Lake Charles, Louisiana </option>
+                  <option value="mlu"> Monroe, Louisiana </option>
+                  <option value="nor"> New Orleans, Louisiana </option>
+                  <option value="shv"> Shreveport, Louisiana </option>
+                  <optgroup label="Maine">
+                  <option value="mne"> Bangor, Maine </option>
+                  <option value="por"> Portland, Maine </option>
+                  <optgroup label="Maryland">
+                  <option value="anp"> Annapolis, Maryland </option>
+                  <option value="bal"> Baltimore, Maryland </option>
+                  <option value="fdk"> Frederick, Maryland </option>
+                  <optgroup label="Massachusetts">
+                  <option value="bos"> Boston, Massachusetts </option>
+                  <option value="cap"> Cape Cod, Massachusetts </option>
+                  <option value="sma"> South Coast, Massachusetts </option>
+                  <option value="wor"> Worcester, Massachusetts </option>
+                  <optgroup label="Michigan">
+                  <option value="aaa"> Ann Arbor, Michigan </option>
+                  <option value="btc"> Battle Creek, Michigan </option>
+                  <option value="det"> Detroit, Michigan </option>
+                  <option value="fnt"> Flint, Michigan </option>
+                  <option value="grr"> Grand Rapids, Michigan </option>
+                  <option value="hld"> Holland, Michigan </option>
+                  <option value="jxn"> Jackson, Michigan </option>
+                  <option value="kzo"> Kalamazoo, Michigan </option>
+                  <option value="lan"> Lansing, Michigan </option>
+                  <option value="mnr"> Monroe, Michigan </option>
+                  <option value="mkg"> Muskegon, Michigan </option>
+                  <option value="phn"> Port Huron, Michigan </option>
+                  <option value="mbs"> Saginaw-Midland-Baycity, Michigan </option>
+                  <option value="thb"> The Thumb, Michigan </option>
+                  <option value="yup"> Upper Peninsula, Michigan </option>
+                  <optgroup label="Minnesota">
+                  <option value="bji"> Bemidji, Minnesota </option>
+                  <option value="brd"> Brainerd, Minnesota </option>
+                  <option value="dlh"> Duluth, Minnesota </option>
+                  <option value="mkt"> Mankato, Minnesota </option>
+                  <option value="min"> Minneapolis / St Paul, Minnesota </option>
+                  <option value="rmn"> Rochester, Minnesota </option>
+                  <option value="stc"> St Cloud, Minnesota </option>
+                  <optgroup label="Mississippi">
+                  <option value="gpt"> Gulfport, Mississippi </option>
+                  <option value="usm"> Hattiesburg, Mississippi </option>
+                  <option value="jan"> Jackson, Mississippi </option>
+                  <option value="mei"> Meridian, Mississippi </option>
+                  <optgroup label="Missouri">
+                  <option value="cou"> Columbia, Missouri </option>
+                  <option value="jln"> Joplin, Missouri </option>
+                  <option value="ksc"> Kansas City, Missouri </option>
+                  <option value="krk"> Kirksville, Missouri </option>
+                  <option value="loz"> Lake Of The Ozarks, Missouri </option>
+                  <option value="sgf"> Springfield, Missouri </option>
+                  <option value="stj"> St Joseph, Missouri </option>
+                  <option value="stl"> St Louis, Missouri </option>
+                  <optgroup label="Montana">
+                  <option value="bil"> Billings, Montana </option>
+                  <option value="bzn"> Bozeman, Montana </option>
+                  <option value="btm"> Butte, Montana </option>
+                  <option value="gtf"> Great Falls, Montana </option>
+                  <option value="hln"> Helena, Montana </option>
+                  <option value="fca"> Kalispell, Montana </option>
+                  <option value="mso"> Missoula, Montana </option>
+                  <optgroup label="Nebraska">
+                  <option value="gil"> Grand Island, Nebraska </option>
+                  <option value="lnk"> Lincoln, Nebraska </option>
+                  <option value="lbf"> North Platte, Nebraska </option>
+                  <option value="oma"> Omaha, Nebraska </option>
+                  <option value="bff"> Scottsbluff, Nebraska </option>
+                  <optgroup label="Nevada">
+                  <option value="elk"> Elko, Nevada </option>
+                  <option value="lvg"> Las Vegas, Nevada </option>
+                  <option value="rno"> Reno, Nevada </option>
+                  <optgroup label="New Hampshire">
+                  <option value="nhm">New Hampshire</option>
+                  <optgroup label="New Jersey">
+                  <option value="cnj"> Central New Jersey </option>
+                  <option value="jys"> Jersey Shore, New Jersey </option>
+                  <option value="njy"> North New Jersey </option>
+                  <option value="snj"> South New Jersey </option>
+                  <optgroup label="New Mexico">
+                  <option value="abq"> Albuquerque, New Mexico </option>
+                  <option value="cvn"> Clovis, New Mexico </option>
+                  <option value="fnm"> Farmington, New Mexico </option>
+                  <option value="lcr"> Las Cruces, New Mexico </option>
+                  <option value="row"> Roswell, New Mexico </option>
+                  <option value="saf"> Santa Fe, New Mexico </option>
+                  <optgroup label="New York">
+                  <option value="alb"> Albany, New York </option>
+                  <option value="bgm"> Binghamton, New York </option>
+                  <option value="buf"> Buffalo, New York </option>
+                  <option value="cat"> Catskills, New York </option>
+                  <option value="chq"> Chautauqua, New York </option>
+                  <option value="elm"> Elmira-Corning, New York </option>
+                  <option value="fgl"> Finger Lakes, New York </option>
+                  <option value="gfl"> Glens Falls, New York </option>
+                  <option value="hud"> Hudson Valley, New York </option>
+                  <option value="ith"> Ithaca, New York </option>
+                  <option value="isp"> Long Island, New York </option>
+                  <option value="nyc"> New York City, New York </option>
+                  <option value="onh"> Oneonta, New York </option>
+                  <option value="plb"> Plattsburgh-Adirondacks, New York </option>
+                  <option value="ptd"> Potsdam-Canton-Massena, New York </option>
+                  <option value="rcs"> Rochester, New York </option>
+                  <option value="syr"> Syracuse, New York </option>
+                  <option value="tts"> Twin Tiers, New York </option>
+                  <option value="uti"> Utica-Rome-Oneida, New York </option>
+                  <option value="wtn"> Watertown, New York </option>
+                  <optgroup label="North Carolina">
+                  <option value="ash"> Asheville, North Carolina </option>
+                  <option value="bnc"> Boone, North Carolina </option>
+                  <option value="cha"> Charlotte, North Carolina </option>
+                  <option value="fay"> Fayetteville, North Carolina </option>
+                  <option value="gbo"> Greensboro, North Carolina </option>
+                  <option value="hky"> Hickory, North Carolina </option>
+                  <option value="oaj"> Jacksonville, North Carolina </option>
+                  <option value="obx"> Outer Banks, North Carolina </option>
+                  <option value="ral"> Raleigh / Durham , North Carolina </option>
+                  <option value="wnc"> Wilmington, North Carolina </option>
+                  <option value="wsl"> Winston-Salem, North Carolina </option>
+                  <optgroup label="North Dakota">
+                  <option value="bis"> Bismarck, North Dakota </option>
+                  <option value="far"> Fargo, North Dakota </option>
+                  <option value="gfk"> Grand Forks, North Dakota </option>
+                  <optgroup label="Ohio">
+                  <option value="cak"> Akron, Ohio </option>
+                  <option value="jfn"> Ashtabula, Ohio </option>
+                  <option value="ohu"> Athens, Ohio </option>
+                  <option value="chl"> Chillicothe, Ohio </option>
+                  <option value="cin"> Cincinnati, Ohio </option>
+                  <option value="cle"> Cleveland, Ohio </option>
+                  <option value="col"> Columbus, Ohio </option>
+                  <option value="day"> Dayton, Ohio </option>
+                  <option value="lma"> Lima, Ohio </option>
+                  <option value="mfd"> Mansfield, Ohio </option>
+                  <option value="sky"> Sandusky, Ohio </option>
+                  <option value="tol"> Toledo, Ohio </option>
+                  <option value="nph"> Tuscarawas Co, Ohio </option>
+                  <option value="yng"> Youngstown, Ohio </option>
+                  <option value="zyl"> Zanesville, Ohio </option>
+                  <optgroup label="Oklahoma">
+                  <option value="law"> Lawton, Oklahoma </option>
+                  <option value="okc"> Oklahoma City, Oklahoma </option>
+                  <option value="osu"> Stillwater, Oklahoma </option>
+                  <option value="tul"> Tulsa, Oklahoma </option>
+                  <optgroup label="Oregon">
+                  <option value="bnd"> Bend, Oregon </option>
+                  <option value="crv"> Corvallis, Oregon </option>
+                  <option value="eug"> Eugene, Oregon </option>
+                  <option value="klf"> Klamath Falls, Oregon </option>
+                  <option value="mfr"> Medford-Ashland, Oregon </option>
+                  <option value="cor"> Oregon Coast, Oregon </option>
+                  <option value="pdx"> Portland, Oregon </option>
+                  <option value="rbg"> Roseburg, Oregon </option>
+                  <option value="sle"> Salem, Oregon </option>
+                  <optgroup label="Pennsylvania">
+                  <option value="aoo"> Altoona-Johnstown, Pennsylvania </option>
+                  <option value="cbg"> Cumberland Valley, Pennsylvania </option>
+                  <option value="eri"> Erie, Pennsylvania </option>
+                  <option value="hrs"> Harrisburg, Pennsylvania </option>
+                  <option value="lns"> Lancaster, Pennsylvania </option>
+                  <option value="alt"> Lehigh Valley, Pennsylvania </option>
+                  <option value="mdv"> Meadville, Pennsylvania </option>
+                  <option value="phi"> Philadelphia, Pennsylvania </option>
+                  <option value="pit"> Pittsburgh, Pennsylvania </option>
+                  <option value="poc"> Poconos, Pennsylvania </option>
+                  <option value="rea"> Reading, Pennsylvania </option>
+                  <option value="avp"> Scranton/Wilkes-Barre, Pennsylvania </option>
+                  <option value="psu"> State College, Pennsylvania </option>
+                  <option value="wpt"> Williamsport, Pennsylvania </option>
+                  <option value="yrk"> York, Pennsylvania </option>
+                  <optgroup label="Rhode Island">
+                  <option value="prv">Rhode Island</option>
+                  <optgroup label="South Carolina">
+                  <option value="chs"> Charleston, South Carolina </option>
+                  <option value="cae"> Columbia, South Carolina </option>
+                  <option value="flo"> Florence, South Carolina </option>
+                  <option value="gsp"> Greenville, South Carolina </option>
+                  <option value="hhi"> Hilton Head, South Carolina </option>
+                  <option value="myr"> Myrtle Beach, South Carolina </option>
+                  <optgroup label="South Dakota">
+                  <option value="csd"> Pierre, South Dakota </option>
+                  <option value="rap"> Rapid City, South Dakota </option>
+                  <option value="fsd"> Sioux Falls, South Dakota </option>
+                  <optgroup label="Tennessee">
+                  <option value="cht"> Chattanooga, Tennessee </option>
+                  <option value="ckv"> Clarksville, Tennessee </option>
+                  <option value="coo"> Cookeville, Tennessee </option>
+                  <option value="jxt"> Jackson , Tennessee </option>
+                  <option value="knx"> Knoxville, Tennessee </option>
+                  <option value="mem"> Memphis, Tennessee </option>
+                  <option value="nsh"> Nashville, Tennessee </option>
+                  <option value="tri"> Tri-Cities, Tennessee </option>
+                  <optgroup label="Texas">
+                  <option value="abi"> Abilene, Texas </option>
+                  <option value="ama"> Amarillo, Texas </option>
+                  <option value="aus"> Austin, Texas </option>
+                  <option value="bpt"> Beaumont / Port Arthur, Texas </option>
+                  <option value="bro"> Brownsville, Texas </option>
+                  <option value="cst"> College Station, Texas </option>
+                  <option value="crp"> Corpus Christi, Texas </option>
+                  <option value="dal"> Dallas / Fort Worth, Texas </option>
+                  <option value="drt"> Del Rio, Texas </option>
+                  <option value="elp"> El Paso, Texas </option>
+                  <option value="gls"> Galveston, Texas </option>
+                  <option value="hou"> Houston, Texas </option>
+                  <option value="grk"> Killeen, Texas </option>
+                  <option value="lrd"> Laredo, Texas </option>
+                  <option value="lbb"> Lubbock, Texas </option>
+                  <option value="mca"> Mcallen, Texas </option>
+                  <option value="odm"> Odessa / Midland, Texas </option>
+                  <option value="sjt"> San Angelo, Texas </option>
+                  <option value="sat"> San Antonio, Texas </option>
+                  <option value="tsu"> San Marcos, Texas </option>
+                  <option value="txm"> Texoma, Texas </option>
+                  <option value="etx"> Tyler, Texas </option>
+                  <option value="vtx"> Victoria, Texas </option>
+                  <option value="wco"> Waco, Texas </option>
+                  <option value="wtf"> Wichita Falls, Texas </option>
+                  <optgroup label="Utah">
+                  <option value="lgu"> Logan, Utah </option>
+                  <option value="ogd"> Ogden-Clearfield, Utah </option>
+                  <option value="pvu"> Provo, Utah </option>
+                  <option value="slc"> Salt Lake City, Utah </option>
+                  <option value="stg"> St George, Utah </option>
+                  <optgroup label="Vermont">
+                  <option value="brl"> Burlington, Vermont </option>
+                  <option value="mon"> Montpelier, Vermont </option>
+                  <option value="brb"> Brattleboro, Vermont </option>
+                  <optgroup label="Virginia">
+                  <option value="uva"> Charlottesville, Virginia </option>
+                  <option value="dnv"> Danville, Virginia </option>
+                  <option value="ezf"> Fredericksburg, Virginia </option>
+                  <option value="nfk"> Hampton Roads, Virginia </option>
+                  <option value="shd"> Harrisonburg, Virginia </option>
+                  <option value="lyn"> Lynchburg, Virginia </option>
+                  <option value="vpi"> New River Valley, Virginia </option>
+                  <option value="ric"> Richmond, Virginia </option>
+                  <option value="roa"> Roanoke, Virginia </option>
+                  <option value="okv"> Winchester, Virginia </option>
+                  <optgroup label="Washington">
+                  <option value="bli"> Bellingham, Washington </option>
+                  <option value="kpr"> Kennewick-Pasco-Richland, Washington </option>
+                  <option value="mlk"> Moses Lake, Washington </option>
+                  <option value="olp"> Olympic Peninsula, Washington </option>
+                  <option value="plm"> Pullman, Washington </option>
+                  <option value="sea"> Seattle-Tacoma, Washington </option>
+                  <option value="mvw"> Skagit, Washington </option>
+                  <option value="spk"> Spokane, Washington </option>
+                  <option value="wen"> Wenatchee, Washington </option>
+                  <option value="yak"> Yakima, Washington </option>
+                  <optgroup label="West Virginia">
+                  <option value="crw"> Charleston, West Virginia </option>
+                  <option value="hts"> Huntington, West Virginia </option>
+                  <option value="wvu"> Morgantown, West Virginia </option>
+                  <option value="pkb"> Parkersburg, West Virginia </option>
+                  <option value="wva"> Wheeling, West Virginia </option>
+                  <optgroup label="Wisconsin">
+                  <option value="app"> Appleton, Wisconsin </option>
+                  <option value="eau"> Eau Claire, Wisconsin </option>
+                  <option value="grb"> Green Bay, Wisconsin </option>
+                  <option value="jvl"> Janesville, Wisconsin </option>
+                  <option value="rac"> Kenosha-Racine, Wisconsin </option>
+                  <option value="lse"> La Crosse, Wisconsin </option>
+                  <option value="mad"> Madison, Wisconsin </option>
+                  <option value="mil"> Milwaukee, Wisconsin </option>
+                  <option value="sbm"> Sheboygan, Wisconsin </option>
+                  <option value="wau"> Wausau, Wisconsin </option>
+                  <optgroup label="Wyoming">
+                  <option value="wyo"> Cheyenne, Wyoming</option>
+                </select>
+              	</div>
+              	<hr style="width:100%">
+                <div id="error-message">
+                  <div class="adv-table">
+                  	<input type="text" class="form-control m-bot15" style="float:right;width:50vw;" id="searchInput" onkeyup="searchTable()" placeholder=" Search ...">
+                    <table class="display table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th class="hidden-phone"><span data-i18n="item_id">Item ID</span></th>
+                          <th><span data-i18n="item_title">Title</span></th>
+                          <th><span data-i18n="price">Price</span></th>
+                        </tr>
+                      </thead>
+                      <tbody id="table_body"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </section>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.dcjqaccordion.2.7.min.js"></script>
+    <script src="../js/bootstrap-hover-dropdown.min.js"></script>
+    <script src="../js/constants.js"></script>
+    <script src="../js/freemarket_scripts.js"></script>
+    <script src="../js/common-scripts.js"></script>
+    <script src="../js/i18next.min.js"></script>
+    <script src="../js/freemarket_localization_scripts.js"></script> 
+    <script>
+    function searchLocation() {
+    document.getElementById("table_body").innerHTML = "";
+    var fmlang = localStorage.getItem("fmlang");
+    $.getJSON(Constants.apiUrl, {
+      requestType: "searchDGSGoods",
+      inStockOnly: "true",
+      hideDelisted: "true",
+      includeCounts: "true",
+      query: $('#itemLocation').val()
+    }, 
+      function(request) {
+      for (var i = 0; i < request.goods.length ; i++) {
+      var goods = request.goods[i];
+      var data = JSON.parse(request.goods[i].description);
+      var id = request.goods[i].goods;
+      var rows;
+      rows += '<tr>';
+      rows += '<td class="hidden-phone"><a href=\'ViewItem.html?setLng=' + fmlang + '&itemid=' + id + '\'>' + id + '</a></td>';
+      rows += '<td><a href=\'ViewItem.html?setLng=' + fmlang + '&itemid=' + id + '\'>' + escapeHtml(goods.name) + '</a></td>';
+      rows += '<td>'+ escapeHtml(data.p) +'&nbsp;'+ escapeHtml(data.c) +'</td>';
+      rows += '</tr>';
+    };
+    $("#table_body").html(rows);
+    })};
+    </script>
+    <script>
+    function searchTable() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("table_body");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                }}
+            if (found) {
+                tr[i].style.display = "";
+                found = false;
+            } else {
+                tr[i].style.display = "none";
+            }}}
+    </script>
+    
+</body>
+</html>
