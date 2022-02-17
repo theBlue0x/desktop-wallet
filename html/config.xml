@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.jelurida.nxt.client.wallet" version="1.11.15" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Nxt Mobile Wallet</name>
+<widget id="com.blue0x.client.wallet" version="1.11.15" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Blue0x Mobile Wallet</name>
     <description>
-        Reference implementation mobile wallet for Nxt.
+        Reference implementation mobile wallet for Blue0x.
     </description>
-    <author email="info@jelurida.com" href="https://jelurida.com/">
-        Jelurida
+    <author email="contact@blue0x.com" href="https://blue0x.com/">
+        theBlue0x
     </author>
-    <version>1.11.15</version>
+    <version>1.12.2</version>
     <content src="index.html" />
     <access origin="*" />
     <preference name="webviewbounce" value="false" />

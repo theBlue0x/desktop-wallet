@@ -14,11 +14,10 @@
     "appId": "com.blue0x.wallet",
     "icon": "./icons/icon.png",
     "mac": {
-      "icon": "./public/icons/mac/icon.icns", 
       "category": "public.app-category.finance"
     },
     "win": {
-      "icon": "./icons/icon256.png",
+      "icon": "./icons/icon.png",
       "target": "nsis"
     },
     "linux": {
