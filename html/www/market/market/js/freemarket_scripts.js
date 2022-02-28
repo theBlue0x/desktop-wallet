@@ -48,30 +48,12 @@ function setLanguage() {
   }
 };
 
-// Check to see if the localstorage language parameter is already set on launch, load ViewAll page if it is
-function checkInitialLanguageV() {
-  //var languageString=(getQueryVariable("setLng")); // See if user returned from another page
-  if("fmlang" in localStorage){ // If not, and fmlang is set, use it 
-   var savedLanguage = localStorage.getItem("fmlang");
-   window.location.href = "ViewAll.html?setLng=" + savedLanguage;
-  }
-};
-
-// Check to see if the localstorage language parameter is already set on launch, load ListNewItem page if it is
-function checkInitialLanguageL() {
-  //var languageString=(getQueryVariable("setLng")); // See if user returned from another page
-  if("fmlang" in localStorage){ // If not, and fmlang is set, use it 
-   var savedLanguage = localStorage.getItem("fmlang");
-   window.location.href = "ListNewItem.html?setLng=" + savedLanguage;
-  }
-};
-
 // Check to see if the localstorage language parameter is already set on launch, load login page if it is
 function checkInitialLanguageLogin() {
   //var languageString=(getQueryVariable("setLng")); // See if user returned from another page
   if("fmlang" in localStorage){ // If not, and fmlang is set, use it 
    var savedLanguage = localStorage.getItem("fmlang");
-   window.location.href = "login_view_account.html?setLng=" + savedLanguage;
+   window.location.href = "login.html?setLng=" + savedLanguage;
   }
 };
 

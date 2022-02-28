@@ -67,6 +67,7 @@
       var goods = request.goods[i];
       var data = JSON.parse(request.goods[i].description);
       var id = request.goods[i].goods;
+      if (data.c == "AUDX") {
       var rows;
       rows += '<tr>';
       rows += '<td><a href=\'ViewItem.html?setLng=' + fmlang + '&itemid=' + id + '\'>' + escapeHtml(goods.name) + '</a></td>';
@@ -75,6 +76,7 @@
       rows += '</tr>';
     };
     $("#table_body").html(rows);
+  }
     });
     </script>
     <script>

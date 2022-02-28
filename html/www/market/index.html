@@ -12,7 +12,23 @@
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
   </head>
-  <body>
+  <body data-spy="scroll" data-offset="0" data-target="#theMenu">
+	<nav class="menu" id="theMenu">
+		<div class="menu-wrap">
+			<h1 class="logo"><a>Blue0x|Market</a></h1>
+			<i class="icon-remove menu-close"></i>
+			<a href="https://blue0x.com" class="smoothScroll">Blue0x|HOME</a>
+			<a href="https://exchange.blue0x.com" class="smoothScroll">Blue0x|EXCHANGE</a>
+			<!--a href="https://explorer.blue0x.com" class="smoothScroll">Blue0x|EXPLORER</a-->
+			<a href="https://lite.blue0x.com" class="smoothScroll">Blue0x|LITE</a>
+			<a href="https://learn.blue0x.com" class="smoothScroll">Blue0x|LEARN</a>
+			<a href="https://discord.com/invite/EbBWRSPW63"><i class="fab fa-discord"></i></a>
+			<a href="https://t.me/blue0xcom"><i class="fab fa-telegram-plane"></i></a>
+			<a href="https://twitter.com/blue0x_com"><i class="fab fa-twitter"></i></a>
+			<a href="https://github.com/theBlue0x"><i class="fab fa-github"></i></a>
+		</div>
+		<div id="menuToggle"><i class="fas fa-bars"></i></div>
+	</nav>
 	<section id="home" name="home"></section>
 	<div id="headerwrap">
 		<div class="container">
@@ -24,18 +40,18 @@
 				<form action="#">
 				<select class="form-control m-bot15" name="market">
 					<option value="#">Select A Market...</option>
-					<option value="market/usdx/ViewAll.html">USDX - United States Dollar</option>
-					<option value="market/audx/ViewAll.html">AUDX - Australian Dollar</option>
-					<option value="market/cadx/ViewAll.html">CADX - Canadian Dollar</option>
-					<option value="market/chfx/ViewAll.html">CHFX - Swiss Franc</option>
-					<option value="market/cnyx/ViewAll.html">CNYX - Chinese Yuan</option>
-					<option value="market/eurx/ViewAll.html">EURX - Euro</option>
-					<option value="market/gbpx/ViewAll.html">GBPX - British Pound</option>
-					<option value="market/iqdx/ViewAll.html">IQDX - Iraqi Dinar</option>
-					<option value="market/irrx/ViewAll.html">IRRX - Iranian Rial</option>
-					<option value="market/jpyx/ViewAll.html">JPYX - Japanese Yen</option>
-					<option value="market/nzdx/ViewAll.html">NZDX - New Zealand Dollar</option>
-					<option value="market/rubx/ViewAll.html">RUBX - Russian Ruble</option>
+					<option value="market/usdx/index.html">USDX - United States Dollar</option>
+					<option value="market/audx/index.html">AUDX - Australian Dollar</option>
+					<option value="market/cadx/index.html">CADX - Canadian Dollar</option>
+					<option value="market/chfx/index.html">CHFX - Swiss Franc</option>
+					<option value="market/cnyx/index.html">CNYX - Chinese Yuan</option>
+					<option value="market/eurx/index.html">EURX - Euro</option>
+					<option value="market/gbpx/index.html">GBPX - British Pound</option>
+					<option value="market/iqdx/index.html">IQDX - Iraqi Dinar</option>
+					<option value="market/irrx/index.html">IRRX - Iranian Rial</option>
+					<option value="market/jpyx/index.html">JPYX - Japanese Yen</option>
+					<option value="market/nzdx/index.html">NZDX - New Zealand Dollar</option>
+					<option value="market/rubx/index.html">RUBX - Russian Ruble</option>
 				</select>
 				<br/>
 				<input type="button" class="myButton" onclick="window.open(this.form.market.options[this.form.market.selectedIndex].value,'_top')" value="Continue">

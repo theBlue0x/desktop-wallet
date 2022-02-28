@@ -206,6 +206,30 @@ docReady(function() {
     html5QrcodeScanner.render(onScanSuccess, onScanError);
 });
 </script>
+<script >
+function docReady(fn) {
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        setTimeout(fn, 1);
+    } else {
+        document.addEventListener("DOMContentLoaded", fn);
+    }} 
+docReady(function() {
+    var lastResult, countResults = 0;
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+        "qr-reader2", { fps: 10, qrbox: 250 });
+    function onScanSuccess(decodedText, decodedResult) {
+        if (decodedText !== lastResult) {
+            ++countResults;
+            lastResult = decodedText;
+            document.getElementById('secret_phrase_message').value = decodedText;
+            html5QrcodeScanner.clear();
+            setTimeout(function(){ $('#reader2').modal('hide'); }, 300);
+        }}
+    function onScanError(qrCodeError) {
+    }
+    html5QrcodeScanner.render(onScanSuccess, onScanError);
+});
+</script>
 </head>
 <body class="full-width" onload="setAccountNumber(); showItem(); setLanguage(); checkLogin();">
   <section id="container">

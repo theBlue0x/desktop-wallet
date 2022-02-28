@@ -7,7 +7,7 @@ document.write("<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"co
 document.write("<span class=\"fa fa-bars\"></span>");
 document.write("</button>");
 document.write("<!--logo start-->");
-document.write("<a id=\"logo_link\" href=\"../../index.html\" class=\"logo\">Blue0x|<span>Market</span></a>");
+document.write("<a id=\"logo_link\" href=\"about.html\" class=\"logo\">Blue0x|<span>Market</span></a>");
 document.write("<!--logo end-->");
 document.write("<div class=\"horizontal-menu navbar-collapse collapse\">");
 document.write("<ul class=\"nav navbar-nav\">");
