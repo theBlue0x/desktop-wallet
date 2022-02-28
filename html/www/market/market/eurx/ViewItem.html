@@ -443,8 +443,7 @@ docReady(function() {
     $.post(Constants.apiUrl,{
       requestType: 'getAccountCurrencies',
       account: account,
-      currency: Constants.EURXId,
-      units: price
+      currency: Constants.EURXId
     },
       function(payment){
         var amount = payment.units / 100; 

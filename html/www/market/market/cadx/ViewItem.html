@@ -428,8 +428,7 @@ docReady(function() {
     $.post(Constants.apiUrl,{
       requestType: 'getAccountCurrencies',
       account: account,
-      currency: Constants.CADXId,
-      units: price
+      currency: Constants.CADXId
     },
       function(payment){
         var amount = payment.units / 100; 

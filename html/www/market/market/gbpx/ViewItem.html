@@ -405,8 +405,7 @@ docReady(function() {
     $.post(Constants.apiUrl,{
       requestType: 'getAccountCurrencies',
       account: account,
-      currency: Constants.GBPXId,
-      units: price
+      currency: Constants.GBPXId
     },
       function(payment){
         var amount = payment.units / 100; 

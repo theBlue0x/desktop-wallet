@@ -398,8 +398,7 @@ docReady(function() {
     $.post(Constants.apiUrl,{
       requestType: 'getAccountCurrencies',
       account: account,
-      currency: Constants.IRRXId,
-      units: price
+      currency: Constants.IRRXId
     },
       function(payment){
         var amount = payment.units / 100; 

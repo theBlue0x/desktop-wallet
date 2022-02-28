@@ -379,8 +379,7 @@ docReady(function() {
     $.post(Constants.apiUrl,{
       requestType: 'getAccountCurrencies',
       account: account,
-      currency: Constants.NZDXId,
-      units: price
+      currency: Constants.NZDXId
     },
       function(payment){
         var amount = payment.units / 100; 

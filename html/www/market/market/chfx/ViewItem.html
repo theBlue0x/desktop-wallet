@@ -380,8 +380,7 @@ docReady(function() {
     $.post(Constants.apiUrl,{
       requestType: 'getAccountCurrencies',
       account: account,
-      currency: Constants.CHFXId,
-      units: price
+      currency: Constants.CHFXId
     },
       function(payment){
         var amount = payment.units / 100; 

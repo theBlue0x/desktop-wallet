@@ -387,8 +387,7 @@ docReady(function() {
     $.post(Constants.apiUrl,{
       requestType: 'getAccountCurrencies',
       account: account,
-      currency: Constants.CNYXId,
-      units: price
+      currency: Constants.CNYXId
     },
       function(payment){
         var amount = payment.units / 100; 
