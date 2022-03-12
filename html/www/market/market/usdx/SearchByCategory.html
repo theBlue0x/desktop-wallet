@@ -119,6 +119,7 @@
       var goods = request.goods[i];
       var data = JSON.parse(request.goods[i].description);
       var id = request.goods[i].goods;
+      if (data.c == "USDX") {
       var rows;
       rows += '<tr>';
       rows += '<td class="hidden-phone"><a href=\'ViewItem.html?setLng=' + fmlang + '&itemid=' + id + '\'>' + id + '</a></td>';
@@ -127,6 +128,7 @@
       rows += '</tr>';
     };
     $("#table_body").html(rows);
+    }
     })};
     </script>
     <script>
