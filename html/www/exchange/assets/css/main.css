@@ -32,7 +32,7 @@
   font-family: Arial;
   font-size: 15px;
   font-weight: bold;
-  padding: 6px 12px;
+  padding: 8px 20px;
   text-decoration: none;
 }
 
@@ -157,7 +157,7 @@ a:after {
 
 #headerwrap h2 {
 	color: white;
-	font-size: 70px;
+	font-size: 46px;
 	font-weight: 700;
 	text-shadow: 1px 1px 4px black;
 }
